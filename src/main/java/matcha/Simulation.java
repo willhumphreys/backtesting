@@ -46,17 +46,23 @@ public class Simulation {
             Boolean closeBelowYesterdaysHigh = CandleClose < yesterdaysHigh;
             Boolean openBelowYesterdaysLow = CandleOpen < yesterdaysHigh;
 
-
             if (takeOutYesterdaysLow &&
                     closePositive &&
                     closeAboveYesterdaysLow &&
                     openAboveYesterdaysLow &&
                     getLowCheck(data[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i)) {
 
-
                 System.out.println("Enter new low");
             }
 
+            if (takeOutYesterdaysHigh &&
+                    closeNegative &&
+                    closeBelowYesterdaysHigh &&
+                    openBelowYesterdaysLow &&
+                    getHighCheck(data[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i)) {
+
+                System.out.println("Enter new high");
+            }
         }
 
         for (String[] line : data) {
@@ -85,6 +91,25 @@ public class Simulation {
                 throw new IllegalArgumentException("Invalid lowCheck value" );
         }
         return lowCheck;
+    }
+
+    Boolean getHighCheck(String[] highOfTheDay, float High, float PreviousHigh, int highCheckPref, int index) {
+        Boolean highCheck;
+        switch(highCheckPref) {
+            case 0:
+                highCheck = High > PreviousHigh;
+                break;
+            case 1:
+                highCheck =  Double.parseDouble(highOfTheDay[index]) > Double.parseDouble(highOfTheDay[index - 1]);
+                break;
+            case 2:
+                //We don't put in a new high.
+                highCheck = Double.parseDouble(highOfTheDay[index]) <= Double.parseDouble(highOfTheDay[index - 1]);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid highCheck value" );
+        }
+        return highCheck;
     }
 
 }
