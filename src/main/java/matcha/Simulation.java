@@ -28,23 +28,23 @@ public class Simulation {
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
     }
 
-    Results execute(String[][] data) {
+    Results execute(String[][] hourData, String[][] tickData) {
 
 
-        for (int i = 1; i < data.length; i++) {
+        for (int i = 1; i < tickData.length; i++) {
 
-            LocalDateTime dateTime = LocalDateTime.parse(data[i][DATE], formatter);
+            LocalDateTime dateTime = LocalDateTime.parse(hourData[i][DATE], formatter);
 
-            double CandleClose = parseDouble(data[i][CLOSE]);
-            double CandleOpen = parseDouble(data[i][OPEN]);
-            double CandleLow = parseDouble(data[i][LOW]);
-            double PreviousCandleLow = parseDouble(data[i -1][LOW]);
-            double CandleHigh = parseDouble(data[i][HIGH]);
-            double PreviousCandleHigh = parseDouble(data[i -1][HIGH]);
-            double PreviousCandleClose = parseDouble(data[i-1][CLOSE]);
+            double CandleClose = parseDouble(hourData[i][CLOSE]);
+            double CandleOpen = parseDouble(hourData[i][OPEN]);
+            double CandleLow = parseDouble(hourData[i][LOW]);
+            double PreviousCandleLow = parseDouble(hourData[i -1][LOW]);
+            double CandleHigh = parseDouble(hourData[i][HIGH]);
+            double PreviousCandleHigh = parseDouble(hourData[i -1][HIGH]);
+            double PreviousCandleClose = parseDouble(hourData[i-1][CLOSE]);
 
-            double yesterdaysLow = parseDouble(data[i][DAILY_LOW]);
-            double yesterdaysHigh = parseDouble(data[i][DAILY_HIGH]);
+            double yesterdaysLow = parseDouble(hourData[i][DAILY_LOW]);
+            double yesterdaysHigh = parseDouble(hourData[i][DAILY_HIGH]);
 
             double LastBarSize = PreviousCandleClose - PreviousCandleLow;
 
@@ -63,7 +63,7 @@ public class Simulation {
                     closePositive &&
                     closeAboveYesterdaysLow &&
                     openAboveYesterdaysLow &&
-                    getLowCheck(data[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i)) {
+                    getLowCheck(hourData[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i)) {
 
                 System.out.println("Enter new low");
 
@@ -84,7 +84,7 @@ public class Simulation {
                     closeNegative &&
                     closeBelowYesterdaysHigh &&
                     openBelowYesterdaysLow &&
-                    getHighCheck(data[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i)) {
+                    getHighCheck(hourData[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i)) {
 
                 System.out.println("Enter new high");
 
@@ -102,7 +102,7 @@ public class Simulation {
             }
         }
 
-        for (String[] line : data) {
+        for (String[] line : hourData) {
             System.out.println(line[DATE] + line[OPEN] + line[LOW] + line[HIGH] + line[CLOSE] + line[DAILY_LOW] + line[DAILY_HIGH]);
         }
 

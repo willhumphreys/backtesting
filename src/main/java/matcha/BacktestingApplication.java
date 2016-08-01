@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BacktestingApplication implements CommandLineRunner {
 
     private static final int DATA_FILE = 0;
+    private static final int TICK_DATA_FILE = 1;
     private final TickDataReader tickDataReader;
     private final Simulation simulation;
 
@@ -29,8 +30,9 @@ public class BacktestingApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         String[][] data = tickDataReader.read(args[DATA_FILE]);
+        String[][] tickData = tickDataReader.read(args[TICK_DATA_FILE]);
 
-        Results results = simulation.execute(data);
+        Results results = simulation.execute(data, tickData);
 
         System.out.println(results);
     }
