@@ -15,13 +15,9 @@ public class Simulation {
     Results execute(String[][] data) {
 
         for (String[] line : data) {
-
             System.out.println(line[DATE] + line[OPEN] + line[LOW] + line[HIGH] + line[CLOSE] + line[DAILY_LOW] + line[DAILY_HIGH]);
-
         }
 
-
-
-        return null;
+        return new Results();
     }
 }
