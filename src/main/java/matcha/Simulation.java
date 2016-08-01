@@ -13,6 +13,8 @@ public class Simulation {
     private static final int CLOSE = 4;
     private static final int DAILY_LOW = 5;
     private static final int DAILY_HIGH = 6;
+    private static final int TODAYS_LOW = 7;
+    private static final int TODAYS_HIGH = 8;
 
     Results execute(String[][] data) {
 
@@ -22,7 +24,7 @@ public class Simulation {
 
             float CandleClose = parseFloat(data[i][DATE]);
             float CandleOpen = parseFloat(data[i][OPEN]);
-            float CandleLow = parseFloat(data[i][LOW];
+            float CandleLow = parseFloat(data[i][LOW]);
             float PreviousCandleLow = parseFloat(data[i -1][LOW]);
             float CandleHigh = parseFloat(data[i][HIGH]);
             float PreviousCandleHigh = parseFloat(data[i -1][HIGH]);
@@ -45,12 +47,15 @@ public class Simulation {
             Boolean openBelowYesterdaysLow = CandleOpen < yesterdaysHigh;
 
 
-//            if (takeOutYesterdaysLow &&
-//                    closePositive &&
-//                    closeAboveYesterdaysLow &&
-//                    openAboveYesterdaysLow &&
-//                    getLowCheck(sc, lowOfTheDay, CandleLow, PreviousCandleLow, highLowCheckPrefInput.GetIndex()) &&
-//                    sc.GetBarHasClosedStatus() == BHCS_BAR_HAS_CLOSED) {
+            if (takeOutYesterdaysLow &&
+                    closePositive &&
+                    closeAboveYesterdaysLow &&
+                    openAboveYesterdaysLow &&
+                    getLowCheck(data[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i)) {
+
+
+                System.out.println("Enter new low");
+            }
 
         }
 
@@ -60,4 +65,26 @@ public class Simulation {
 
         return new Results();
     }
+
+    Boolean getLowCheck(String[] lowOfTheDay, float Low, float PreviousLow, int lowCheckPref, int index) {
+        Boolean lowCheck;
+        switch (lowCheckPref) {
+            case 0:
+                //Current Candle is below last candle.
+                lowCheck = Low < PreviousLow;
+                break;
+            case 1:
+                //New low for the day is put in.
+                lowCheck = Double.parseDouble(lowOfTheDay[index]) < Double.parseDouble(lowOfTheDay[index - 1]);
+                break;
+            case 2:
+                //We don't put in a new low.
+                lowCheck = Double.parseDouble(lowOfTheDay[index]) >= Double.parseDouble(lowOfTheDay[index - 1]);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid lowCheck value" );
+        }
+        return lowCheck;
+    }
+
 }
