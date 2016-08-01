@@ -9,10 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BacktestingApplication implements CommandLineRunner {
 
     private final TickDataReader tickDataReader;
+    private final Simulation simulation;
 
     @Autowired
-    public BacktestingApplication(TickDataReader tickDataReader) {
+    public BacktestingApplication(TickDataReader tickDataReader, Simulation simulation) {
         this.tickDataReader = tickDataReader;
+        this.simulation = simulation;
     }
 
     public static void main(String[] args) {
@@ -24,6 +26,6 @@ public class BacktestingApplication implements CommandLineRunner {
 
         String[][] data = tickDataReader.read("Data/dataOut2.txt");
 
-        System.out.println(data[0][0]);
+        Results results = simulation.execute(data);
     }
 }
