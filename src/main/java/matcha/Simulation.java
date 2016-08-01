@@ -53,6 +53,18 @@ public class Simulation {
                     getLowCheck(data[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i)) {
 
                 System.out.println("Enter new low");
+
+//                s_SCNewOrder order;
+//                order.OrderQuantity = 1;
+//                order.OrderType = SCT_ORDERTYPE_MARKET;
+//
+//                order.Target1Price = CandleLow - extraTicks;
+//                order.Stop1Price = CandleClose + (CandleClose - CandleLow) + extraTicks;
+//                order.OCOGroup1Quantity = 1; // If this is left at the default of 0, then it will be automatically set.
+//
+//                //logEntryMessage(sc, PositionData, order);
+//                sc.SellEntry(order);
+
             }
 
             if (takeOutYesterdaysHigh &&
@@ -62,6 +74,18 @@ public class Simulation {
                     getHighCheck(data[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i)) {
 
                 System.out.println("Enter new high");
+
+//                s_SCNewOrder order;
+//                order.OrderQuantity = 1;
+//                order.OrderType = SCT_ORDERTYPE_MARKET;
+//
+//                order.Target1Price = CandleHigh + extraTicks;
+//                order.Stop1Price = CandleClose - (CandleHigh - CandleClose) - extraTicks;
+//
+//                order.OCOGroup1Quantity = 1; // If this is left at the default of 0, then it will be automatically set.
+//
+//                //logEntryMessage(sc, PositionData, order);
+//                sc.BuyEntry(order);
             }
         }
 
