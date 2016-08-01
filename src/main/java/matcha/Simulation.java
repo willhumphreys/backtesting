@@ -96,8 +96,8 @@ public class Simulation {
         return new Results();
     }
 
-    Boolean getLowCheck(String[] lowOfTheDay, float Low, float PreviousLow, int lowCheckPref, int index) {
-        Boolean lowCheck;
+    private boolean getLowCheck(String[] lowOfTheDay, float Low, float PreviousLow, int lowCheckPref, int index) {
+        boolean lowCheck;
         switch (lowCheckPref) {
             case 0:
                 //Current Candle is below last candle.
@@ -117,8 +117,8 @@ public class Simulation {
         return lowCheck;
     }
 
-    Boolean getHighCheck(String[] highOfTheDay, float High, float PreviousHigh, int highCheckPref, int index) {
-        Boolean highCheck;
+    private boolean getHighCheck(String[] highOfTheDay, float High, float PreviousHigh, int highCheckPref, int index) {
+        boolean highCheck;
         switch(highCheckPref) {
             case 0:
                 highCheck = High > PreviousHigh;
