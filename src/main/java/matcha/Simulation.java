@@ -31,9 +31,7 @@ public class Simulation {
     Results execute(String[][] data) {
 
 
-        for (int i = 0; i < data.length; i++) {
-
-
+        for (int i = 1; i < data.length; i++) {
 
             LocalDateTime dateTime = LocalDateTime.parse(data[i][DATE], formatter);
 
