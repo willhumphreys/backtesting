@@ -8,8 +8,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BacktestingApplication implements CommandLineRunner {
 
+    private final TickDataReader tickDataReader;
+
     @Autowired
-    private TickDataReader tickDataReader;
+    public BacktestingApplication(TickDataReader tickDataReader) {
+        this.tickDataReader = tickDataReader;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(BacktestingApplication.class, args);
