@@ -20,6 +20,10 @@ public class Simulation {
     private static final int TODAYS_LOW = 7;
     private static final int TODAYS_HIGH = 8;
 
+    private double entry;
+    private double stop;
+    private double target;
+
 
     private DateTimeFormatter formatter;
 
@@ -31,20 +35,25 @@ public class Simulation {
     Results execute(String[][] hourData, String[][] tickData) {
 
 
+        int hourCounter = 0;
         for (int i = 1; i < tickData.length; i++) {
 
-            LocalDateTime dateTime = LocalDateTime.parse(hourData[i][DATE], formatter);
+            LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE], formatter);
+            LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE], formatter);
 
-            double CandleClose = parseDouble(hourData[i][CLOSE]);
-            double CandleOpen = parseDouble(hourData[i][OPEN]);
-            double CandleLow = parseDouble(hourData[i][LOW]);
+            hourCounter = syncAndCheckCandles(hourCounter, hourDateTime, tickDateTime);
+
+
+            double CandleClose = parseDouble(hourData[hourCounter][CLOSE]);
+            double CandleOpen = parseDouble(hourData[hourCounter][OPEN]);
+            double CandleLow = parseDouble(hourData[hourCounter][LOW]);
             double PreviousCandleLow = parseDouble(hourData[i -1][LOW]);
-            double CandleHigh = parseDouble(hourData[i][HIGH]);
+            double CandleHigh = parseDouble(hourData[hourCounter][HIGH]);
             double PreviousCandleHigh = parseDouble(hourData[i -1][HIGH]);
             double PreviousCandleClose = parseDouble(hourData[i-1][CLOSE]);
 
-            double yesterdaysLow = parseDouble(hourData[i][DAILY_LOW]);
-            double yesterdaysHigh = parseDouble(hourData[i][DAILY_HIGH]);
+            double yesterdaysLow = parseDouble(hourData[hourCounter][DAILY_LOW]);
+            double yesterdaysHigh = parseDouble(hourData[hourCounter][DAILY_HIGH]);
 
             double LastBarSize = PreviousCandleClose - PreviousCandleLow;
 
@@ -67,6 +76,15 @@ public class Simulation {
 
                 System.out.println("Enter new low");
 
+
+                if(entry == -1) {
+
+                    this.stop = CandleClose + (CandleClose - CandleLow);
+                    this.target = CandleLow;
+                    this.entry = CandleClose;
+
+                }
+
 //                s_SCNewOrder order;
 //                order.OrderQuantity = 1;
 //                order.OrderType = SCT_ORDERTYPE_MARKET;
@@ -88,6 +106,12 @@ public class Simulation {
 
                 System.out.println("Enter new high");
 
+
+                if(entry == -1) {
+                    this.stop = CandleClose - (CandleHigh - CandleClose);
+                    this.target = CandleHigh;
+                    this.entry = CandleClose;
+                }
 //                s_SCNewOrder order;
 //                order.OrderQuantity = 1;
 //                order.OrderType = SCT_ORDERTYPE_MARKET;
@@ -107,6 +131,17 @@ public class Simulation {
         }
 
         return new Results();
+    }
+
+    private int syncAndCheckCandles(int hourCounter, LocalDateTime hourDateTime, LocalDateTime tickDateTime) {
+        final int tickHour = tickDateTime.getHour();
+        final int hourCandle = hourDateTime.getHour();
+        if(tickHour == hourCandle + 1) {
+            hourCounter++;
+        } else if(tickHour != hourCandle) {
+            throw new IllegalStateException(String.format("Tick Hour is %d Hour Candle is %d", tickHour, hourCandle));
+        }
+        return hourCounter;
     }
 
     private boolean getLowCheck(String[] lowOfTheDay, double Low, double PreviousLow, int lowCheckPref, int index) {
