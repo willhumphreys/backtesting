@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BacktestingApplication implements CommandLineRunner {
 
+    private static final int DATA_FILE = 0;
     private final TickDataReader tickDataReader;
     private final Simulation simulation;
 
@@ -21,10 +22,13 @@ public class BacktestingApplication implements CommandLineRunner {
         SpringApplication.run(BacktestingApplication.class, args);
     }
 
+    /**
+     * Data file "Data/dataOut2.txt"
+     */
     @Override
     public void run(String... args) throws Exception {
 
-        String[][] data = tickDataReader.read("Data/dataOut2.txt");
+        String[][] data = tickDataReader.read(args[DATA_FILE]);
 
         Results results = simulation.execute(data);
 
