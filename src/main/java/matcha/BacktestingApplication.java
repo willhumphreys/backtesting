@@ -1,16 +1,15 @@
 package matcha;
 
-import com.opencsv.CSVReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.List;
-
 @SpringBootApplication
 public class BacktestingApplication implements CommandLineRunner {
+
+    @Autowired
+    private TickDataReader tickDataReader;
 
     public static void main(String[] args) {
         SpringApplication.run(BacktestingApplication.class, args);
@@ -19,15 +18,8 @@ public class BacktestingApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        CSVReader csvReader = new CSVReader(new FileReader(new File("Data/dataOut2.txt")));
-        List<String[]> list = csvReader.readAll();
+        String[][] data = tickDataReader.read("Data/dataOut2.txt");
 
-        list.forEach(line -> System.out.println(line[0]));
-
-        String[][] dataArr = new String[list.size()][];
-        dataArr = list.toArray(dataArr);
-
-
-
+        System.out.println(data[0][0]);
     }
 }
