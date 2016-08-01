@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 
-import static java.lang.Float.parseFloat;
+import static java.lang.Double.parseDouble;
 
 @Service
 public class Simulation {
@@ -37,20 +37,18 @@ public class Simulation {
 
             LocalDateTime dateTime = LocalDateTime.parse(data[i][DATE], formatter);
 
+            double CandleClose = parseDouble(data[i][CLOSE]);
+            double CandleOpen = parseDouble(data[i][OPEN]);
+            double CandleLow = parseDouble(data[i][LOW]);
+            double PreviousCandleLow = parseDouble(data[i -1][LOW]);
+            double CandleHigh = parseDouble(data[i][HIGH]);
+            double PreviousCandleHigh = parseDouble(data[i -1][HIGH]);
+            double PreviousCandleClose = parseDouble(data[i-1][CLOSE]);
 
+            double yesterdaysLow = parseDouble(data[i][DAILY_LOW]);
+            double yesterdaysHigh = parseDouble(data[i][DAILY_HIGH]);
 
-            float CandleClose = parseFloat(data[i][CLOSE]);
-            float CandleOpen = parseFloat(data[i][OPEN]);
-            float CandleLow = parseFloat(data[i][LOW]);
-            float PreviousCandleLow = parseFloat(data[i -1][LOW]);
-            float CandleHigh = parseFloat(data[i][HIGH]);
-            float PreviousCandleHigh = parseFloat(data[i -1][HIGH]);
-            float PreviousCandleClose = parseFloat(data[i-1][CLOSE]);
-
-            float yesterdaysLow = parseFloat(data[i][DAILY_LOW]);
-            float yesterdaysHigh = parseFloat(data[i][DAILY_HIGH]);
-
-            float LastBarSize = PreviousCandleClose - PreviousCandleLow;
+            double LastBarSize = PreviousCandleClose - PreviousCandleLow;
 
 
             Boolean takeOutYesterdaysLow = CandleLow < yesterdaysLow;
@@ -113,7 +111,7 @@ public class Simulation {
         return new Results();
     }
 
-    private boolean getLowCheck(String[] lowOfTheDay, float Low, float PreviousLow, int lowCheckPref, int index) {
+    private boolean getLowCheck(String[] lowOfTheDay, double Low, double PreviousLow, int lowCheckPref, int index) {
         boolean lowCheck;
         switch (lowCheckPref) {
             case 0:
@@ -134,7 +132,7 @@ public class Simulation {
         return lowCheck;
     }
 
-    private boolean getHighCheck(String[] highOfTheDay, float High, float PreviousHigh, int highCheckPref, int index) {
+    private boolean getHighCheck(String[] highOfTheDay, double High, double PreviousHigh, int highCheckPref, int index) {
         boolean highCheck;
         switch(highCheckPref) {
             case 0:
