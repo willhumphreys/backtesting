@@ -2,6 +2,10 @@ package matcha;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+
 import static java.lang.Float.parseFloat;
 
 @Service
@@ -16,13 +20,26 @@ public class Simulation {
     private static final int TODAYS_LOW = 7;
     private static final int TODAYS_HIGH = 8;
 
+
+    private DateTimeFormatter formatter;
+
+
+    public Simulation() {
+        formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
+    }
+
     Results execute(String[][] data) {
 
 
         for (int i = 0; i < data.length; i++) {
 
 
-            float CandleClose = parseFloat(data[i][DATE]);
+
+            LocalDateTime dateTime = LocalDateTime.parse(data[i][DATE], formatter);
+
+
+
+            float CandleClose = parseFloat(data[i][CLOSE]);
             float CandleOpen = parseFloat(data[i][OPEN]);
             float CandleLow = parseFloat(data[i][LOW]);
             float PreviousCandleLow = parseFloat(data[i -1][LOW]);
