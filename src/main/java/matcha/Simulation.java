@@ -56,7 +56,7 @@ public class Simulation {
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
 
-            //If this is the last tick then it is time to open our position.
+            //If this is the last tick then it is time to open our position if we have one.
             if (tickDateTime.getHour() != nextTickDateTime.getHour()) {
                 timeToOpenPosition = true;
             }
@@ -98,7 +98,6 @@ public class Simulation {
                         closeAboveYesterdaysLow &&
                         openAboveYesterdaysLow &&
                         getLowCheck(hourData[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i) &&
-                        entry == -1.0 &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
@@ -118,7 +117,6 @@ public class Simulation {
                         closeBelowYesterdaysHigh &&
                         openBelowYesterdaysLow &&
                         getHighCheck(hourData[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i) &&
-                        entry == -1.0 &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
