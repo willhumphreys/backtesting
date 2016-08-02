@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static java.lang.Double.parseDouble;
+import static java.lang.String.format;
 
 @Service
 public class Simulation {
@@ -42,8 +43,12 @@ public class Simulation {
             LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE], formatter);
             LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE], formatter);
 
-            hourCounter = syncAndCheckCandles(hourCounter, hourDateTime, tickDateTime);
-
+            final int hourCandleHour = hourDateTime.getHour();
+            final int tickCandleHour = tickDateTime.getHour();
+            if(hourCandleHour != tickCandleHour || hourCandleHour != tickCandleHour -1) {
+                throw new IllegalStateException(format("The hour candles are out of sync. " +
+                        "Hour Candle: %d Tick Candle: %d", hourCandleHour, tickCandleHour);
+            }
 
             double CandleClose = parseDouble(hourData[hourCounter][CLOSE]);
             double CandleOpen = parseDouble(hourData[hourCounter][OPEN]);
@@ -130,6 +135,8 @@ public class Simulation {
 
 
 
+
+
         }
 
         for (String[] line : hourData) {
@@ -137,17 +144,6 @@ public class Simulation {
         }
 
         return new Results();
-    }
-
-    private int syncAndCheckCandles(int hourCounter, LocalDateTime hourDateTime, LocalDateTime tickDateTime) {
-        final int tickHour = tickDateTime.getHour();
-        final int hourCandle = hourDateTime.getHour();
-        if(tickHour == hourCandle + 1) {
-            hourCounter++;
-        } else if(tickHour != hourCandle) {
-            throw new IllegalStateException(String.format("Tick Hour is %d Hour Candle is %d", tickHour, hourCandle));
-        }
-        return hourCounter;
     }
 
     private boolean getLowCheck(String[] lowOfTheDay, double Low, double PreviousLow, int lowCheckPref, int index) {
