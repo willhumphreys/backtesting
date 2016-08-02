@@ -24,8 +24,9 @@ public class Simulation {
     private double stop;
     private double target;
 
-    private boolean pending;
+    private boolean availableToTrade;
 
+    private boolean timeToOpenPosition;
 
     private DateTimeFormatter formatter;
 
@@ -52,6 +53,7 @@ public class Simulation {
 
             if(isHourCandleBehind(hourCandleHour, tickCandleHour)) {
                 hourCounter++;
+                timeToOpenPosition = true;
             }
 
             double CandleClose = parseDouble(hourData[hourCounter][CLOSE]);
@@ -87,13 +89,12 @@ public class Simulation {
                 System.out.println("Enter new low");
 
 
-                if(entry == -1 && !pending) {
+                if(entry == -1 && timeToOpenPosition) {
 
                     this.stop = CandleClose + (CandleClose - CandleLow);
                     this.target = CandleLow;
                     this.entry = CandleClose;
-                    pending = true;
-
+                    availableToTrade = true;
                 }
 
 //                s_SCNewOrder order;
@@ -118,11 +119,11 @@ public class Simulation {
                 System.out.println("Enter new high");
 
 
-                if(entry == -1 && !pending) {
+                if(entry == -1 && timeToOpenPosition) {
                     this.stop = CandleClose - (CandleHigh - CandleClose);
                     this.target = CandleHigh;
                     this.entry = CandleClose;
-                    pending = true;
+                    availableToTrade = true;
                 }
 //                s_SCNewOrder order;
 //                order.OrderQuantity = 1;
@@ -139,7 +140,7 @@ public class Simulation {
 
 
 
-
+            timeToOpenPosition = false;
 
         }
 
