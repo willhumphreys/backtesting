@@ -37,105 +37,95 @@ public class Simulation {
 
     Results execute(String[][] hourData, String[][] tickData) {
 
-
         int hourCounter = 0;
         for (int i = 1; i < tickData.length; i++) {
 
-            LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE], formatter);
-            LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE], formatter);
-
-            final int hourCandleHour = hourDateTime.getHour();
-            final int tickCandleHour = tickDateTime.getHour();
-            if(isHourCandleOutOfSyncByMoreThanAnHour(hourCandleHour, tickCandleHour)) {
-                throw new IllegalStateException(format("The hour candles are out of sync. " +
-                        "Hour Candle: %d Tick Candle: %d", hourCandleHour, tickCandleHour));
+            //If it the last tick skip trading.
+            if(i == tickData.length -1) {
+                continue;
             }
 
-            if(isHourCandleBehind(hourCandleHour, tickCandleHour)) {
-                hourCounter++;
+            //Get tick hour and the hour hour.
+            LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE], formatter);
+            LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE], formatter);
+            LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i +1][DATE], formatter);
+
+            int hourCandleHour = hourDateTime.getHour();
+            final int tickCandleHour = tickDateTime.getHour();
+
+            //If this is the last tick then it is time to open our position.
+            if(tickDateTime.getHour() != nextTickDateTime.getHour()) {
                 timeToOpenPosition = true;
             }
 
-            double CandleClose = parseDouble(hourData[hourCounter][CLOSE]);
-            double CandleOpen = parseDouble(hourData[hourCounter][OPEN]);
-            double CandleLow = parseDouble(hourData[hourCounter][LOW]);
-            double PreviousCandleLow = parseDouble(hourData[i -1][LOW]);
-            double CandleHigh = parseDouble(hourData[hourCounter][HIGH]);
-            double PreviousCandleHigh = parseDouble(hourData[i -1][HIGH]);
-            double PreviousCandleClose = parseDouble(hourData[i-1][CLOSE]);
-
-            double yesterdaysLow = parseDouble(hourData[hourCounter][DAILY_LOW]);
-            double yesterdaysHigh = parseDouble(hourData[hourCounter][DAILY_HIGH]);
-
-            double LastBarSize = PreviousCandleClose - PreviousCandleLow;
-
-
-            Boolean takeOutYesterdaysLow = CandleLow < yesterdaysLow;
-            Boolean closePositive = CandleClose > CandleOpen;
-            Boolean closeAboveYesterdaysLow = CandleClose > yesterdaysLow;
-            Boolean openAboveYesterdaysLow = CandleOpen > yesterdaysLow;
-
-            Boolean takeOutYesterdaysHigh = CandleHigh > yesterdaysHigh;
-            Boolean closeNegative = CandleClose < CandleOpen;
-            Boolean closeBelowYesterdaysHigh = CandleClose < yesterdaysHigh;
-            Boolean openBelowYesterdaysLow = CandleOpen < yesterdaysHigh;
-
-            if (takeOutYesterdaysLow &&
-                    closePositive &&
-                    closeAboveYesterdaysLow &&
-                    openAboveYesterdaysLow &&
-                    getLowCheck(hourData[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i)) {
-
-                System.out.println("Enter new low");
-
-
-                if(entry == -1 && timeToOpenPosition) {
-
-                    this.stop = CandleClose + (CandleClose - CandleLow);
-                    this.target = CandleLow;
-                    this.entry = CandleClose;
-                    availableToTrade = true;
-                }
-
-//                s_SCNewOrder order;
-//                order.OrderQuantity = 1;
-//                order.OrderType = SCT_ORDERTYPE_MARKET;
-//
-//                order.Target1Price = CandleLow - extraTicks;
-//                order.Stop1Price = CandleClose + (CandleClose - CandleLow) + extraTicks;
-//                order.OCOGroup1Quantity = 1; // If this is left at the default of 0, then it will be automatically set.
-//
-//                //logEntryMessage(sc, PositionData, order);
-//                sc.SellEntry(order);
+            //If the hour has changed we need to update the hour counter.
+            if(tickCandleHour != hourCandleHour) {
+                hourCounter ++;
 
             }
 
-            if (takeOutYesterdaysHigh &&
-                    closeNegative &&
-                    closeBelowYesterdaysHigh &&
-                    openBelowYesterdaysLow &&
-                    getHighCheck(hourData[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i)) {
+            if (hourCounter != 0) {
 
-                System.out.println("Enter new high");
+                double CandleClose = parseDouble(hourData[hourCounter][CLOSE]);
+                double CandleOpen = parseDouble(hourData[hourCounter][OPEN]);
+                double CandleLow = parseDouble(hourData[hourCounter][LOW]);
+                double PreviousCandleLow = parseDouble(hourData[hourCounter - 1][LOW]);
+                double CandleHigh = parseDouble(hourData[hourCounter][HIGH]);
+                double PreviousCandleHigh = parseDouble(hourData[hourCounter - 1][HIGH]);
+                double PreviousCandleClose = parseDouble(hourData[hourCounter - 1][CLOSE]);
+
+                double yesterdaysLow = parseDouble(hourData[hourCounter][DAILY_LOW]);
+                double yesterdaysHigh = parseDouble(hourData[hourCounter][DAILY_HIGH]);
+
+                double LastBarSize = PreviousCandleClose - PreviousCandleLow;
 
 
-                if(entry == -1 && timeToOpenPosition) {
-                    this.stop = CandleClose - (CandleHigh - CandleClose);
-                    this.target = CandleHigh;
-                    this.entry = CandleClose;
-                    availableToTrade = true;
+                Boolean takeOutYesterdaysLow = CandleLow < yesterdaysLow;
+                Boolean closePositive = CandleClose > CandleOpen;
+                Boolean closeAboveYesterdaysLow = CandleClose > yesterdaysLow;
+                Boolean openAboveYesterdaysLow = CandleOpen > yesterdaysLow;
+
+                Boolean takeOutYesterdaysHigh = CandleHigh > yesterdaysHigh;
+                Boolean closeNegative = CandleClose < CandleOpen;
+                Boolean closeBelowYesterdaysHigh = CandleClose < yesterdaysHigh;
+                Boolean openBelowYesterdaysLow = CandleOpen < yesterdaysHigh;
+
+                if (takeOutYesterdaysLow &&
+                        closePositive &&
+                        closeAboveYesterdaysLow &&
+                        openAboveYesterdaysLow &&
+                        getLowCheck(hourData[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i)) {
+
+                    System.out.println("Enter new low");
+
+
+                    if (entry == -1 && timeToOpenPosition) {
+
+                        this.stop = CandleClose + (CandleClose - CandleLow);
+                        this.target = CandleLow;
+                        this.entry = CandleClose;
+                        availableToTrade = true;
+                    }
+
                 }
-//                s_SCNewOrder order;
-//                order.OrderQuantity = 1;
-//                order.OrderType = SCT_ORDERTYPE_MARKET;
-//
-//                order.Target1Price = CandleHigh + extraTicks;
-//                order.Stop1Price = CandleClose - (CandleHigh - CandleClose) - extraTicks;
-//
-//                order.OCOGroup1Quantity = 1; // If this is left at the default of 0, then it will be automatically set.
-//
-//                //logEntryMessage(sc, PositionData, order);
-//                sc.BuyEntry(order);
+
+                if (takeOutYesterdaysHigh &&
+                        closeNegative &&
+                        closeBelowYesterdaysHigh &&
+                        openBelowYesterdaysLow &&
+                        getHighCheck(hourData[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i)) {
+
+                    System.out.println("Enter new high");
+
+
+                    if (entry == -1 && timeToOpenPosition) {
+                        this.stop = CandleClose - (CandleHigh - CandleClose);
+                        this.target = CandleHigh;
+                        this.entry = CandleClose;
+                        availableToTrade = true;
+                    }
+                }
+
             }
 
 
@@ -145,18 +135,19 @@ public class Simulation {
         }
 
         for (String[] line : hourData) {
-            System.out.println(line[DATE] + line[OPEN] + line[LOW] + line[HIGH] + line[CLOSE] + line[DAILY_LOW] + line[DAILY_HIGH]);
+            System.out.println(line[DATE] + line[OPEN] + line[LOW] + line[HIGH] + line[CLOSE] + line[DAILY_LOW] +
+                    line[DAILY_HIGH]);
         }
 
         return new Results();
     }
 
     private boolean isHourCandleOutOfSyncByMoreThanAnHour(int hourCandleHour, int tickCandleHour) {
-        return hourCandleHour != tickCandleHour || hourCandleHour != tickCandleHour -1;
+        return Math.abs(hourCandleHour - tickCandleHour) > 1 && !(hourCandleHour == 23 && tickCandleHour == 0);
     }
 
     private boolean isHourCandleBehind(int hourCandleHour, int tickCandleHour) {
-        return hourCandleHour == tickCandleHour -1;
+        return hourCandleHour == tickCandleHour - 1;
     }
 
     private boolean getLowCheck(String[] lowOfTheDay, double Low, double PreviousLow, int lowCheckPref, int index) {
@@ -175,26 +166,27 @@ public class Simulation {
                 lowCheck = Double.parseDouble(lowOfTheDay[index]) >= Double.parseDouble(lowOfTheDay[index - 1]);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid lowCheck value" );
+                throw new IllegalArgumentException("Invalid lowCheck value");
         }
         return lowCheck;
     }
 
-    private boolean getHighCheck(String[] highOfTheDay, double High, double PreviousHigh, int highCheckPref, int index) {
+    private boolean getHighCheck(String[] highOfTheDay, double High, double PreviousHigh, int highCheckPref, int
+            index) {
         boolean highCheck;
-        switch(highCheckPref) {
+        switch (highCheckPref) {
             case 0:
                 highCheck = High > PreviousHigh;
                 break;
             case 1:
-                highCheck =  Double.parseDouble(highOfTheDay[index]) > Double.parseDouble(highOfTheDay[index - 1]);
+                highCheck = Double.parseDouble(highOfTheDay[index]) > Double.parseDouble(highOfTheDay[index - 1]);
                 break;
             case 2:
                 //We don't put in a new high.
                 highCheck = Double.parseDouble(highOfTheDay[index]) <= Double.parseDouble(highOfTheDay[index - 1]);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid highCheck value" );
+                throw new IllegalArgumentException("Invalid highCheck value");
         }
         return highCheck;
     }

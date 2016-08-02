@@ -33,7 +33,5 @@ public class BacktestingApplication implements CommandLineRunner {
         String[][] tickData = tickDataReader.read(args[TICK_DATA_FILE]);
 
         Results results = simulation.execute(data, tickData);
-
-        System.out.println(results);
     }
 }
