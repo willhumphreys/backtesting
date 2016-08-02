@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static java.lang.Double.parseDouble;
-import static java.lang.String.format;
 
 @Service
 public class Simulation {
@@ -33,9 +32,10 @@ public class Simulation {
 
     public Simulation() {
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
-        entry = -1;
-        stop = -1;
-        target = -1;
+        entry = -1.0;
+        stop = -1.0;
+        target = -1.0;
+        availableToTrade = true;
     }
 
     Results execute(String[][] hourData, String[][] tickData) {
@@ -44,26 +44,26 @@ public class Simulation {
         for (int i = 1; i < tickData.length; i++) {
 
             //If it the last tick skip trading.
-            if(i == tickData.length -1) {
+            if (i == tickData.length - 1) {
                 continue;
             }
 
             //Get tick hour and the hour hour.
             LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE], formatter);
             LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE], formatter);
-            LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i +1][DATE], formatter);
+            LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE], formatter);
 
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
 
             //If this is the last tick then it is time to open our position.
-            if(tickDateTime.getHour() != nextTickDateTime.getHour()) {
+            if (tickDateTime.getHour() != nextTickDateTime.getHour()) {
                 timeToOpenPosition = true;
             }
 
             //If the hour has changed we need to update the hour counter.
-            if(tickCandleHour != hourCandleHour) {
-                hourCounter ++;
+            if (tickCandleHour != hourCandleHour) {
+                hourCounter++;
 
             }
 
@@ -97,20 +97,19 @@ public class Simulation {
                         closePositive &&
                         closeAboveYesterdaysLow &&
                         openAboveYesterdaysLow &&
-                        getLowCheck(hourData[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i)) {
+                        getLowCheck(hourData[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i) &&
+                        entry == -1.0 &&
+                        timeToOpenPosition &&
+                        availableToTrade) {
 
 
-
-                    if (entry == -1 && timeToOpenPosition && availableToTrade) {
-
-                        System.out.println("Enter new low");
+                    System.out.println("Enter new low");
 
 
-                        this.stop = CandleClose + (CandleClose - CandleLow);
-                        this.target = CandleLow;
-                        this.entry = CandleClose;
-                        availableToTrade = false;
-                    }
+                    this.stop = CandleClose + (CandleClose - CandleLow);
+                    this.target = CandleLow;
+                    this.entry = CandleClose;
+                    availableToTrade = false;
 
                 }
 
@@ -118,24 +117,18 @@ public class Simulation {
                         closeNegative &&
                         closeBelowYesterdaysHigh &&
                         openBelowYesterdaysLow &&
-                        getHighCheck(hourData[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i)) {
+                        getHighCheck(hourData[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i) &&
+                        entry == -1.0 &&
+                        timeToOpenPosition &&
+                        availableToTrade) {
 
-
-
-
-                    if (entry == -1 && timeToOpenPosition && availableToTrade) {
-
-                        System.out.println("Enter new high");
-                        this.stop = CandleClose - (CandleHigh - CandleClose);
-                        this.target = CandleHigh;
-                        this.entry = CandleClose;
-                        availableToTrade = false;
-                    }
+                    System.out.println("Enter new high");
+                    this.stop = CandleClose - (CandleHigh - CandleClose);
+                    this.target = CandleHigh;
+                    this.entry = CandleClose;
+                    availableToTrade = false;
                 }
-
             }
-
-
 
             timeToOpenPosition = false;
 
