@@ -47,7 +47,11 @@ public class Simulation {
             final int tickCandleHour = tickDateTime.getHour();
             if(hourCandleHour != tickCandleHour || hourCandleHour != tickCandleHour -1) {
                 throw new IllegalStateException(format("The hour candles are out of sync. " +
-                        "Hour Candle: %d Tick Candle: %d", hourCandleHour, tickCandleHour);
+                        "Hour Candle: %d Tick Candle: %d", hourCandleHour, tickCandleHour));
+            }
+
+            if(hourCandleHour == tickCandleHour -1) {
+                hourCounter++;
             }
 
             double CandleClose = parseDouble(hourData[hourCounter][CLOSE]);
