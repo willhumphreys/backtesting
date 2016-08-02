@@ -105,22 +105,22 @@ public class Simulation {
                     if (target > stop) {
 
                         if (CandleClose <= stop) {
-                            tickCounter += stop - entry;
+                            tickCounter += convertTicksToInt(stop - entry);
                             losers++;
                             availableToTrade = true;
                         } else if (CandleClose > target) {
-                            tickCounter += target - entry;
+                            tickCounter += convertTicksToInt(target - entry);
                             winners++;
                             availableToTrade = true;
                         }
                     } else {
 
                         if (CandleClose >= stop) {
-                            tickCounter += entry - stop;
+                            tickCounter += convertTicksToInt(entry - stop);
                             losers++;
                             availableToTrade = true;
                         } else if (CandleClose < target) {
-                            tickCounter += entry - target;
+                            tickCounter += convertTicksToInt(entry - target);
                             winners++;
                             availableToTrade = true;
                         }
@@ -172,6 +172,12 @@ public class Simulation {
 //        }
 
         return new Results(tickCounter, winners, losers);
+    }
+
+    private long convertTicksToInt(double doubleTicks) {
+        final long tickProfit = Math.round(doubleTicks * 10000);
+        System.out.println(tickProfit);
+        return tickProfit;
     }
 
     private boolean isHourCandleOutOfSyncByMoreThanAnHour(int hourCandleHour, int tickCandleHour) {
