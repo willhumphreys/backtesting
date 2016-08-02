@@ -75,51 +75,51 @@ public class Simulation {
 
             if (hourCounter != 0) {
 
-                double CandleClose = parseDouble(hourData[hourCounter][CLOSE]);
-                double CandleOpen = parseDouble(hourData[hourCounter][OPEN]);
-                double CandleLow = parseDouble(hourData[hourCounter][LOW]);
-                double PreviousCandleLow = parseDouble(hourData[hourCounter - 1][LOW]);
-                double CandleHigh = parseDouble(hourData[hourCounter][HIGH]);
-                double PreviousCandleHigh = parseDouble(hourData[hourCounter - 1][HIGH]);
-                double PreviousCandleClose = parseDouble(hourData[hourCounter - 1][CLOSE]);
+                double candleClose = parseDouble(hourData[hourCounter][CLOSE]);
+                double candleOpen = parseDouble(hourData[hourCounter][OPEN]);
+                double candleLow = parseDouble(hourData[hourCounter][LOW]);
+                double previousCandleLow = parseDouble(hourData[hourCounter - 1][LOW]);
+                double candleHigh = parseDouble(hourData[hourCounter][HIGH]);
+                double previousCandleHigh = parseDouble(hourData[hourCounter - 1][HIGH]);
+                double previousCandleClose = parseDouble(hourData[hourCounter - 1][CLOSE]);
 
                 double yesterdaysLow = parseDouble(hourData[hourCounter][DAILY_LOW]);
                 double yesterdaysHigh = parseDouble(hourData[hourCounter][DAILY_HIGH]);
 
-                double LastBarSize = PreviousCandleClose - PreviousCandleLow;
+                double LastBarSize = previousCandleClose - previousCandleLow;
 
 
-                Boolean takeOutYesterdaysLow = CandleLow < yesterdaysLow;
-                Boolean closePositive = CandleClose > CandleOpen;
-                Boolean closeAboveYesterdaysLow = CandleClose > yesterdaysLow;
-                Boolean openAboveYesterdaysLow = CandleOpen > yesterdaysLow;
+                Boolean takeOutYesterdaysLow = candleLow < yesterdaysLow;
+                Boolean closePositive = candleClose > candleOpen;
+                Boolean closeAboveYesterdaysLow = candleClose > yesterdaysLow;
+                Boolean openAboveYesterdaysLow = candleOpen > yesterdaysLow;
 
-                Boolean takeOutYesterdaysHigh = CandleHigh > yesterdaysHigh;
-                Boolean closeNegative = CandleClose < CandleOpen;
-                Boolean closeBelowYesterdaysHigh = CandleClose < yesterdaysHigh;
-                Boolean openBelowYesterdaysLow = CandleOpen < yesterdaysHigh;
+                Boolean takeOutYesterdaysHigh = candleHigh > yesterdaysHigh;
+                Boolean closeNegative = candleClose < candleOpen;
+                Boolean closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
+                Boolean openBelowYesterdaysLow = candleOpen < yesterdaysHigh;
 
 
                 if (!availableToTrade) {
 
                     if (target > stop) {
 
-                        if (CandleClose <= stop) {
+                        if (candleClose <= stop) {
                             tickCounter += convertTicksToInt(stop - entry);
                             losers++;
                             availableToTrade = true;
-                        } else if (CandleClose > target) {
+                        } else if (candleClose > target) {
                             tickCounter += convertTicksToInt(target - entry);
                             winners++;
                             availableToTrade = true;
                         }
                     } else {
 
-                        if (CandleClose >= stop) {
+                        if (candleClose >= stop) {
                             tickCounter += convertTicksToInt(entry - stop);
                             losers++;
                             availableToTrade = true;
-                        } else if (CandleClose < target) {
+                        } else if (candleClose < target) {
                             tickCounter += convertTicksToInt(entry - target);
                             winners++;
                             availableToTrade = true;
@@ -131,7 +131,7 @@ public class Simulation {
                         closePositive &&
                         closeAboveYesterdaysLow &&
                         openAboveYesterdaysLow &&
-                        getLowCheck(hourData[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i) &&
+                        getLowCheck(hourData[TODAYS_LOW], candleLow, previousCandleLow, 0, i) &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
@@ -139,9 +139,9 @@ public class Simulation {
                     System.out.println("Enter new low");
 
 
-                    this.stop = CandleClose + (CandleClose - CandleLow);
-                    this.target = CandleLow;
-                    this.entry = CandleClose;
+                    this.stop = candleClose + (candleClose - candleLow);
+                    this.target = candleLow;
+                    this.entry = candleClose;
                     availableToTrade = false;
 
                 }
@@ -150,14 +150,14 @@ public class Simulation {
                         closeNegative &&
                         closeBelowYesterdaysHigh &&
                         openBelowYesterdaysLow &&
-                        getHighCheck(hourData[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i) &&
+                        getHighCheck(hourData[TODAYS_HIGH], candleHigh, previousCandleHigh, 0, i) &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
                     System.out.println("Enter new high");
-                    this.stop = CandleClose - (CandleHigh - CandleClose);
-                    this.target = CandleHigh;
-                    this.entry = CandleClose;
+                    this.stop = candleClose - (candleHigh - candleClose);
+                    this.target = candleHigh;
+                    this.entry = candleClose;
                     availableToTrade = false;
                 }
             }
