@@ -89,15 +89,15 @@ public class Simulation {
                 double LastBarSize = previousCandleClose - previousCandleLow;
 
 
-                Boolean takeOutYesterdaysLow = candleLow < yesterdaysLow;
-                Boolean closePositive = candleClose > candleOpen;
-                Boolean closeAboveYesterdaysLow = candleClose > yesterdaysLow;
-                Boolean openAboveYesterdaysLow = candleOpen > yesterdaysLow;
+                boolean takeOutYesterdaysLow = candleLow < yesterdaysLow;
+                boolean closePositive = candleClose > candleOpen;
+                boolean closeAboveYesterdaysLow = candleClose > yesterdaysLow;
+                boolean openAboveYesterdaysLow = candleOpen > yesterdaysLow;
 
-                Boolean takeOutYesterdaysHigh = candleHigh > yesterdaysHigh;
-                Boolean closeNegative = candleClose < candleOpen;
-                Boolean closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
-                Boolean openBelowYesterdaysLow = candleOpen < yesterdaysHigh;
+                boolean takeOutYesterdaysHigh = candleHigh > yesterdaysHigh;
+                boolean closeNegative = candleClose < candleOpen;
+                boolean closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
+                boolean openBelowYesterdaysLow = candleOpen < yesterdaysHigh;
 
 
                 if (!availableToTrade) {
