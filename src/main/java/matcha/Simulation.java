@@ -24,13 +24,10 @@ public class Simulation {
     private double target;
 
     private boolean availableToTrade;
-
     private boolean timeToOpenPosition;
 
     private double tickCounter;
-
     private int winners;
-
     private int losers;
 
 
@@ -178,14 +175,6 @@ public class Simulation {
         final long tickProfit = Math.round(doubleTicks * 10000);
         System.out.println(tickProfit);
         return tickProfit;
-    }
-
-    private boolean isHourCandleOutOfSyncByMoreThanAnHour(int hourCandleHour, int tickCandleHour) {
-        return Math.abs(hourCandleHour - tickCandleHour) > 1 && !(hourCandleHour == 23 && tickCandleHour == 0);
-    }
-
-    private boolean isHourCandleBehind(int hourCandleHour, int tickCandleHour) {
-        return hourCandleHour == tickCandleHour - 1;
     }
 
     private boolean getLowCheck(String[] lowOfTheDay, double Low, double PreviousLow, int lowCheckPref, int index) {
