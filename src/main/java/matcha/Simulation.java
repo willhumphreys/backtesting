@@ -45,12 +45,12 @@ public class Simulation {
 
             final int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
-            if(hourCandleHour != tickCandleHour || hourCandleHour != tickCandleHour -1) {
+            if(isHourCandleOutOfSyncByMoreThanAnHour(hourCandleHour, tickCandleHour)) {
                 throw new IllegalStateException(format("The hour candles are out of sync. " +
                         "Hour Candle: %d Tick Candle: %d", hourCandleHour, tickCandleHour));
             }
 
-            if(hourCandleHour == tickCandleHour -1) {
+            if(isHourCandleBehind(hourCandleHour, tickCandleHour)) {
                 hourCounter++;
             }
 
@@ -148,6 +148,14 @@ public class Simulation {
         }
 
         return new Results();
+    }
+
+    private boolean isHourCandleOutOfSyncByMoreThanAnHour(int hourCandleHour, int tickCandleHour) {
+        return hourCandleHour != tickCandleHour || hourCandleHour != tickCandleHour -1;
+    }
+
+    private boolean isHourCandleBehind(int hourCandleHour, int tickCandleHour) {
+        return hourCandleHour == tickCandleHour -1;
     }
 
     private boolean getLowCheck(String[] lowOfTheDay, double Low, double PreviousLow, int lowCheckPref, int index) {
