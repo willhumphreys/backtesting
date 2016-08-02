@@ -33,6 +33,9 @@ public class Simulation {
 
     public Simulation() {
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
+        entry = -1;
+        stop = -1;
+        target = -1;
     }
 
     Results execute(String[][] hourData, String[][] tickData) {
@@ -96,15 +99,17 @@ public class Simulation {
                         openAboveYesterdaysLow &&
                         getLowCheck(hourData[TODAYS_LOW], CandleLow, PreviousCandleLow, 0, i)) {
 
-                    System.out.println("Enter new low");
 
 
-                    if (entry == -1 && timeToOpenPosition) {
+                    if (entry == -1 && timeToOpenPosition && availableToTrade) {
+
+                        System.out.println("Enter new low");
+
 
                         this.stop = CandleClose + (CandleClose - CandleLow);
                         this.target = CandleLow;
                         this.entry = CandleClose;
-                        availableToTrade = true;
+                        availableToTrade = false;
                     }
 
                 }
@@ -115,14 +120,16 @@ public class Simulation {
                         openBelowYesterdaysLow &&
                         getHighCheck(hourData[TODAYS_HIGH], CandleHigh, PreviousCandleHigh, 0, i)) {
 
-                    System.out.println("Enter new high");
 
 
-                    if (entry == -1 && timeToOpenPosition) {
+
+                    if (entry == -1 && timeToOpenPosition && availableToTrade) {
+
+                        System.out.println("Enter new high");
                         this.stop = CandleClose - (CandleHigh - CandleClose);
                         this.target = CandleHigh;
                         this.entry = CandleClose;
-                        availableToTrade = true;
+                        availableToTrade = false;
                     }
                 }
 
@@ -134,10 +141,10 @@ public class Simulation {
 
         }
 
-        for (String[] line : hourData) {
-            System.out.println(line[DATE] + line[OPEN] + line[LOW] + line[HIGH] + line[CLOSE] + line[DAILY_LOW] +
-                    line[DAILY_HIGH]);
-        }
+//        for (String[] line : hourData) {
+//            System.out.println(line[DATE] + line[OPEN] + line[LOW] + line[HIGH] + line[CLOSE] + line[DAILY_LOW] +
+//                    line[DAILY_HIGH]);
+//        }
 
         return new Results();
     }
