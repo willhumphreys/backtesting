@@ -27,6 +27,13 @@ public class Simulation {
 
     private boolean timeToOpenPosition;
 
+    private double tickCounter;
+
+    private int winners;
+
+    private int losers;
+
+
     private DateTimeFormatter formatter;
 
 
@@ -64,7 +71,6 @@ public class Simulation {
             //If the hour has changed we need to update the hour counter.
             if (tickCandleHour != hourCandleHour) {
                 hourCounter++;
-
             }
 
             if (hourCounter != 0) {
@@ -92,6 +98,34 @@ public class Simulation {
                 Boolean closeNegative = CandleClose < CandleOpen;
                 Boolean closeBelowYesterdaysHigh = CandleClose < yesterdaysHigh;
                 Boolean openBelowYesterdaysLow = CandleOpen < yesterdaysHigh;
+
+
+                if (!availableToTrade) {
+
+                    if (target > stop) {
+
+                        if (CandleClose <= stop) {
+                            tickCounter += stop - entry;
+                            losers++;
+                            availableToTrade = true;
+                        } else if (CandleClose > target) {
+                            tickCounter += target - entry;
+                            winners++;
+                            availableToTrade = true;
+                        }
+                    } else {
+
+                        if (CandleClose >= stop) {
+                            tickCounter += entry - stop;
+                            losers++;
+                            availableToTrade = true;
+                        } else if (CandleClose < target) {
+                            tickCounter += entry - target;
+                            winners++;
+                            availableToTrade = true;
+                        }
+                    }
+                }
 
                 if (takeOutYesterdaysLow &&
                         closePositive &&
@@ -137,7 +171,7 @@ public class Simulation {
 //                    line[DAILY_HIGH]);
 //        }
 
-        return new Results();
+        return new Results(tickCounter, winners, losers);
     }
 
     private boolean isHourCandleOutOfSyncByMoreThanAnHour(int hourCandleHour, int tickCandleHour) {
@@ -188,5 +222,4 @@ public class Simulation {
         }
         return highCheck;
     }
-
 }
