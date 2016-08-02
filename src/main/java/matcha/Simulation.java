@@ -23,6 +23,8 @@ public class Simulation {
     private double stop;
     private double target;
 
+    private boolean pending;
+
 
     private DateTimeFormatter formatter;
 
@@ -76,11 +78,12 @@ public class Simulation {
                 System.out.println("Enter new low");
 
 
-                if(entry == -1) {
+                if(entry == -1 && !pending) {
 
                     this.stop = CandleClose + (CandleClose - CandleLow);
                     this.target = CandleLow;
                     this.entry = CandleClose;
+                    pending = true;
 
                 }
 
@@ -106,10 +109,11 @@ public class Simulation {
                 System.out.println("Enter new high");
 
 
-                if(entry == -1) {
+                if(entry == -1 && !pending) {
                     this.stop = CandleClose - (CandleHigh - CandleClose);
                     this.target = CandleHigh;
                     this.entry = CandleClose;
+                    pending = true;
                 }
 //                s_SCNewOrder order;
 //                order.OrderQuantity = 1;
@@ -123,6 +127,9 @@ public class Simulation {
 //                //logEntryMessage(sc, PositionData, order);
 //                sc.BuyEntry(order);
             }
+
+
+
         }
 
         for (String[] line : hourData) {
