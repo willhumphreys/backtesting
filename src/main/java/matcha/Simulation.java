@@ -85,7 +85,6 @@ public class Simulation {
 
                 double LastBarSize = previousCandleClose - previousCandleLow;
 
-
                 boolean takeOutYesterdaysLow = candleLow < yesterdaysLow;
                 boolean closePositive = candleClose > candleOpen;
                 boolean closeAboveYesterdaysLow = candleClose > yesterdaysLow;
@@ -105,6 +104,7 @@ public class Simulation {
                             tickCounter += convertTicksToInt(stop - entry);
                             losers++;
                             availableToTrade = true;
+                            System.out.println("Close long entry: " + entry + " target: " + target + " stop: " + stop + " for loss " + tickCounter);
                         } else if (candleClose > target) {
                             tickCounter += convertTicksToInt(target - entry);
                             winners++;
