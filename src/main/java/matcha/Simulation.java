@@ -39,8 +39,12 @@ public class Simulation {
     @Autowired
     private Utils utils;
 
-    public Simulation(Utils utils) {
+    @Autowired
+    private HighAndLowChecks highAndLowChecks;
+
+    public Simulation(Utils utils, HighAndLowChecks highAndLowChecks) {
         this.utils = utils;
+        this.highAndLowChecks = highAndLowChecks;
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
         entry = -1.0;
         stop = -1.0;
@@ -145,7 +149,7 @@ public class Simulation {
                         closePositive &&
                         closeAboveYesterdaysLow &&
                         openAboveYesterdaysLow &&
-                        getLowCheck(hourData[TODAYS_LOW], candleLow, previousCandleLow, 0, i) &&
+                        highAndLowChecks.getLowCheck(hourData[TODAYS_LOW], candleLow, previousCandleLow, 0, i) &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
@@ -161,7 +165,7 @@ public class Simulation {
                         closeNegative &&
                         closeBelowYesterdaysHigh &&
                         openBelowYesterdaysLow &&
-                        getHighCheck(hourData[TODAYS_HIGH], candleHigh, previousCandleHigh, 0, i) &&
+                        highAndLowChecks.getHighCheck(hourData[TODAYS_HIGH], candleHigh, previousCandleHigh, 0, i) &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
@@ -186,44 +190,5 @@ public class Simulation {
         return new Results(tickCounter, winners, losers);
     }
 
-    private boolean getLowCheck(String[] lowOfTheDay, double Low, double PreviousLow, int lowCheckPref, int index) {
-        boolean lowCheck;
-        switch (lowCheckPref) {
-            case 0:
-                //Current Candle is below last candle.
-                lowCheck = Low < PreviousLow;
-                break;
-            case 1:
-                //New low for the day is put in.
-                lowCheck = Double.parseDouble(lowOfTheDay[index]) < Double.parseDouble(lowOfTheDay[index - 1]);
-                break;
-            case 2:
-                //We don't put in a new low.
-                lowCheck = Double.parseDouble(lowOfTheDay[index]) >= Double.parseDouble(lowOfTheDay[index - 1]);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid lowCheck value");
-        }
-        return lowCheck;
-    }
 
-    private boolean getHighCheck(String[] highOfTheDay, double High, double PreviousHigh, int highCheckPref, int
-            index) {
-        boolean highCheck;
-        switch (highCheckPref) {
-            case 0:
-                highCheck = High > PreviousHigh;
-                break;
-            case 1:
-                highCheck = Double.parseDouble(highOfTheDay[index]) > Double.parseDouble(highOfTheDay[index - 1]);
-                break;
-            case 2:
-                //We don't put in a new high.
-                highCheck = Double.parseDouble(highOfTheDay[index]) <= Double.parseDouble(highOfTheDay[index - 1]);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid highCheck value");
-        }
-        return highCheck;
-    }
 }
