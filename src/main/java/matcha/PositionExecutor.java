@@ -35,7 +35,7 @@ public class PositionExecutor {
     }
 
 
-    public void placePositions(UsefulTickData usefulTickData)  {
+    void placePositions(UsefulTickData usefulTickData)  {
         if (signals.isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
 
             stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData.getCandleLow());
@@ -56,11 +56,11 @@ public class PositionExecutor {
         }
     }
 
-    public void setTimeToOpenPosition(boolean timeToOpenPosition) {
+    void setTimeToOpenPosition(boolean timeToOpenPosition) {
         this.timeToOpenPosition = timeToOpenPosition;
     }
 
-    public void managePosition(UsefulTickData usefulTickData) {
+    void managePosition(UsefulTickData usefulTickData) {
         if (!availableToTrade) {
             if (target > stop) {
 
