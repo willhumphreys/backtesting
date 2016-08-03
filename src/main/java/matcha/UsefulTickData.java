@@ -9,8 +9,8 @@ class UsefulTickData {
     private static final int LOW = 2;
     private static final int HIGH = 3;
     private static final int CLOSE = 4;
-    private static final int DAILY_LOW = 5;
-    private static final int DAILY_HIGH = 6;
+    private static final int YESTERDAYS_DAILY_LOW = 5;
+    private static final int YESTERDAYS_DAILY_HIGH = 6;
     private static final int TODAYS_LOW = 7;
     private static final int TODAYS_HIGH = 8;
 
@@ -105,8 +105,8 @@ class UsefulTickData {
         previousCandleLow = parseDouble(hourData[hourCounter - 1][LOW]);
         candleHigh = parseDouble(hourData[hourCounter][HIGH]);
         previousCandleHigh = parseDouble(hourData[hourCounter - 1][HIGH]);
-        double yesterdaysLow = parseDouble(hourData[hourCounter][DAILY_LOW]);
-        double yesterdaysHigh = parseDouble(hourData[hourCounter][DAILY_HIGH]);
+        double yesterdaysLow = parseDouble(hourData[hourCounter][YESTERDAYS_DAILY_LOW]);
+        double yesterdaysHigh = parseDouble(hourData[hourCounter][YESTERDAYS_DAILY_HIGH]);
         todaysLow = parseDouble(hourData[hourCounter][TODAYS_LOW]);
         todaysHigh = parseDouble(hourData[hourCounter][TODAYS_HIGH]);
         lowOfYesterday = parseDouble(hourData[hourCounter - 1][TODAYS_LOW]);
