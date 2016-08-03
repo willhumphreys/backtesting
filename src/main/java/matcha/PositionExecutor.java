@@ -82,7 +82,6 @@ public class PositionExecutor {
                 winners++;
             }
         } else {
-
             if (isShortStopTouched(usefulTickData)) {
                 final int profitLoss = utils.convertTicksToInt(entry - stop);
                 closePosition(profitLoss, STOPPED_SHORT_TEMPLATE);
@@ -93,7 +92,6 @@ public class PositionExecutor {
                 winners++;
             }
         }
-
     }
 
     private boolean isShortTargetExceeded(UsefulTickData usefulTickData) {
