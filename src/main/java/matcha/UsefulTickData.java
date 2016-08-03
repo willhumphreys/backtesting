@@ -29,68 +29,69 @@ class UsefulTickData {
     private boolean closeBelowYesterdaysHigh;
     private boolean openBelowYesterdaysLow;
 
-    public UsefulTickData(String[][] hourData, int hourCounter) {
+    UsefulTickData(String[][] hourData, int hourCounter) {
         this.hourData = hourData;
         this.hourCounter = hourCounter;
     }
 
 
-    public String getCandleDate() {
+    String getCandleDate() {
         return candleDate;
     }
-    public double getCandleClose() {
+
+    double getCandleClose() {
         return candleClose;
     }
 
-    public double getCandleLow() {
+    double getCandleLow() {
         return candleLow;
     }
 
-    public double getPreviousCandleLow() {
+    double getPreviousCandleLow() {
         return previousCandleLow;
     }
 
-    public double getCandleHigh() {
+    double getCandleHigh() {
         return candleHigh;
     }
 
-    public double getPreviousCandleHigh() {
+    double getPreviousCandleHigh() {
         return previousCandleHigh;
     }
 
-    public boolean isTakeOutYesterdaysLow() {
+    boolean isTakeOutYesterdaysLow() {
         return takeOutYesterdaysLow;
     }
 
-    public boolean isClosePositive() {
+    boolean isClosePositive() {
         return closePositive;
     }
 
-    public boolean isCloseAboveYesterdaysLow() {
+    boolean isCloseAboveYesterdaysLow() {
         return closeAboveYesterdaysLow;
     }
 
-    public boolean isOpenAboveYesterdaysLow() {
+    boolean isOpenAboveYesterdaysLow() {
         return openAboveYesterdaysLow;
     }
 
-    public boolean isTakeOutYesterdaysHigh() {
+    boolean isTakeOutYesterdaysHigh() {
         return takeOutYesterdaysHigh;
     }
 
-    public boolean isCloseNegative() {
+    boolean isCloseNegative() {
         return closeNegative;
     }
 
-    public boolean isCloseBelowYesterdaysHigh() {
+    boolean isCloseBelowYesterdaysHigh() {
         return closeBelowYesterdaysHigh;
     }
 
-    public boolean isOpenBelowYesterdaysLow() {
+    boolean isOpenBelowYesterdaysLow() {
         return openBelowYesterdaysLow;
     }
 
-    public UsefulTickData invoke() {
+    UsefulTickData invoke() {
         candleDate = hourData[hourCounter][DATE];
         candleClose = parseDouble(hourData[hourCounter][CLOSE]);
         double candleOpen = parseDouble(hourData[hourCounter][OPEN]);
