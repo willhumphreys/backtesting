@@ -26,7 +26,7 @@ public class Simulation {
     private boolean availableToTrade;
     private boolean timeToOpenPosition;
 
-    private double tickCounter;
+    private int tickCounter;
     private int winners;
     private int losers;
 
