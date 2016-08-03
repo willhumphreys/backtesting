@@ -41,59 +41,58 @@ class UsefulTickData {
         this.hourCounter = hourCounter;
     }
 
-
     String getCandleDate() {
         return candleDate;
     }
-
     double getCandleClose() {
         return candleClose;
     }
-
     double getCandleLow() {
         return candleLow;
     }
-
     double getPreviousCandleLow() {
         return previousCandleLow;
     }
-
     double getCandleHigh() {
         return candleHigh;
     }
-
     double getPreviousCandleHigh() {
         return previousCandleHigh;
+    }
+    double getTodaysLow() {
+        return todaysLow;
+    }
+    double getTodaysHigh() {
+        return todaysHigh;
+    }
+    double getLowOfYesterday() {
+        return lowOfYesterday;
+    }
+    double getHighOfYesterday() {
+        return lowOfYesterday;
     }
 
     boolean isTakeOutYesterdaysLow() {
         return takeOutYesterdaysLow;
     }
-
     boolean isClosePositive() {
         return closePositive;
     }
-
     boolean isCloseAboveYesterdaysLow() {
         return closeAboveYesterdaysLow;
     }
-
     boolean isOpenAboveYesterdaysLow() {
         return openAboveYesterdaysLow;
     }
-
     boolean isTakeOutYesterdaysHigh() {
         return takeOutYesterdaysHigh;
     }
-
     boolean isCloseNegative() {
         return closeNegative;
     }
-
     boolean isCloseBelowYesterdaysHigh() {
         return closeBelowYesterdaysHigh;
     }
-
     boolean isOpenBelowYesterdaysLow() {
         return openBelowYesterdaysLow;
     }
@@ -110,8 +109,8 @@ class UsefulTickData {
         double yesterdaysHigh = parseDouble(hourData[hourCounter][DAILY_HIGH]);
         todaysLow = parseDouble(hourData[hourCounter][TODAYS_LOW]);
         todaysHigh = parseDouble(hourData[hourCounter][TODAYS_HIGH]);
-        lowOfYesterday = parseDouble(hourData[hourCounter -1][TODAYS_LOW]);
-        highOfYesterday = parseDouble(hourData[hourCounter -1][TODAYS_HIGH]);
+        lowOfYesterday = parseDouble(hourData[hourCounter - 1][TODAYS_LOW]);
+        highOfYesterday = parseDouble(hourData[hourCounter - 1][TODAYS_HIGH]);
 
 
         takeOutYesterdaysLow = candleLow < yesterdaysLow;
@@ -124,20 +123,5 @@ class UsefulTickData {
         closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
         openBelowYesterdaysLow = candleOpen < yesterdaysHigh;
         return this;
-    }
-
-    public double getTodaysLow() {
-        return todaysLow;
-    }
-    public double getTodaysHigh() {
-        return todaysHigh;
-    }
-
-    public double getLowOfYesterday() {
-        return lowOfYesterday;
-    }
-
-    public double getHighOfYesterday() {
-        return lowOfYesterday;
     }
 }
