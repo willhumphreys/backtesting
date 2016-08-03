@@ -109,14 +109,15 @@ public class Simulation {
                             losers++;
                             availableToTrade = true;
                             exitDate = candleDate;
-                            //Close long 2016-23-34T06 234234 Stopped 2016-34-34 234234 -3434 ticks cumulative ticks 3423
-                            System.out.printf("Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n", entryDate, entry, exitDate, stop, profitLoss, tickCounter);
+                            System.out.printf("Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
+                                    entryDate, entry, exitDate, stop, profitLoss, tickCounter);
                         } else if (candleClose > target) {
                             final int profitLoss = convertTicksToInt(target - entry);
                             tickCounter += profitLoss;
                             winners++;
                             availableToTrade = true;
-                            System.out.printf("Close long %s %.5f target: %s %.5f ticks %d cumulative profit %d%n", entryDate, entry, exitDate, target, profitLoss, tickCounter);
+                            System.out.printf("Close long %s %.5f target: %s %.5f ticks %d cumulative profit %d%n",
+                                    entryDate, entry, exitDate, target, profitLoss, tickCounter);
                         }
                     } else {
 
@@ -125,13 +126,15 @@ public class Simulation {
                             tickCounter += profitLoss;
                             losers++;
                             availableToTrade = true;
-                            System.out.printf("Close short %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n", entryDate, entry, exitDate, stop, profitLoss, tickCounter);
+                            System.out.printf("Close short %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
+                                    entryDate, entry, exitDate, stop, profitLoss, tickCounter);
                         } else if (candleClose < target) {
                             final int profitLoss = convertTicksToInt(entry - target);
                             tickCounter += profitLoss;
                             winners++;
                             availableToTrade = true;
-                            System.out.printf("Close short %s %.5f target: %s %.5f ticks %d cumulative profit %d%n", entryDate, entry, exitDate, target, profitLoss, tickCounter);
+                            System.out.printf("Close short %s %.5f target: %s %.5f ticks %d cumulative profit %d%n",
+                                    entryDate, entry, exitDate, target, profitLoss, tickCounter);
                         }
                     }
                 }
