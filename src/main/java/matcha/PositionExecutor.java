@@ -60,7 +60,7 @@ public class PositionExecutor {
         this.timeToOpenPosition = timeToOpenPosition;
     }
 
-    public void managePosition(UsefulTickData usefulTickData, Simulation simulation) {
+    public void managePosition(UsefulTickData usefulTickData) {
         if (!availableToTrade) {
             if (target > stop) {
 
@@ -101,7 +101,7 @@ public class PositionExecutor {
         }
     }
 
-    public Results getResults() {
+    Results getResults() {
         return new Results(tickCounter, winners, losers);
     }
 }
