@@ -20,6 +20,7 @@ public class Simulation {
     private static final int TODAYS_HIGH = 8;
 
     private String entryDate;
+    private String exitDate;
     private double entry;
     private double stop;
     private double target;
@@ -73,7 +74,7 @@ public class Simulation {
 
             if (hourCounter != 0) {
 
-                String entryDate = hourData[hourCounter][DATE];
+                String candleDate = hourData[hourCounter][DATE];
                 double candleClose = parseDouble(hourData[hourCounter][CLOSE]);
                 double candleOpen = parseDouble(hourData[hourCounter][OPEN]);
                 double candleLow = parseDouble(hourData[hourCounter][LOW]);
@@ -107,13 +108,15 @@ public class Simulation {
                             tickCounter+=profitLoss;
                             losers++;
                             availableToTrade = true;
-                            System.out.printf("%s Close long entry: %s target: %.5f stop: %.5f for loss %s cumulative profit %s%n", entryDate, entry, target, stop, profitLoss, tickCounter);
+                            exitDate = candleDate;
+                            //Close long 2016-23-34T06 234234 Stopped 2016-34-34 234234 -3434 ticks cumulative ticks 3423
+                            System.out.printf("Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n", entryDate, entry, exitDate, stop, profitLoss, tickCounter);
                         } else if (candleClose > target) {
                             final int profitLoss = convertTicksToInt(target - entry);
                             tickCounter += profitLoss;
                             winners++;
                             availableToTrade = true;
-                            System.out.printf("%s Close long entry: %s target: %.5f stop: %.5f for win %s cumulative profit %s%n", entryDate, entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("Close long %s %.5f target: %s %.5f ticks %d cumulative profit %d%n", entryDate, entry, exitDate, target, profitLoss, tickCounter);
                         }
                     } else {
 
@@ -122,13 +125,13 @@ public class Simulation {
                             tickCounter += profitLoss;
                             losers++;
                             availableToTrade = true;
-                            System.out.printf("%s Close short entry: %s target: %.5f stop: %.5f for loss %s cumulative profit %s%n", entryDate, entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("Close short %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n", entryDate, entry, exitDate, stop, profitLoss, tickCounter);
                         } else if (candleClose < target) {
                             final int profitLoss = convertTicksToInt(entry - target);
                             tickCounter += profitLoss;
                             winners++;
                             availableToTrade = true;
-                            System.out.printf("%s Close short entry: %s target: %.5f stop: %.5f for win %s cumulative profit %s%n", entryDate, entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("Close short %s %.5f target: %s %.5f ticks %d cumulative profit %d%n", entryDate, entry, exitDate, target, profitLoss, tickCounter);
                         }
                     }
                 }
@@ -144,7 +147,7 @@ public class Simulation {
                     this.stop = candleClose + (candleClose - candleLow);
                     this.target = candleLow;
                     this.entry = candleClose;
-                    this.entryDate = entryDate;
+                    this.entryDate = candleDate;
                     availableToTrade = false;
 
                 }
@@ -161,6 +164,7 @@ public class Simulation {
                     this.stop = candleClose - (candleHigh - candleClose);
                     this.target = candleHigh;
                     this.entry = candleClose;
+                    this.entryDate = candleDate;
                     availableToTrade = false;
                 }
             }
