@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 public class PositionExecutor {
 
     private static final String STOPPED_LONG_TEMPLATE =
-            "Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
+            "Close long  %s @ %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
     private static final String TARGET_LONG_TEMPLATE =
-            "Close long %s %.5f target: %s %.5f ticks %d cumulative profit %d%n";
+            "Close long  %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
     private static final String STOPPED_SHORT_TEMPLATE =
-            "Close short %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
+            "Close short %s @ %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
     private static final String TARGET_SHORT_TEMPLATE =
-            "Close short %s %.5f target: %s %.5f ticks %d cumulative profit %d%n";
+            "Close short %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
 
     private final Utils utils;
     private final Signals signals;
