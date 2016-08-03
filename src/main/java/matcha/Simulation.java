@@ -19,6 +19,7 @@ public class Simulation {
     private static final int TODAYS_LOW = 7;
     private static final int TODAYS_HIGH = 8;
 
+    private String entryDate;
     private double entry;
     private double stop;
     private double target;
@@ -72,6 +73,7 @@ public class Simulation {
 
             if (hourCounter != 0) {
 
+                String entryDate = hourData[hourCounter][DATE];
                 double candleClose = parseDouble(hourData[hourCounter][CLOSE]);
                 double candleOpen = parseDouble(hourData[hourCounter][OPEN]);
                 double candleLow = parseDouble(hourData[hourCounter][LOW]);
@@ -105,13 +107,13 @@ public class Simulation {
                             tickCounter+=profitLoss;
                             losers++;
                             availableToTrade = true;
-                            System.out.printf("Close long entry: %s target: %.5f stop: %.5f for loss %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("%s Close long entry: %s target: %.5f stop: %.5f for loss %s cumulative profit %s%n", entryDate, entry, target, stop, profitLoss, tickCounter);
                         } else if (candleClose > target) {
                             final int profitLoss = convertTicksToInt(target - entry);
                             tickCounter += profitLoss;
                             winners++;
                             availableToTrade = true;
-                            System.out.printf("Close long entry: %s target: %.5f stop: %.5f for win %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("%s Close long entry: %s target: %.5f stop: %.5f for win %s cumulative profit %s%n", entryDate, entry, target, stop, profitLoss, tickCounter);
                         }
                     } else {
 
@@ -120,13 +122,13 @@ public class Simulation {
                             tickCounter += profitLoss;
                             losers++;
                             availableToTrade = true;
-                            System.out.printf("Close short entry: %s target: %.5f stop: %.5f for loss %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("%s Close short entry: %s target: %.5f stop: %.5f for loss %s cumulative profit %s%n", entryDate, entry, target, stop, profitLoss, tickCounter);
                         } else if (candleClose < target) {
                             final int profitLoss = convertTicksToInt(entry - target);
                             tickCounter += profitLoss;
                             winners++;
                             availableToTrade = true;
-                            System.out.printf("Close short entry: %s target: %.5f stop: %.5f for win %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("%s Close short entry: %s target: %.5f stop: %.5f for win %s cumulative profit %s%n", entryDate, entry, target, stop, profitLoss, tickCounter);
                         }
                     }
                 }
@@ -142,6 +144,7 @@ public class Simulation {
                     this.stop = candleClose + (candleClose - candleLow);
                     this.target = candleLow;
                     this.entry = candleClose;
+                    this.entryDate = entryDate;
                     availableToTrade = false;
 
                 }
