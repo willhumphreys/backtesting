@@ -20,9 +20,7 @@ public class PositionExecutor {
 
     private String entryDate;
     private String exitDate;
-    private double entry;
-    private double stop;
-    private double target;
+    private Position position;
 
     private boolean availableToTrade;
     private boolean timeToOpenPosition;
@@ -35,28 +33,32 @@ public class PositionExecutor {
     public PositionExecutor(Signals signals, Utils utils) {
         this.signals = signals;
         this.utils = utils;
-        entry = -1.0;
-        stop = -1.0;
-        target = -1.0;
         availableToTrade = true;
     }
 
     void placePositions(UsefulTickData usefulTickData) {
         if (signals.isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
 
-            stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData.getCandleLow());
-            target = usefulTickData.getCandleLow();
-            entry = usefulTickData.getCandleClose();
+
+
+            double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData.getCandleLow());
+            double target = usefulTickData.getCandleLow();
+            double entry = usefulTickData.getCandleClose();
             entryDate = usefulTickData.getCandleDate();
+
+            this.position = new Position(entryDate, entry, target, stop);
+
             availableToTrade = false;
         }
 
         if (signals.isLongSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
 
-            stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData.getCandleClose());
-            target = usefulTickData.getCandleHigh();
-            entry = usefulTickData.getCandleClose();
+            double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData.getCandleClose());
+            double target = usefulTickData.getCandleHigh();
+            double entry = usefulTickData.getCandleClose();
             entryDate = usefulTickData.getCandleDate();
+            this.position = new Position(entryDate, entry, target, stop);
+
             availableToTrade = false;
         }
     }
@@ -73,21 +75,21 @@ public class PositionExecutor {
         if (isLongPosition()) {
             exitDate = usefulTickData.getCandleDate();
             if (isLongStopTouched(usefulTickData)) {
-                int profitLoss = utils.convertTicksToInt(stop - entry);
+                int profitLoss = utils.convertTicksToInt(this.position.getStop() - this.position.getEntry());
                 closePosition(profitLoss, STOPPED_LONG_TEMPLATE);
                 losers++;
             } else if (isLongTargetExceeded(usefulTickData)) {
-                final int profitLoss = utils.convertTicksToInt(target - entry);
+                final int profitLoss = utils.convertTicksToInt(this.position.getTarget() - this.position.getEntry());
                 closePosition(profitLoss, TARGET_LONG_TEMPLATE);
                 winners++;
             }
         } else {
             if (isShortStopTouched(usefulTickData)) {
-                final int profitLoss = utils.convertTicksToInt(entry - stop);
+                final int profitLoss = utils.convertTicksToInt(this.position.getEntry() - this.position.getStop());
                 closePosition(profitLoss, STOPPED_SHORT_TEMPLATE);
                 losers++;
             } else if (isShortTargetExceeded(usefulTickData)) {
-                final int profitLoss = utils.convertTicksToInt(entry - target);
+                final int profitLoss = utils.convertTicksToInt(this.position.getEntry() - this.position.getTarget());
                 closePosition(profitLoss, TARGET_SHORT_TEMPLATE);
                 winners++;
             }
@@ -95,29 +97,29 @@ public class PositionExecutor {
     }
 
     private boolean isShortTargetExceeded(UsefulTickData usefulTickData) {
-        return usefulTickData.getCandleClose() < target;
+        return usefulTickData.getCandleClose() < this.position.getTarget();
     }
 
     private boolean isShortStopTouched(UsefulTickData usefulTickData) {
-        return usefulTickData.getCandleClose() >= stop;
+        return usefulTickData.getCandleClose() >= this.position.getStop();
     }
 
     private boolean isLongTargetExceeded(UsefulTickData usefulTickData) {
-        return usefulTickData.getCandleClose() > target;
+        return usefulTickData.getCandleClose() > this.position.getTarget();
     }
 
     private boolean isLongStopTouched(UsefulTickData usefulTickData) {
-        return usefulTickData.getCandleClose() <= stop;
+        return usefulTickData.getCandleClose() <= this.position.getStop();
     }
 
     private boolean isLongPosition() {
-        return target > stop;
+        return this.position.getTarget() > this.position.getStop();
     }
 
     private void closePosition(int profitLoss, String template) {
         tickCounter += profitLoss;
         availableToTrade = true;
-        System.out.printf(template, entryDate, entry, exitDate, stop, profitLoss, tickCounter);
+        System.out.printf(template, entryDate, this.position.getEntry(), exitDate, this.position.getStop(), profitLoss, tickCounter);
     }
 
     Results getResults() {

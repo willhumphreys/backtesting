@@ -54,7 +54,6 @@ public class Simulation {
                 UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter).invoke();
 
                 positionExecutor.managePosition(usefulTickData);
-
                 positionExecutor.placePositions(usefulTickData);
             }
 
