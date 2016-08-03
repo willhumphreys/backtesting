@@ -3,6 +3,8 @@ package matcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PositionExecutor {
 
@@ -20,7 +22,7 @@ public class PositionExecutor {
 
     private String entryDate;
     private String exitDate;
-    private Position position;
+    //private Position position;
 
     private boolean availableToTrade;
     private boolean timeToOpenPosition;
@@ -36,16 +38,18 @@ public class PositionExecutor {
         availableToTrade = true;
     }
 
-    void placePositions(UsefulTickData usefulTickData) {
+    Optional<Position> placePositions(UsefulTickData usefulTickData) {
         if (signals.isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
             double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData.getCandleLow());
             double target = usefulTickData.getCandleLow();
             double entry = usefulTickData.getCandleClose();
             entryDate = usefulTickData.getCandleDate();
 
-            this.position = new Position(entryDate, entry, target, stop);
+            Position position = new Position(entryDate, entry, target, stop);
 
             availableToTrade = false;
+
+            return Optional.of(position);
         }
 
         if (signals.isLongSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
@@ -54,70 +58,73 @@ public class PositionExecutor {
             double target = usefulTickData.getCandleHigh();
             double entry = usefulTickData.getCandleClose();
             entryDate = usefulTickData.getCandleDate();
-            this.position = new Position(entryDate, entry, target, stop);
+            Position position = new Position(entryDate, entry, target, stop);
 
             availableToTrade = false;
+            return Optional.of(position);
         }
+
+        return Optional.empty();
     }
 
     void setTimeToOpenPosition(boolean timeToOpenPosition) {
         this.timeToOpenPosition = timeToOpenPosition;
     }
 
-    void managePosition(UsefulTickData usefulTickData) {
-        if (availableToTrade || this.position == null) {
+    void managePosition(UsefulTickData usefulTickData, Position position) {
+        if (availableToTrade) {
             return;
         }
 
-        if (isLongPosition()) {
+        if (isLongPosition(position)) {
             exitDate = usefulTickData.getCandleDate();
-            if (isLongStopTouched(usefulTickData)) {
-                int profitLoss = utils.convertTicksToInt(this.position.getStop() - this.position.getEntry());
-                closePosition(profitLoss, STOPPED_LONG_TEMPLATE, this.position.getStop());
+            if (isLongStopTouched(usefulTickData, position)) {
+                int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry());
+                closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position);
                 losers++;
-            } else if (isLongTargetExceeded(usefulTickData)) {
-                final int profitLoss = utils.convertTicksToInt(this.position.getTarget() - this.position.getEntry());
-                closePosition(profitLoss, TARGET_LONG_TEMPLATE, this.position.getTarget());
+            } else if (isLongTargetExceeded(usefulTickData, position)) {
+                final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry());
+                closePosition(profitLoss, TARGET_LONG_TEMPLATE, position.getTarget(), position);
                 winners++;
             }
         } else {
-            if (isShortStopTouched(usefulTickData)) {
-                final int profitLoss = utils.convertTicksToInt(this.position.getEntry() - this.position.getStop());
-                closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, this.position.getStop());
+            if (isShortStopTouched(usefulTickData, position)) {
+                final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop());
+                closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position);
                 losers++;
-            } else if (isShortTargetExceeded(usefulTickData)) {
-                final int profitLoss = utils.convertTicksToInt(this.position.getEntry() - this.position.getTarget());
-                closePosition(profitLoss, TARGET_SHORT_TEMPLATE, this.position.getTarget());
+            } else if (isShortTargetExceeded(usefulTickData, position)) {
+                final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget());
+                closePosition(profitLoss, TARGET_SHORT_TEMPLATE, position.getTarget(), position);
                 winners++;
             }
         }
     }
 
-    private boolean isShortTargetExceeded(UsefulTickData usefulTickData) {
-        return usefulTickData.getCandleClose() < this.position.getTarget();
+    private boolean isShortTargetExceeded(UsefulTickData usefulTickData, Position position) {
+        return usefulTickData.getCandleClose() < position.getTarget();
     }
 
-    private boolean isShortStopTouched(UsefulTickData usefulTickData) {
-        return usefulTickData.getCandleClose() >= this.position.getStop();
+    private boolean isShortStopTouched(UsefulTickData usefulTickData, Position position) {
+        return usefulTickData.getCandleClose() >= position.getStop();
     }
 
-    private boolean isLongTargetExceeded(UsefulTickData usefulTickData) {
-        return usefulTickData.getCandleClose() > this.position.getTarget();
+    private boolean isLongTargetExceeded(UsefulTickData usefulTickData, Position position) {
+        return usefulTickData.getCandleClose() > position.getTarget();
     }
 
-    private boolean isLongStopTouched(UsefulTickData usefulTickData) {
-        return usefulTickData.getCandleClose() <= this.position.getStop();
+    private boolean isLongStopTouched(UsefulTickData usefulTickData, Position position) {
+        return usefulTickData.getCandleClose() <= position.getStop();
     }
 
-    private boolean isLongPosition() {
-        return this.position.getTarget() > this.position.getStop();
+    private boolean isLongPosition(Position position) {
+        return position.getTarget() > position.getStop();
     }
 
-    private void closePosition(int profitLoss, String template, final double stopOrTarget) {
+    private void closePosition(int profitLoss, String template, final double stopOrTarget, Position position) {
         tickCounter += profitLoss;
         availableToTrade = true;
-        System.out.printf(template, entryDate, this.position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter);
-        this.position = null;
+        System.out.printf(template, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter);
+        position.close();
     }
 
     Results getResults() {

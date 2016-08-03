@@ -5,6 +5,7 @@ class Position {
     private final double entry;
     private final double target;
     private final double stop;
+    private boolean closed;
 
     Position(String entryDate, double entry, double target, double stop) {
         this.entryDate = entryDate;
@@ -17,15 +18,23 @@ class Position {
         return entryDate;
     }
 
-    public double getEntry() {
+    double getEntry() {
         return entry;
     }
 
-    public double getTarget() {
+    double getTarget() {
         return target;
     }
 
-    public double getStop() {
+    double getStop() {
         return stop;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    void close() {
+        this.closed = true;
     }
 }

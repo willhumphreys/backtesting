@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class Simulation {
@@ -15,10 +16,13 @@ public class Simulation {
 
     private PositionExecutor positionExecutor;
 
+    private Optional<Position> positionOptional;
+
     @Autowired
     public Simulation(PositionExecutor positionExecutor) {
         this.positionExecutor = positionExecutor;
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
+        this.positionOptional = Optional.empty();
     }
 
     Results execute(String[][] hourData, String[][] tickData) {
@@ -39,7 +43,7 @@ public class Simulation {
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
 
-            //If this is the last tick then it is time to open our position if we have one.
+            //If this is the last tick then it is time to open our positionOptional if we have one.
             if (tickDateTime.getHour() != nextTickDateTime.getHour()) {
                 positionExecutor.setTimeToOpenPosition(true);
             }
@@ -53,8 +57,15 @@ public class Simulation {
 
                 UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter).invoke();
 
-                positionExecutor.managePosition(usefulTickData);
-                positionExecutor.placePositions(usefulTickData);
+                if(positionOptional.isPresent()) {
+                    final Position position = positionOptional.get();
+                    positionExecutor.managePosition(usefulTickData, position);
+                    if(position.isClosed()) {
+                        this.positionOptional = Optional.empty();
+                    }
+                } else {
+                    this.positionOptional = positionExecutor.placePositions(usefulTickData);
+                }
             }
 
             positionExecutor.setTimeToOpenPosition(false);
