@@ -6,17 +6,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static java.lang.Double.parseDouble;
-
 @Service
 public class Simulation {
+
     private static final int DATE = 0;
-    private static final int OPEN = 1;
-    private static final int LOW = 2;
-    private static final int HIGH = 3;
-    private static final int CLOSE = 4;
-    private static final int DAILY_LOW = 5;
-    private static final int DAILY_HIGH = 6;
+
     private static final int TODAYS_LOW = 7;
     private static final int TODAYS_HIGH = 8;
 
@@ -36,13 +30,12 @@ public class Simulation {
 
     private DateTimeFormatter formatter;
 
-    @Autowired
-    private Utils utils;
+    private final Utils utils;
+
+    private final HighAndLowChecks highAndLowChecks;
 
     @Autowired
-    private HighAndLowChecks highAndLowChecks;
-
-    public Simulation(Utils utils, HighAndLowChecks highAndLowChecks) {
+    public Simulation(HighAndLowChecks highAndLowChecks, Utils utils) {
         this.utils = utils;
         this.highAndLowChecks = highAndLowChecks;
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
@@ -82,42 +75,20 @@ public class Simulation {
 
             if (hourCounter != 0) {
 
-                String candleDate = hourData[hourCounter][DATE];
-                double candleClose = parseDouble(hourData[hourCounter][CLOSE]);
-                double candleOpen = parseDouble(hourData[hourCounter][OPEN]);
-                double candleLow = parseDouble(hourData[hourCounter][LOW]);
-                double previousCandleLow = parseDouble(hourData[hourCounter - 1][LOW]);
-                double candleHigh = parseDouble(hourData[hourCounter][HIGH]);
-                double previousCandleHigh = parseDouble(hourData[hourCounter - 1][HIGH]);
-                double previousCandleClose = parseDouble(hourData[hourCounter - 1][CLOSE]);
-
-                double yesterdaysLow = parseDouble(hourData[hourCounter][DAILY_LOW]);
-                double yesterdaysHigh = parseDouble(hourData[hourCounter][DAILY_HIGH]);
-
-                double LastBarSize = previousCandleClose - previousCandleLow;
-
-                boolean takeOutYesterdaysLow = candleLow < yesterdaysLow;
-                boolean closePositive = candleClose > candleOpen;
-                boolean closeAboveYesterdaysLow = candleClose > yesterdaysLow;
-                boolean openAboveYesterdaysLow = candleOpen > yesterdaysLow;
-
-                boolean takeOutYesterdaysHigh = candleHigh > yesterdaysHigh;
-                boolean closeNegative = candleClose < candleOpen;
-                boolean closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
-                boolean openBelowYesterdaysLow = candleOpen < yesterdaysHigh;
+                UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter).invoke();
 
                 if (!availableToTrade) {
                     if (target > stop) {
 
-                        if (candleClose <= stop) {
+                        if (usefulTickData.getCandleClose() <= stop) {
                             int profitLoss = utils.convertTicksToInt(stop - entry);
                             tickCounter+=profitLoss;
                             losers++;
                             availableToTrade = true;
-                            exitDate = candleDate;
+                            exitDate = usefulTickData.getCandleDate();
                             System.out.printf("Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
                                     entryDate, entry, exitDate, stop, profitLoss, tickCounter);
-                        } else if (candleClose > target) {
+                        } else if (usefulTickData.getCandleClose() > target) {
                             final int profitLoss = utils.convertTicksToInt(target - entry);
                             tickCounter += profitLoss;
                             winners++;
@@ -127,14 +98,14 @@ public class Simulation {
                         }
                     } else {
 
-                        if (candleClose >= stop) {
+                        if (usefulTickData.getCandleClose() >= stop) {
                             final int profitLoss = utils.convertTicksToInt(entry - stop);
                             tickCounter += profitLoss;
                             losers++;
                             availableToTrade = true;
                             System.out.printf("Close short %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
                                     entryDate, entry, exitDate, stop, profitLoss, tickCounter);
-                        } else if (candleClose < target) {
+                        } else if (usefulTickData.getCandleClose() < target) {
                             final int profitLoss = utils.convertTicksToInt(entry - target);
                             tickCounter += profitLoss;
                             winners++;
@@ -145,35 +116,35 @@ public class Simulation {
                     }
                 }
 
-                if (takeOutYesterdaysLow &&
-                        closePositive &&
-                        closeAboveYesterdaysLow &&
-                        openAboveYesterdaysLow &&
-                        highAndLowChecks.getLowCheck(hourData[TODAYS_LOW], candleLow, previousCandleLow, 0, i) &&
+                if (usefulTickData.isTakeOutYesterdaysLow() &&
+                        usefulTickData.isClosePositive() &&
+                        usefulTickData.isCloseAboveYesterdaysLow() &&
+                        usefulTickData.isOpenAboveYesterdaysLow() &&
+                        highAndLowChecks.getLowCheck(hourData[TODAYS_LOW], usefulTickData.getCandleLow(), usefulTickData.getPreviousCandleLow(), 0, i) &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
-                    this.stop = candleClose + (candleClose - candleLow);
-                    this.target = candleLow;
-                    this.entry = candleClose;
-                    this.entryDate = candleDate;
+                    this.stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData.getCandleLow());
+                    this.target = usefulTickData.getCandleLow();
+                    this.entry = usefulTickData.getCandleClose();
+                    this.entryDate = usefulTickData.getCandleDate();
                     availableToTrade = false;
 
                 }
 
-                if (takeOutYesterdaysHigh &&
-                        closeNegative &&
-                        closeBelowYesterdaysHigh &&
-                        openBelowYesterdaysLow &&
-                        highAndLowChecks.getHighCheck(hourData[TODAYS_HIGH], candleHigh, previousCandleHigh, 0, i) &&
+                if (usefulTickData.isTakeOutYesterdaysHigh() &&
+                        usefulTickData.isCloseNegative() &&
+                        usefulTickData.isCloseBelowYesterdaysHigh() &&
+                        usefulTickData.isOpenBelowYesterdaysLow() &&
+                        highAndLowChecks.getHighCheck(hourData[TODAYS_HIGH], usefulTickData.getCandleHigh(), usefulTickData.getPreviousCandleHigh(), 0, i) &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
 
-                    this.stop = candleClose - (candleHigh - candleClose);
-                    this.target = candleHigh;
-                    this.entry = candleClose;
-                    this.entryDate = candleDate;
+                    this.stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData.getCandleClose());
+                    this.target = usefulTickData.getCandleHigh();
+                    this.entry = usefulTickData.getCandleClose();
+                    this.entryDate = usefulTickData.getCandleDate();
                     availableToTrade = false;
                 }
             }

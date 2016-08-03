@@ -29,6 +29,7 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	compile group: 'com.opencsv', name: 'opencsv', version: '3.8'
+	compile 'com.google.guava:guava:19.0'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
