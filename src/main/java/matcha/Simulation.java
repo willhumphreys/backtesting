@@ -11,9 +11,6 @@ public class Simulation {
 
     private static final int DATE = 0;
 
-    private static final int TODAYS_LOW = 7;
-    private static final int TODAYS_HIGH = 8;
-
     private String entryDate;
     private String exitDate;
     private double entry;
@@ -116,11 +113,7 @@ public class Simulation {
                     }
                 }
 
-                if (usefulTickData.isTakeOutYesterdaysLow() &&
-                        usefulTickData.isClosePositive() &&
-                        usefulTickData.isCloseAboveYesterdaysLow() &&
-                        usefulTickData.isOpenAboveYesterdaysLow() &&
-                        highAndLowChecks.getLowCheck(hourData[TODAYS_LOW], usefulTickData.getCandleLow(), usefulTickData.getPreviousCandleLow(), 0, i) &&
+                if (isShortSignal(usefulTickData) &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
@@ -136,7 +129,7 @@ public class Simulation {
                         usefulTickData.isCloseNegative() &&
                         usefulTickData.isCloseBelowYesterdaysHigh() &&
                         usefulTickData.isOpenBelowYesterdaysLow() &&
-                        highAndLowChecks.getHighCheck(hourData[TODAYS_HIGH], usefulTickData.getCandleHigh(), usefulTickData.getPreviousCandleHigh(), 0, i) &&
+                        highAndLowChecks.getHighCheck(usefulTickData.getTodaysHigh(), usefulTickData.getHighOfYesterday(), usefulTickData.getCandleHigh(), usefulTickData.getPreviousCandleHigh(), 0) &&
                         timeToOpenPosition &&
                         availableToTrade) {
 
@@ -159,6 +152,18 @@ public class Simulation {
 //        }
 
         return new Results(tickCounter, winners, losers);
+    }
+
+    private boolean isShortSignal(UsefulTickData usefulTickData) {
+        return usefulTickData.isTakeOutYesterdaysLow() &&
+                usefulTickData.isClosePositive() &&
+                usefulTickData.isCloseAboveYesterdaysLow() &&
+                usefulTickData.isOpenAboveYesterdaysLow() &&
+
+                highAndLowChecks.getLowCheck(usefulTickData.getTodaysLow(),
+                        usefulTickData.getLowOfYesterday(),
+                        usefulTickData.getCandleLow(),
+                        usefulTickData.getPreviousCandleLow(), 0);
     }
 
 

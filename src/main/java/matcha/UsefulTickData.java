@@ -11,6 +11,8 @@ class UsefulTickData {
     private static final int CLOSE = 4;
     private static final int DAILY_LOW = 5;
     private static final int DAILY_HIGH = 6;
+    private static final int TODAYS_LOW = 7;
+    private static final int TODAYS_HIGH = 8;
 
     private String[][] hourData;
     private int hourCounter;
@@ -28,6 +30,11 @@ class UsefulTickData {
     private boolean closeNegative;
     private boolean closeBelowYesterdaysHigh;
     private boolean openBelowYesterdaysLow;
+    private double todaysLow;
+    private double todaysHigh;
+
+    private double lowOfYesterday;
+    private double highOfYesterday;
 
     UsefulTickData(String[][] hourData, int hourCounter) {
         this.hourData = hourData;
@@ -101,6 +108,10 @@ class UsefulTickData {
         previousCandleHigh = parseDouble(hourData[hourCounter - 1][HIGH]);
         double yesterdaysLow = parseDouble(hourData[hourCounter][DAILY_LOW]);
         double yesterdaysHigh = parseDouble(hourData[hourCounter][DAILY_HIGH]);
+        todaysLow = parseDouble(hourData[hourCounter][TODAYS_LOW]);
+        todaysHigh = parseDouble(hourData[hourCounter][TODAYS_HIGH]);
+        lowOfYesterday = parseDouble(hourData[hourCounter -1][TODAYS_LOW]);
+        highOfYesterday = parseDouble(hourData[hourCounter -1][TODAYS_HIGH]);
 
 
         takeOutYesterdaysLow = candleLow < yesterdaysLow;
@@ -113,5 +124,20 @@ class UsefulTickData {
         closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
         openBelowYesterdaysLow = candleOpen < yesterdaysHigh;
         return this;
+    }
+
+    public double getTodaysLow() {
+        return todaysLow;
+    }
+    public double getTodaysHigh() {
+        return todaysHigh;
+    }
+
+    public double getLowOfYesterday() {
+        return lowOfYesterday;
+    }
+
+    public double getHighOfYesterday() {
+        return lowOfYesterday;
     }
 }
