@@ -11,14 +11,8 @@ public class Simulation {
 
     private static final int DATE = 0;
 
-    private String entryDate;
-    private String exitDate;
-    private double entry;
-    private double stop;
-    private double target;
 
-    private boolean availableToTrade;
-    private boolean timeToOpenPosition;
+
 
     private int tickCounter;
     private int winners;
@@ -29,17 +23,16 @@ public class Simulation {
 
     private final Utils utils;
 
-    private final HighAndLowChecks highAndLowChecks;
+    private final Signals signals;
+
+    private PositionExecutor positionExecutor;
 
     @Autowired
-    public Simulation(HighAndLowChecks highAndLowChecks, Utils utils) {
+    public Simulation(Signals signals, Utils utils, PositionExecutor positionExecutor) {
         this.utils = utils;
-        this.highAndLowChecks = highAndLowChecks;
+        this.signals = signals;
+        this.positionExecutor = positionExecutor;
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
-        entry = -1.0;
-        stop = -1.0;
-        target = -1.0;
-        availableToTrade = true;
     }
 
     Results execute(String[][] hourData, String[][] tickData) {
@@ -62,7 +55,7 @@ public class Simulation {
 
             //If this is the last tick then it is time to open our position if we have one.
             if (tickDateTime.getHour() != nextTickDateTime.getHour()) {
-                timeToOpenPosition = true;
+                positionExecutor.setTimeToOpenPosition(true);
             }
 
             //If the hour has changed we need to update the hour counter.
@@ -74,66 +67,12 @@ public class Simulation {
 
                 UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter).invoke();
 
-                if (!availableToTrade) {
-                    if (target > stop) {
+                positionExecutor.managePosition(usefulTickData, this);
 
-                        if (usefulTickData.getCandleClose() <= stop) {
-                            int profitLoss = utils.convertTicksToInt(stop - entry);
-                            tickCounter+=profitLoss;
-                            losers++;
-                            availableToTrade = true;
-                            exitDate = usefulTickData.getCandleDate();
-                            System.out.printf("Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
-                                    entryDate, entry, exitDate, stop, profitLoss, tickCounter);
-                        } else if (usefulTickData.getCandleClose() > target) {
-                            final int profitLoss = utils.convertTicksToInt(target - entry);
-                            tickCounter += profitLoss;
-                            winners++;
-                            availableToTrade = true;
-                            System.out.printf("Close long %s %.5f target: %s %.5f ticks %d cumulative profit %d%n",
-                                    entryDate, entry, exitDate, target, profitLoss, tickCounter);
-                        }
-                    } else {
-
-                        if (usefulTickData.getCandleClose() >= stop) {
-                            final int profitLoss = utils.convertTicksToInt(entry - stop);
-                            tickCounter += profitLoss;
-                            losers++;
-                            availableToTrade = true;
-                            System.out.printf("Close short %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
-                                    entryDate, entry, exitDate, stop, profitLoss, tickCounter);
-                        } else if (usefulTickData.getCandleClose() < target) {
-                            final int profitLoss = utils.convertTicksToInt(entry - target);
-                            tickCounter += profitLoss;
-                            winners++;
-                            availableToTrade = true;
-                            System.out.printf("Close short %s %.5f target: %s %.5f ticks %d cumulative profit %d%n",
-                                    entryDate, entry, exitDate, target, profitLoss, tickCounter);
-                        }
-                    }
-                }
-
-                if (highAndLowChecks.isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
-
-                    this.stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData.getCandleLow());
-                    this.target = usefulTickData.getCandleLow();
-                    this.entry = usefulTickData.getCandleClose();
-                    this.entryDate = usefulTickData.getCandleDate();
-                    availableToTrade = false;
-
-                }
-
-                if (highAndLowChecks.isLongSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
-
-                    this.stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData.getCandleClose());
-                    this.target = usefulTickData.getCandleHigh();
-                    this.entry = usefulTickData.getCandleClose();
-                    this.entryDate = usefulTickData.getCandleDate();
-                    availableToTrade = false;
-                }
+                positionExecutor.placePositions(usefulTickData);
             }
 
-            timeToOpenPosition = false;
+            positionExecutor.setTimeToOpenPosition(false);
 
         }
 
@@ -144,4 +83,5 @@ public class Simulation {
 
         return new Results(tickCounter, winners, losers);
     }
+
 }

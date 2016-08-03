@@ -3,7 +3,7 @@ package matcha;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HighAndLowChecks {
+public class Signals {
 
 
     boolean isLongSignal(UsefulTickData usefulTickData) {
