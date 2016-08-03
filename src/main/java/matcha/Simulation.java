@@ -11,26 +11,12 @@ public class Simulation {
 
     private static final int DATE = 0;
 
-
-
-
-    private int tickCounter;
-    private int winners;
-    private int losers;
-
-
     private DateTimeFormatter formatter;
-
-    private final Utils utils;
-
-    private final Signals signals;
 
     private PositionExecutor positionExecutor;
 
     @Autowired
-    public Simulation(Signals signals, Utils utils, PositionExecutor positionExecutor) {
-        this.utils = utils;
-        this.signals = signals;
+    public Simulation(PositionExecutor positionExecutor) {
         this.positionExecutor = positionExecutor;
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
     }
@@ -81,7 +67,7 @@ public class Simulation {
 //                    line[DAILY_HIGH]);
 //        }
 
-        return new Results(tickCounter, winners, losers);
+        return positionExecutor.getResults();
     }
 
 }

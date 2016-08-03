@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PositionExecutor {
 
+    private Utils utils;
+
     private final Signals signals;
 
     private String entryDate;
@@ -18,9 +20,14 @@ public class PositionExecutor {
     private boolean availableToTrade;
     private boolean timeToOpenPosition;
 
+    private int tickCounter;
+    private int winners;
+    private int losers;
+
     @Autowired
-    public PositionExecutor(Signals signals) {
+    public PositionExecutor(Signals signals, Utils utils) {
         this.signals = signals;
+        this.utils = utils;
         entry = -1.0;
         stop = -1.0;
         target = -1.0;
@@ -58,39 +65,43 @@ public class PositionExecutor {
             if (target > stop) {
 
                 if (usefulTickData.getCandleClose() <= stop) {
-                    int profitLoss = simulation.utils.convertTicksToInt(stop - entry);
-                    simulation.tickCounter+=profitLoss;
-                    simulation.losers++;
+                    int profitLoss = utils.convertTicksToInt(stop - entry);
+                    tickCounter+=profitLoss;
+                    losers++;
                     availableToTrade = true;
                     exitDate = usefulTickData.getCandleDate();
                     System.out.printf("Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
-                            entryDate, entry, exitDate, stop, profitLoss, simulation.tickCounter);
+                            entryDate, entry, exitDate, stop, profitLoss, tickCounter);
                 } else if (usefulTickData.getCandleClose() > target) {
-                    final int profitLoss = simulation.utils.convertTicksToInt(target - entry);
-                    simulation.tickCounter += profitLoss;
-                    simulation.winners++;
+                    final int profitLoss = utils.convertTicksToInt(target - entry);
+                    tickCounter += profitLoss;
+                    winners++;
                     availableToTrade = true;
                     System.out.printf("Close long %s %.5f target: %s %.5f ticks %d cumulative profit %d%n",
-                            entryDate, entry, exitDate, target, profitLoss, simulation.tickCounter);
+                            entryDate, entry, exitDate, target, profitLoss, tickCounter);
                 }
             } else {
 
                 if (usefulTickData.getCandleClose() >= stop) {
-                    final int profitLoss = simulation.utils.convertTicksToInt(entry - stop);
-                    simulation.tickCounter += profitLoss;
-                    simulation.losers++;
+                    final int profitLoss = utils.convertTicksToInt(entry - stop);
+                    tickCounter += profitLoss;
+                    losers++;
                     availableToTrade = true;
                     System.out.printf("Close short %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
-                            entryDate, entry, exitDate, stop, profitLoss, simulation.tickCounter);
+                            entryDate, entry, exitDate, stop, profitLoss, tickCounter);
                 } else if (usefulTickData.getCandleClose() < target) {
-                    final int profitLoss = simulation.utils.convertTicksToInt(entry - target);
-                    simulation.tickCounter += profitLoss;
-                    simulation.winners++;
+                    final int profitLoss = utils.convertTicksToInt(entry - target);
+                    tickCounter += profitLoss;
+                    winners++;
                     availableToTrade = true;
                     System.out.printf("Close short %s %.5f target: %s %.5f ticks %d cumulative profit %d%n",
-                            entryDate, entry, exitDate, target, profitLoss, simulation.tickCounter);
+                            entryDate, entry, exitDate, target, profitLoss, tickCounter);
                 }
             }
         }
+    }
+
+    public Results getResults() {
+        return new Results(tickCounter, winners, losers);
     }
 }
