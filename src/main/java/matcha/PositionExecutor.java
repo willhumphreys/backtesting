@@ -15,7 +15,7 @@ public class PositionExecutor {
     private static final String TARGET_SHORT_TEMPLATE =
             "Close short %s %.5f target: %s %.5f ticks %d cumulative profit %d%n";
 
-    private Utils utils;
+    private final Utils utils;
     private final Signals signals;
 
     private String entryDate;
@@ -38,9 +38,6 @@ public class PositionExecutor {
 
     void placePositions(UsefulTickData usefulTickData) {
         if (signals.isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
-
-
-
             double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData.getCandleLow());
             double target = usefulTickData.getCandleLow();
             double entry = usefulTickData.getCandleClose();
@@ -76,21 +73,21 @@ public class PositionExecutor {
             exitDate = usefulTickData.getCandleDate();
             if (isLongStopTouched(usefulTickData)) {
                 int profitLoss = utils.convertTicksToInt(this.position.getStop() - this.position.getEntry());
-                closePosition(profitLoss, STOPPED_LONG_TEMPLATE);
+                closePosition(profitLoss, STOPPED_LONG_TEMPLATE, this.position.getStop());
                 losers++;
             } else if (isLongTargetExceeded(usefulTickData)) {
                 final int profitLoss = utils.convertTicksToInt(this.position.getTarget() - this.position.getEntry());
-                closePosition(profitLoss, TARGET_LONG_TEMPLATE);
+                closePosition(profitLoss, TARGET_LONG_TEMPLATE, this.position.getTarget());
                 winners++;
             }
         } else {
             if (isShortStopTouched(usefulTickData)) {
                 final int profitLoss = utils.convertTicksToInt(this.position.getEntry() - this.position.getStop());
-                closePosition(profitLoss, STOPPED_SHORT_TEMPLATE);
+                closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, this.position.getStop());
                 losers++;
             } else if (isShortTargetExceeded(usefulTickData)) {
                 final int profitLoss = utils.convertTicksToInt(this.position.getEntry() - this.position.getTarget());
-                closePosition(profitLoss, TARGET_SHORT_TEMPLATE);
+                closePosition(profitLoss, TARGET_SHORT_TEMPLATE, this.position.getTarget());
                 winners++;
             }
         }
@@ -116,10 +113,10 @@ public class PositionExecutor {
         return this.position.getTarget() > this.position.getStop();
     }
 
-    private void closePosition(int profitLoss, String template) {
+    private void closePosition(int profitLoss, String template, final double stopOrTarget) {
         tickCounter += profitLoss;
         availableToTrade = true;
-        System.out.printf(template, entryDate, this.position.getEntry(), exitDate, this.position.getStop(), profitLoss, tickCounter);
+        System.out.printf(template, entryDate, this.position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter);
         this.position = null;
     }
 
