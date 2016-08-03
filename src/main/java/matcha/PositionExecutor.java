@@ -16,7 +16,6 @@ public class PositionExecutor {
     private double stop;
     private double target;
 
-
     private boolean availableToTrade;
     private boolean timeToOpenPosition;
 
@@ -34,7 +33,6 @@ public class PositionExecutor {
         availableToTrade = true;
     }
 
-
     void placePositions(UsefulTickData usefulTickData)  {
         if (signals.isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
 
@@ -43,7 +41,6 @@ public class PositionExecutor {
             entry = usefulTickData.getCandleClose();
             entryDate = usefulTickData.getCandleDate();
             availableToTrade = false;
-
         }
 
         if (signals.isLongSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
@@ -63,13 +60,12 @@ public class PositionExecutor {
     void managePosition(UsefulTickData usefulTickData) {
         if (!availableToTrade) {
             if (target > stop) {
-
+                exitDate = usefulTickData.getCandleDate();
                 if (usefulTickData.getCandleClose() <= stop) {
                     int profitLoss = utils.convertTicksToInt(stop - entry);
                     tickCounter+=profitLoss;
                     losers++;
                     availableToTrade = true;
-                    exitDate = usefulTickData.getCandleDate();
                     System.out.printf("Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
                             entryDate, entry, exitDate, stop, profitLoss, tickCounter);
                 } else if (usefulTickData.getCandleClose() > target) {
