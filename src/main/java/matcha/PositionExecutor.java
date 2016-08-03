@@ -68,7 +68,7 @@ public class PositionExecutor {
     }
 
     void managePosition(UsefulTickData usefulTickData) {
-        if (availableToTrade) {
+        if (availableToTrade || this.position == null) {
             return;
         }
 
@@ -120,6 +120,7 @@ public class PositionExecutor {
         tickCounter += profitLoss;
         availableToTrade = true;
         System.out.printf(template, entryDate, this.position.getEntry(), exitDate, this.position.getStop(), profitLoss, tickCounter);
+        this.position = null;
     }
 
     Results getResults() {
