@@ -5,6 +5,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class Signals {
 
+    private int highLowCheckPref;
+
+    public Signals() {
+        this.highLowCheckPref = 0;
+    }
 
     boolean isLongSignal(UsefulTickData usefulTickData) {
         return usefulTickData.isTakeOutYesterdaysHigh() &&
@@ -20,12 +25,12 @@ public class Signals {
                 usefulTickData.isCloseAboveYesterdaysLow() &&
                 usefulTickData.isOpenAboveYesterdaysLow() &&
 
-                getLowCheck(usefulTickData, 0);
+                getLowCheck(usefulTickData);
     }
 
-    boolean getLowCheck(UsefulTickData usefulTickData, int lowCheckPref) {
+    boolean getLowCheck(UsefulTickData usefulTickData) {
         boolean lowCheck;
-        switch (lowCheckPref) {
+        switch (highLowCheckPref) {
             case 0:
                 //Current Candle is below last candle.
                 lowCheck = usefulTickData.getCandleLow() < usefulTickData.getPreviousCandleLow();
