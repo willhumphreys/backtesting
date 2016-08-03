@@ -2,6 +2,7 @@ package matcha;
 
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -105,13 +106,13 @@ public class Simulation {
                             tickCounter+=profitLoss;
                             losers++;
                             availableToTrade = true;
-                            System.out.printf("Close long entry: %s target: %s stop: %s for loss %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("Close long entry: %s target: %.5f stop: %.5f for loss %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
                         } else if (candleClose > target) {
                             final int profitLoss = convertTicksToInt(target - entry);
                             tickCounter += profitLoss;
                             winners++;
                             availableToTrade = true;
-                            System.out.printf("Close long entry: %s target: %s stop: %s for win %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("Close long entry: %s target: %.5f stop: %.5f for win %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
                         }
                     } else {
 
@@ -120,13 +121,13 @@ public class Simulation {
                             tickCounter += profitLoss;
                             losers++;
                             availableToTrade = true;
-                            System.out.printf("Close short entry: %s target: %s stop: %s for loss %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("Close short entry: %s target: %.5f stop: %.5f for loss %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
                         } else if (candleClose < target) {
                             final int profitLoss = convertTicksToInt(entry - target);
                             tickCounter += profitLoss;
                             winners++;
                             availableToTrade = true;
-                            System.out.printf("Close short entry: %s target: %s stop: %s for win %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
+                            System.out.printf("Close short entry: %s target: %.5f stop: %.5f for win %s cumulative profit %s%n", entry, target, stop, profitLoss, tickCounter);
                         }
                     }
                 }
@@ -138,10 +139,6 @@ public class Simulation {
                         getLowCheck(hourData[TODAYS_LOW], candleLow, previousCandleLow, 0, i) &&
                         timeToOpenPosition &&
                         availableToTrade) {
-
-
-
-
 
                     this.stop = candleClose + (candleClose - candleLow);
                     this.target = candleLow;
