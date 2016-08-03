@@ -98,9 +98,7 @@ public class Simulation {
                 boolean closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
                 boolean openBelowYesterdaysLow = candleOpen < yesterdaysHigh;
 
-
                 if (!availableToTrade) {
-
                     if (target > stop) {
 
                         if (candleClose <= stop) {
