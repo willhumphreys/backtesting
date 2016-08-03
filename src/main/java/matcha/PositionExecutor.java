@@ -6,8 +6,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class PositionExecutor {
 
-    private Utils utils;
+    private static final String STOPPED_LONG_TEMPLATE =
+            "Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
+    private static final String TARGET_LONG_TEMPLATE =
+            "Close long %s %.5f target: %s %.5f ticks %d cumulative profit %d%n";
+    private static final String STOPPED_SHORT_TEMPLATE =
+            "Close short %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
+    private static final String TARGET_SHORT_TEMPLATE =
+            "Close short %s %.5f target: %s %.5f ticks %d cumulative profit %d%n";
 
+    private Utils utils;
     private final Signals signals;
 
     private String entryDate;
@@ -63,38 +71,32 @@ public class PositionExecutor {
                 exitDate = usefulTickData.getCandleDate();
                 if (usefulTickData.getCandleClose() <= stop) {
                     int profitLoss = utils.convertTicksToInt(stop - entry);
-                    tickCounter+=profitLoss;
+                    closePosition(profitLoss, STOPPED_LONG_TEMPLATE);
                     losers++;
-                    availableToTrade = true;
-                    System.out.printf("Close long %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
-                            entryDate, entry, exitDate, stop, profitLoss, tickCounter);
                 } else if (usefulTickData.getCandleClose() > target) {
                     final int profitLoss = utils.convertTicksToInt(target - entry);
-                    tickCounter += profitLoss;
+                    closePosition(profitLoss, TARGET_LONG_TEMPLATE);
                     winners++;
-                    availableToTrade = true;
-                    System.out.printf("Close long %s %.5f target: %s %.5f ticks %d cumulative profit %d%n",
-                            entryDate, entry, exitDate, target, profitLoss, tickCounter);
                 }
             } else {
 
                 if (usefulTickData.getCandleClose() >= stop) {
                     final int profitLoss = utils.convertTicksToInt(entry - stop);
-                    tickCounter += profitLoss;
+                    closePosition(profitLoss, STOPPED_SHORT_TEMPLATE);
                     losers++;
-                    availableToTrade = true;
-                    System.out.printf("Close short %s %.5f stopped: %s %.5f ticks %d cumulative profit %d%n",
-                            entryDate, entry, exitDate, stop, profitLoss, tickCounter);
                 } else if (usefulTickData.getCandleClose() < target) {
                     final int profitLoss = utils.convertTicksToInt(entry - target);
-                    tickCounter += profitLoss;
+                   closePosition(profitLoss, TARGET_SHORT_TEMPLATE);
                     winners++;
-                    availableToTrade = true;
-                    System.out.printf("Close short %s %.5f target: %s %.5f ticks %d cumulative profit %d%n",
-                            entryDate, entry, exitDate, target, profitLoss, tickCounter);
                 }
             }
         }
+    }
+
+    private void closePosition(int profitLoss, String template) {
+        tickCounter+=profitLoss;
+        availableToTrade = true;
+        System.out.printf(template, entryDate, entry, exitDate, stop, profitLoss, tickCounter);
     }
 
     Results getResults() {
