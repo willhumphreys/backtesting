@@ -5,6 +5,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class HighAndLowChecks {
 
+
+    boolean isLongSignal(UsefulTickData usefulTickData) {
+        return usefulTickData.isTakeOutYesterdaysHigh() &&
+                usefulTickData.isCloseNegative() &&
+                usefulTickData.isCloseBelowYesterdaysHigh() &&
+                usefulTickData.isOpenBelowYesterdaysLow() &&
+                getHighCheck(usefulTickData, 0);
+    }
+
+    boolean isShortSignal(UsefulTickData usefulTickData) {
+        return usefulTickData.isTakeOutYesterdaysLow() &&
+                usefulTickData.isClosePositive() &&
+                usefulTickData.isCloseAboveYesterdaysLow() &&
+                usefulTickData.isOpenAboveYesterdaysLow() &&
+
+                getLowCheck(usefulTickData, 0);
+    }
+
     boolean getLowCheck(UsefulTickData usefulTickData, int lowCheckPref) {
         boolean lowCheck;
         switch (lowCheckPref) {

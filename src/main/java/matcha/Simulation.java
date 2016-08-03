@@ -113,7 +113,7 @@ public class Simulation {
                     }
                 }
 
-                if (isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
+                if (highAndLowChecks.isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
 
                     this.stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData.getCandleLow());
                     this.target = usefulTickData.getCandleLow();
@@ -123,7 +123,7 @@ public class Simulation {
 
                 }
 
-                if (isLongSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
+                if (highAndLowChecks.isLongSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
 
                     this.stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData.getCandleClose());
                     this.target = usefulTickData.getCandleHigh();
@@ -144,23 +144,4 @@ public class Simulation {
 
         return new Results(tickCounter, winners, losers);
     }
-
-    private boolean isLongSignal(UsefulTickData usefulTickData) {
-        return usefulTickData.isTakeOutYesterdaysHigh() &&
-                usefulTickData.isCloseNegative() &&
-                usefulTickData.isCloseBelowYesterdaysHigh() &&
-                usefulTickData.isOpenBelowYesterdaysLow() &&
-                highAndLowChecks.getHighCheck(usefulTickData, 0);
-    }
-
-    private boolean isShortSignal(UsefulTickData usefulTickData) {
-        return usefulTickData.isTakeOutYesterdaysLow() &&
-                usefulTickData.isClosePositive() &&
-                usefulTickData.isCloseAboveYesterdaysLow() &&
-                usefulTickData.isOpenAboveYesterdaysLow() &&
-
-                highAndLowChecks.getLowCheck(usefulTickData, 0);
-    }
-
-
 }
