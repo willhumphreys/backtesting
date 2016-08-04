@@ -15,7 +15,7 @@ public class Signals {
         return usefulTickData.isTakeOutYesterdaysHigh() &&
                 usefulTickData.isCloseNegative() &&
                 usefulTickData.isCloseBelowYesterdaysHigh() &&
-                usefulTickData.isOpenBelowYesterdaysLow() &&
+                usefulTickData.isOpenBelowYesterdaysHigh() &&
                 getHighCheck(usefulTickData, this.highLowCheckPref);
     }
 

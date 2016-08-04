@@ -29,7 +29,7 @@ class UsefulTickData {
     private boolean takeOutYesterdaysHigh;
     private boolean closeNegative;
     private boolean closeBelowYesterdaysHigh;
-    private boolean openBelowYesterdaysLow;
+    private boolean openBelowYesterdaysHigh;
     private double todaysLow;
     private double todaysHigh;
 
@@ -69,7 +69,7 @@ class UsefulTickData {
         return lowOfYesterday;
     }
     double getHighOfYesterday() {
-        return lowOfYesterday;
+        return highOfYesterday;
     }
 
     boolean isTakeOutYesterdaysLow() {
@@ -93,8 +93,8 @@ class UsefulTickData {
     boolean isCloseBelowYesterdaysHigh() {
         return closeBelowYesterdaysHigh;
     }
-    boolean isOpenBelowYesterdaysLow() {
-        return openBelowYesterdaysLow;
+    boolean isOpenBelowYesterdaysHigh() {
+        return openBelowYesterdaysHigh;
     }
 
     UsefulTickData invoke() {
@@ -121,7 +121,7 @@ class UsefulTickData {
         takeOutYesterdaysHigh = candleHigh > yesterdaysHigh;
         closeNegative = candleClose < candleOpen;
         closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
-        openBelowYesterdaysLow = candleOpen < yesterdaysLow;
+        openBelowYesterdaysHigh = candleOpen < yesterdaysHigh;
         return this;
     }
 }

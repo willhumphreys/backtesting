@@ -197,7 +197,7 @@ public class PositionExecutorTest {
     //usefulTickData.isTakeOutYesterdaysHigh() &&
     //        usefulTickData.isCloseNegative() &&
     //        usefulTickData.isCloseBelowYesterdaysHigh() &&
-    //        usefulTickData.isOpenBelowYesterdaysLow() &&
+    //        usefulTickData.isOpenBelowYesterdaysHigh() &&
     //getHighCheck(usefulTickData, 0);
     @Test
     public void shouldOpenALongPositionAtCloseIfPreviousDaysHighIsExceeded() throws Exception {
@@ -251,7 +251,7 @@ public class PositionExecutorTest {
     //usefulTickData.isTakeOutYesterdaysHigh() &&
     //        usefulTickData.isCloseNegative() &&
     //        usefulTickData.isCloseBelowYesterdaysHigh() &&
-    //        usefulTickData.isOpenBelowYesterdaysLow() &&
+    //        usefulTickData.isOpenBelowYesterdaysHigh() &&
     //getHighCheck(usefulTickData, 0);
     @Test
     public void shouldNotOpenALongPositionAtCloseIfTheCloseIsPositive() throws Exception {
@@ -290,7 +290,7 @@ public class PositionExecutorTest {
     }
 
     @Test
-    public void shouldNotOpenALongPositionAtCloseIfWeOpenAboveYesterdaysLow() throws Exception {
+    public void shouldNotOpenALongPositionAtCloseIfWeOpenAboveYesterdaysHigh() throws Exception {
         final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
 
         positionExecutor.setTimeToOpenPosition(true);
@@ -298,7 +298,7 @@ public class PositionExecutorTest {
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
-                {"2015-8-4T9:0:0", "5", "2", "9", "2", "4", "7", "10", "20"}
+                {"2015-8-4T9:0:0", "8", "2", "9", "2", "4", "7", "10", "20"}
         };
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
         usefulTickData.invoke();
