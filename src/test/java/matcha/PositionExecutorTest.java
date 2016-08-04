@@ -128,7 +128,6 @@ public class PositionExecutorTest {
         //Entry = Candle Close = 8
 
 
-
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -363,19 +362,87 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldCloseLongPositionIfTargetExceeded() throws Exception {
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"},
+                {"2015-8-4T10:0:0", "3", "2", "20", "2", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
 
+        assertThat(optionalPosition.isPresent(), is(true));
 
+        final Position position = optionalPosition.get();
+
+        //Target 2.0
+        //Entry 8.0
+        //Stop 14.0
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+        usefulTickData2.invoke();
+        positionExecutor.managePosition(usefulTickData2, position);
+
+        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(70000.0)));
     }
 
     @Test
     public void shouldCloseLongPositionIfStopTouched() throws Exception {
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"},
+                {"2015-8-4T10:0:0", "3", "-6", "9", "2", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
 
+        assertThat(optionalPosition.isPresent(), is(true));
 
+        final Position position = optionalPosition.get();
+
+        //Target 2.0
+        //Entry 8.0
+        //Stop 14.0
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+        usefulTickData2.invoke();
+        positionExecutor.managePosition(usefulTickData2, position);
+
+        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(-70000.0)));
     }
 
     @Test
     public void shouldNotCloseLongPositionIfTargetOrStopNotHit() throws Exception {
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"},
+                {"2015-8-4T10:0:0", "3", "2", "9", "2", "4", "7", "10", "20"}
+        };
 
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(true));
+
+        final Position position = optionalPosition.get();
+
+        //Target 2.0
+        //Entry 8.0
+        //Stop 14.0
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+        usefulTickData2.invoke();
+        positionExecutor.managePosition(usefulTickData2, position);
+
+        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(0.0)));
     }
 
 }
