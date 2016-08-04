@@ -333,13 +333,32 @@ public class PositionExecutorTest {
         assertThat(positionExecutor.getResults().getWinners(), is(equalTo(0)));
         assertThat(positionExecutor.getResults().getLosers(), is(equalTo(1)));
         assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(-60000.0)));
-
-
     }
 
     @Test
     public void shouldNotCloseShortPositionIfTargetOrStopNotHit() throws Exception {
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"},
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
 
+        final Position position = optionalPosition.get();
+
+        //Target 2.0
+        //Entry 8.0
+        //Stop 14.0
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+        usefulTickData2.invoke();
+        positionExecutor.managePosition(usefulTickData2, position);
+
+        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(0.0)));
     }
 
     @Test
