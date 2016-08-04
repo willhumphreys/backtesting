@@ -32,7 +32,7 @@ public class BacktestingApplication implements CommandLineRunner {
         String[][] data = tickDataReader.read(args[DATA_FILE]);
         String[][] tickData = tickDataReader.read(args[TICK_DATA_FILE]);
 
-        int extraTicks = 0;
+        int extraTicks = 10;
 
         Results results = simulation.execute(data, tickData, extraTicks);
 
