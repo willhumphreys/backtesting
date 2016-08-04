@@ -16,7 +16,7 @@ public class Signals {
                 usefulTickData.isCloseNegative() &&
                 usefulTickData.isCloseBelowYesterdaysHigh() &&
                 usefulTickData.isOpenBelowYesterdaysLow() &&
-                getHighCheck(usefulTickData, 0);
+                getHighCheck(usefulTickData, this.highLowCheckPref);
     }
 
     boolean isShortSignal(UsefulTickData usefulTickData) {
@@ -24,10 +24,10 @@ public class Signals {
                 usefulTickData.isClosePositive() &&
                 usefulTickData.isCloseAboveYesterdaysLow() &&
                 usefulTickData.isOpenAboveYesterdaysLow() &&
-                getLowCheck(usefulTickData);
+                getLowCheck(usefulTickData, this.highLowCheckPref);
     }
 
-    boolean getLowCheck(UsefulTickData usefulTickData) {
+    boolean getLowCheck(UsefulTickData usefulTickData, int highLowCheckPref) {
         boolean lowCheck;
         switch (highLowCheckPref) {
             case 0:

@@ -121,7 +121,7 @@ class UsefulTickData {
         takeOutYesterdaysHigh = candleHigh > yesterdaysHigh;
         closeNegative = candleClose < candleOpen;
         closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
-        openBelowYesterdaysLow = candleOpen < yesterdaysHigh;
+        openBelowYesterdaysLow = candleOpen < yesterdaysLow;
         return this;
     }
 }
