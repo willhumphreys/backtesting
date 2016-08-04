@@ -174,4 +174,57 @@ public class PositionExecutorTest {
 
         assertThat(optionalPosition.isPresent(), is(false));
     }
+
+    //usefulTickData.isTakeOutYesterdaysHigh() &&
+    //        usefulTickData.isCloseNegative() &&
+    //        usefulTickData.isCloseBelowYesterdaysHigh() &&
+    //        usefulTickData.isOpenBelowYesterdaysLow() &&
+    //getHighCheck(usefulTickData, 0);
+    @Test
+    public void shouldOpenALongPositionAtCloseIfPreviousDaysHighIsExceeded() throws Exception {
+        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+
+        positionExecutor.setTimeToOpenPosition(true);
+
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(true));
+
+        final Position position = optionalPosition.get();
+
+        //close - (high - close)
+        //2 - (9 - 2)
+        //stop low
+        //target high
+        //entry close
+        assertThat(position.getStop(), is(equalTo(-5.0)));
+        assertThat(position.getTarget(), is(equalTo(9.0)));
+        assertThat(position.getEntryDate(), is(equalTo("2015-8-4T9:0:0")));
+        assertThat(position.getEntry(), is(equalTo(2.0)));
+    }
+
+    @Test
+    public void shouldNotOpenALongPositionAtCloseIfItIsNotTimeToOpen() throws Exception {
+        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+
+        positionExecutor.setTimeToOpenPosition(false);
+
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(false));
+    }
 }

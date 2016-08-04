@@ -24,7 +24,6 @@ public class Signals {
                 usefulTickData.isClosePositive() &&
                 usefulTickData.isCloseAboveYesterdaysLow() &&
                 usefulTickData.isOpenAboveYesterdaysLow() &&
-
                 getLowCheck(usefulTickData);
     }
 
