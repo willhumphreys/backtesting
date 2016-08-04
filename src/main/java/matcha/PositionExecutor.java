@@ -101,19 +101,19 @@ public class PositionExecutor {
     }
 
     private boolean isShortTargetExceeded(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getCandleClose() < position.getTarget();
+        return usefulTickData.getCandleLow() < position.getTarget();
     }
 
     private boolean isShortStopTouched(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getCandleClose() >= position.getStop();
+        return usefulTickData.getCandleHigh() >= position.getStop();
     }
 
     private boolean isLongTargetExceeded(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getCandleClose() > position.getTarget();
+        return usefulTickData.getCandleHigh() > position.getTarget();
     }
 
     private boolean isLongStopTouched(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getCandleClose() <= position.getStop();
+        return usefulTickData.getCandleLow() <= position.getStop();
     }
 
     private boolean isLongPosition(Position position) {
