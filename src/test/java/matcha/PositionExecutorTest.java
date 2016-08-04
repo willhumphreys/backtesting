@@ -1,5 +1,6 @@
 package matcha;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -10,12 +11,17 @@ import static org.junit.Assert.assertThat;
 
 public class PositionExecutorTest {
 
-    @Test
-    public void shouldOpenAShortPositionAtCloseIfPreviousDaysLowIsExceeded() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+    private PositionExecutor positionExecutor;
 
+    @Before
+    public void setUp() throws Exception {
+        positionExecutor = new PositionExecutor(new Signals(), new Utils());
         positionExecutor.setTimeToOpenPosition(true);
 
+    }
+
+    @Test
+    public void shouldOpenAShortPositionAtCloseIfPreviousDaysLowIsExceeded() throws Exception {
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -39,8 +45,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenAShortPositionIfItIsNotTimeToOpenAPosition() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
         positionExecutor.setTimeToOpenPosition(false);
 
         final String[][] data = {
@@ -57,10 +61,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenAShortPositionIfWeAreNotAvailableToTrade() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -80,10 +80,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenAShortPositionACloseIfPreviousDaysLowIsNotExceeded() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         //Target = CandleLow = 3
         //Stop = Candle Close 8 + (8 - 3) = 13
         //Entry = Candle Close = 8
@@ -105,10 +101,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenAShortPositionACloseIfWeDoNotClosePositive() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         //Target = CandleLow = 3
         //Stop = Candle Close 8 + (8 - 3) = 13
         //Entry = Candle Close = 8
@@ -131,10 +123,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenAShortPositionAtCloseIfWeDoNotCloseAboveYesterdaysLow() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         //Target = CandleLow = 3
         //Stop = Candle Close 8 + (8 - 3) = 13
         //Entry = Candle Close = 8
@@ -155,10 +143,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenAShortPositionAtCloseIfWeDoNotCloseAboveYesterdaysOpen() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         //Target = CandleLow = 3
         //Stop = Candle Close 8 + (8 - 3) = 13
         //Entry = Candle Close = 8
@@ -177,10 +161,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenAShortPositionIfTodaysLowDoesNotTakeOutYesterdaysLow() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -201,10 +181,6 @@ public class PositionExecutorTest {
     //getHighCheck(usefulTickData, 0);
     @Test
     public void shouldOpenALongPositionAtCloseIfPreviousDaysHighIsExceeded() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -231,8 +207,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenALongPositionAtCloseIfItIsNotTimeToOpen() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
         positionExecutor.setTimeToOpenPosition(false);
 
         final String[][] data = {
@@ -255,10 +229,6 @@ public class PositionExecutorTest {
     //getHighCheck(usefulTickData, 0);
     @Test
     public void shouldNotOpenALongPositionAtCloseIfTheCloseIsPositive() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -273,10 +243,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenALongPositionAtCloseIfWeDoNotTakeOutYesterdaysHigh() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -291,10 +257,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenALongPositionAtCloseIfWeOpenAboveYesterdaysHigh() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -309,10 +271,6 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenALongPositionIfWeDoNotTakeOutTheHighOfThePreviousCandle() throws Exception {
-        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
-
-        positionExecutor.setTimeToOpenPosition(true);
-
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -324,4 +282,39 @@ public class PositionExecutorTest {
 
         assertThat(optionalPosition.isPresent(), is(false));
     }
+
+    @Test
+    public void shouldCloseLongPositionIfTargetExceeded() throws Exception {
+
+
+    }
+
+    @Test
+    public void shouldCloseLongPositionIfStopTouched() throws Exception {
+
+
+    }
+
+    @Test
+    public void shouldNotCloseLongPositionIfTargetOrStopNotHit() throws Exception {
+
+    }
+
+    @Test
+    public void shouldCloseShortPositionIfTargetExceeded() throws Exception {
+
+
+    }
+
+    @Test
+    public void shouldCloseShortPositionIfStopTouched() throws Exception {
+
+
+    }
+
+    @Test
+    public void shouldNotCloseShortPositionIfTargetOrStopNotHit() throws Exception {
+
+    }
+
 }
