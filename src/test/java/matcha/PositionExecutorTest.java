@@ -175,6 +175,25 @@ public class PositionExecutorTest {
         assertThat(optionalPosition.isPresent(), is(false));
     }
 
+    @Test
+    public void shouldNotOpenAShortPositionIfTodaysLowDoesNotTakeOutYesterdaysLow() throws Exception {
+        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+
+        positionExecutor.setTimeToOpenPosition(true);
+
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "4", "9", "8", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(false));
+    }
+
+
     //usefulTickData.isTakeOutYesterdaysHigh() &&
     //        usefulTickData.isCloseNegative() &&
     //        usefulTickData.isCloseBelowYesterdaysHigh() &&
@@ -305,6 +324,4 @@ public class PositionExecutorTest {
 
         assertThat(optionalPosition.isPresent(), is(false));
     }
-
-
 }
