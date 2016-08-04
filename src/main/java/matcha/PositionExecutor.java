@@ -9,13 +9,13 @@ import java.util.Optional;
 public class PositionExecutor {
 
     private static final String STOPPED_LONG_TEMPLATE =
-            "Close long  %s @ %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
+            "%s Close long  %s @ %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
     private static final String TARGET_LONG_TEMPLATE =
-            "Close long  %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
+            "%s Close long  %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
     private static final String STOPPED_SHORT_TEMPLATE =
-            "Close short %s @ %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
+            "%s Close short %s @ %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
     private static final String TARGET_SHORT_TEMPLATE =
-            "Close short %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
+            "%s Close short %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
 
     private final Utils utils;
     private final Signals signals;
@@ -129,7 +129,13 @@ public class PositionExecutor {
     private void closePosition(int profitLoss, String template, final double stopOrTarget, Position position) {
         tickCounter += profitLoss;
         availableToTrade = true;
-        System.out.printf(template, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter);
+        String winLose = "LOSE";
+        if(profitLoss > 0) {
+            winLose = "WIN";
+        }
+
+
+        System.out.printf(template, winLose, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter);
         position.close();
     }
 

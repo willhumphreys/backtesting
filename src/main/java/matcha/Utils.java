@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 class Utils {
 
     int convertTicksToInt(double doubleTicks) {
-        return Math.toIntExact(Math.round(doubleTicks * 10000));
+        return Math.toIntExact(Math.round(doubleTicks * 20000));
     }
 }
