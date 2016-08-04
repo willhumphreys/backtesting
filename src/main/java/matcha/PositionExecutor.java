@@ -37,10 +37,15 @@ public class PositionExecutor {
         availableToTrade = true;
     }
 
-    Optional<Position> placePositions(UsefulTickData usefulTickData) {
+    Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount) {
+
+        //1.094295
+        double extraTicks = extraTicksCount / 100000.0;
+
         if (signals.isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
-            double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData.getCandleLow());
-            double target = usefulTickData.getCandleLow();
+            double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData
+                    .getCandleLow() + extraTicks);
+            double target = usefulTickData.getCandleLow() - extraTicks;
             double entry = usefulTickData.getCandleClose();
             entryDate = usefulTickData.getCandleDate();
 
@@ -53,8 +58,9 @@ public class PositionExecutor {
 
         if (signals.isLongSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
 
-            double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData.getCandleClose());
-            double target = usefulTickData.getCandleHigh();
+            double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
+                    .getCandleClose() - extraTicks);
+            double target = usefulTickData.getCandleHigh() + extraTicks;
             double entry = usefulTickData.getCandleClose();
             entryDate = usefulTickData.getCandleDate();
             Position position = new Position(entryDate, entry, target, stop);

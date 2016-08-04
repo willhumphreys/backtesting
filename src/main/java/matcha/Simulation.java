@@ -25,7 +25,7 @@ public class Simulation {
         this.positionOptional = Optional.empty();
     }
 
-    Results execute(String[][] hourData, String[][] tickData) {
+    Results execute(String[][] hourData, String[][] tickData, int extraTicks) {
 
         int hourCounter = 0;
         for (int i = 1; i < tickData.length; i++) {
@@ -64,7 +64,7 @@ public class Simulation {
                         this.positionOptional = Optional.empty();
                     }
                 } else {
-                    this.positionOptional = positionExecutor.placePositions(usefulTickData);
+                    this.positionOptional = positionExecutor.placePositions(usefulTickData, extraTicks);
                 }
             }
 
