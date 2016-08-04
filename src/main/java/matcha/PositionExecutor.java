@@ -22,7 +22,6 @@ public class PositionExecutor {
 
     private String entryDate;
     private String exitDate;
-    //private Position position;
 
     private boolean availableToTrade;
     private boolean timeToOpenPosition;
