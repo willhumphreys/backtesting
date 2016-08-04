@@ -76,8 +76,9 @@ public class PositionExecutor {
             return;
         }
 
+        exitDate = usefulTickData.getCandleDate();
         if (isLongPosition(position)) {
-            exitDate = usefulTickData.getCandleDate();
+
             if (isLongStopTouched(usefulTickData, position)) {
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry());
                 closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position);
