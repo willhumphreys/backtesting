@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 public class PositionExecutorTest {
 
     @Test
-    public void shouldCloseALongPositionAtTargetIfTargetIsExceeded() throws Exception {
+    public void shouldOpenAShortPositionAtCloseIfPreviousDaysLowIsExceeded() throws Exception {
         final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
 
         positionExecutor.setTimeToOpenPosition(true);
@@ -35,5 +35,143 @@ public class PositionExecutorTest {
         assertThat(position.getTarget(), is(equalTo(2.0)));
         assertThat(position.getEntryDate(), is(equalTo("2015-8-4T9:0:0")));
         assertThat(position.getEntry(), is(equalTo(8.0)));
+    }
+
+    @Test
+    public void shouldNotOpenAShortPositionIfItIsNotTimeToOpenAPosition() throws Exception {
+        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+
+        positionExecutor.setTimeToOpenPosition(false);
+
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldNotOpenAShortPositionIfWeAreNotAvailableToTrade() throws Exception {
+        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+
+        positionExecutor.setTimeToOpenPosition(true);
+
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(true));
+
+        final Optional<Position> alreadyInAPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(alreadyInAPosition.isPresent(), is(false));
+    }
+
+
+    @Test
+    public void shouldNotOpenAShortPositionACloseIfPreviousDaysLowIsNotExceeded() throws Exception {
+        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+
+        positionExecutor.setTimeToOpenPosition(true);
+
+        //Target = CandleLow = 3
+        //Stop = Candle Close 8 + (8 - 3) = 13
+        //Entry = Candle Close = 8
+
+        //Target is equal to todays Low
+        String todaysLow = "3";
+
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", todaysLow, "9", "8", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldNotOpenAShortPositionACloseIfWeDoNotClosePositive() throws Exception {
+        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+
+        positionExecutor.setTimeToOpenPosition(true);
+
+        //Target = CandleLow = 3
+        //Stop = Candle Close 8 + (8 - 3) = 13
+        //Entry = Candle Close = 8
+
+        //Target is equal to todays Low
+        String todaysLow = "2";
+        String todaysClose = "5";
+
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", todaysLow, "9", todaysClose, "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldNotOpenAShortPositionAtCloseIfWeDoNotCloseAboveYesterdaysLow() throws Exception {
+        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+
+        positionExecutor.setTimeToOpenPosition(true);
+
+        //Target = CandleLow = 3
+        //Stop = Candle Close 8 + (8 - 3) = 13
+        //Entry = Candle Close = 8
+
+
+
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "2", "2", "6", "3", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldNotOpenAShortPositionAtCloseIfWeDoNotCloseAboveYesterdaysOpen() throws Exception {
+        final PositionExecutor positionExecutor = new PositionExecutor(new Signals(), new Utils());
+
+        positionExecutor.setTimeToOpenPosition(true);
+
+        //Target = CandleLow = 3
+        //Stop = Candle Close 8 + (8 - 3) = 13
+        //Entry = Candle Close = 8
+
+        final String[][] data = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "3", "2", "9", "8", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        usefulTickData.invoke();
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData);
+
+        assertThat(optionalPosition.isPresent(), is(false));
     }
 }
