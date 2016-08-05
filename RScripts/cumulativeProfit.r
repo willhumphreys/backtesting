@@ -1,6 +1,7 @@
 library(ggplot2)
 
-data <- read.table("results/eurusd_60min_10y_03082016Out.csv", header=T,sep=",")
+#data <- read.table("results/eurusd_60min_10y_03082016Out.csv", header=T,sep=",")
+data <- read.table("results/audusd_60min_03082016Out.csv", header=T,sep=",")
 
 data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S")
 data$date <- NULL

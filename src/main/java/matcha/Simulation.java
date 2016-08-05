@@ -10,13 +10,13 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class Simulation {
 
     private static final int DATE = 0;
-
-    private DateTimeFormatter formatter;
 
     private PositionExecutor positionExecutor;
 
@@ -31,14 +31,13 @@ public class Simulation {
     public Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;
-        formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
         this.positionOptional = Optional.empty();
     }
 
     Results execute(Inputs inputs, int extraTicks) throws IOException {
 
-        String[][] hourData = tickDataReader.read(inputs.getFile2());
         String[][] tickData = tickDataReader.read(inputs.getFile1());
+        String[][] hourData = tickDataReader.read(inputs.getFile2());
 
         final Path file2 = inputs.getFile2();
         String outputFile = file2.getName(file2.getNameCount() -1).toString().split("\\.")[0] + "Out.csv";
@@ -60,12 +59,13 @@ public class Simulation {
 
             //Get tick hour and the hour hour.
             LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE]);
-
-          //  hourData[hourCounter][DATE] = hourDateTime.toString();
-
             LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE]);
-          //  tickData[i][DATE] = tickDateTime.toString();
             LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE]);
+
+
+            if(ChronoUnit.MINUTES.between(hourDateTime, tickDateTime) > 61) {
+                throw new IllegalStateException("hdt: " + hourDateTime + " tdt: " + tickDateTime);
+            }
 
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
@@ -79,6 +79,8 @@ public class Simulation {
             if (tickCandleHour != hourCandleHour) {
                 hourCounter++;
             }
+
+
 
             if (hourCounter != 0) {
 
@@ -96,6 +98,8 @@ public class Simulation {
             }
 
             positionExecutor.setTimeToOpenPosition(false);
+
+
 
         }
 

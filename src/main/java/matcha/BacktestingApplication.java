@@ -42,7 +42,9 @@ public class BacktestingApplication implements CommandLineRunner {
 
         for (String inputLine : inputLines) {
             String[] lineParts = inputLine.split(",");
-            Inputs input = new Inputs(dataDirectory.resolve(lineParts[0]), dataDirectory.resolve(lineParts[1]));
+            final Path oneMinutePath = dataDirectory.resolve(lineParts[0]);
+            final Path sixtyMinutePath = dataDirectory.resolve(lineParts[1]);
+            Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
             final Results results = simulation.execute(input, extraTicks);
 
             System.out.println(results);
