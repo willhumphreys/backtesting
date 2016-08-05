@@ -24,7 +24,7 @@ public class Simulation {
 
     private final TickDataReader tickDataReader;
 
-    private static final String fileHeader = "date,direction,entry,exit_date,exit,ticks,cumulative_profit\n";
+    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks,cumulative_profit\n";
 
 
     @Autowired
@@ -59,9 +59,13 @@ public class Simulation {
             }
 
             //Get tick hour and the hour hour.
-            LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE], formatter);
-            LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE], formatter);
-            LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE], formatter);
+            LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE]);
+
+          //  hourData[hourCounter][DATE] = hourDateTime.toString();
+
+            LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE]);
+          //  tickData[i][DATE] = tickDateTime.toString();
+            LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE]);
 
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
