@@ -32,9 +32,11 @@ public class BacktestingApplication implements CommandLineRunner {
         String[][] data = tickDataReader.read(args[DATA_FILE]);
         String[][] tickData = tickDataReader.read(args[TICK_DATA_FILE]);
 
+        String resultsFile = "eurusd10y.csv";
+
         int extraTicks = 10;
 
-        Results results = simulation.execute(data, tickData, extraTicks);
+        Results results = simulation.execute(data, tickData, extraTicks, resultsFile);
 
         System.out.println(results);
     }

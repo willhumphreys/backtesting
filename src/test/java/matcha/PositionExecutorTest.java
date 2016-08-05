@@ -29,6 +29,7 @@ public class PositionExecutorTest {
         };
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
         usefulTickData.invoke();
+        int extraTicks = 0;
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks);
 
         assertThat(optionalPosition.isPresent(), is(true));
@@ -46,6 +47,7 @@ public class PositionExecutorTest {
     @Test
     public void shouldNotOpenAShortPositionIfItIsNotTimeToOpenAPosition() throws Exception {
         positionExecutor.setTimeToOpenPosition(false);
+        int extraTicks = 0;
 
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
@@ -66,6 +68,7 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
         };
+        int extraTicks = 0;
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks);
@@ -86,7 +89,7 @@ public class PositionExecutorTest {
 
         //Target is equal to todays Low
         String todaysLow = "3";
-
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -104,7 +107,7 @@ public class PositionExecutorTest {
         //Target = CandleLow = 3
         //Stop = Candle Close 8 + (8 - 3) = 13
         //Entry = Candle Close = 8
-
+        int extraTicks = 0;
         //Target is equal to todays Low
         String todaysLow = "2";
         String todaysClose = "5";
@@ -126,7 +129,7 @@ public class PositionExecutorTest {
         //Target = CandleLow = 3
         //Stop = Candle Close 8 + (8 - 3) = 13
         //Entry = Candle Close = 8
-
+        int extraTicks = 0;
 
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
@@ -145,7 +148,7 @@ public class PositionExecutorTest {
         //Target = CandleLow = 3
         //Stop = Candle Close 8 + (8 - 3) = 13
         //Entry = Candle Close = 8
-
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -160,6 +163,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenAShortPositionIfTodaysLowDoesNotTakeOutYesterdaysLow() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -180,6 +184,7 @@ public class PositionExecutorTest {
     //getHighCheck(usefulTickData, 0);
     @Test
     public void shouldOpenALongPositionAtCloseIfPreviousDaysHighIsExceeded() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -206,6 +211,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenALongPositionAtCloseIfItIsNotTimeToOpen() throws Exception {
+        int extraTicks = 0;
         positionExecutor.setTimeToOpenPosition(false);
 
         final String[][] data = {
@@ -228,6 +234,7 @@ public class PositionExecutorTest {
     //getHighCheck(usefulTickData, 0);
     @Test
     public void shouldNotOpenALongPositionAtCloseIfTheCloseIsPositive() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -242,6 +249,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenALongPositionAtCloseIfWeDoNotTakeOutYesterdaysHigh() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -256,6 +264,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenALongPositionAtCloseIfWeOpenAboveYesterdaysHigh() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -270,6 +279,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotOpenALongPositionIfWeDoNotTakeOutTheHighOfThePreviousCandle() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -284,6 +294,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldCloseShortPositionIfTargetExceeded() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -310,6 +321,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldCloseShortPositionIfStopTouched() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -336,6 +348,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotCloseShortPositionIfTargetOrStopNotHit() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -362,6 +375,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldCloseLongPositionIfTargetExceeded() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -390,6 +404,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldCloseLongPositionIfStopTouched() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
@@ -418,6 +433,7 @@ public class PositionExecutorTest {
 
     @Test
     public void shouldNotCloseLongPositionIfTargetOrStopNotHit() throws Exception {
+        int extraTicks = 0;
         final String[][] data = {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high

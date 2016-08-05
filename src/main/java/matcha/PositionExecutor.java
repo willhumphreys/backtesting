@@ -3,6 +3,11 @@ package matcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @Service
@@ -17,6 +22,13 @@ public class PositionExecutor {
     private static final String TARGET_SHORT_TEMPLATE =
             "%s Close short %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
 
+    private static final String fileHeader = "date,direction,entry,exit_date,exit,ticks,cumulative_profit\n";
+
+    private static final String STOPPED_LONG_CSV_TEMPLATE = "%s,long,%.5f,stopped,%s,%.5f,%d,%d%n";
+    private static final String TARGET_LONG_CSV_TEMPLATE = "%s,long,%.5f,target,%s,%.5f,%d,%d%n";
+    private static final String STOPPED_SHORT_CSV_TEMPLATE = "%s,short,%.5f,stopped,%s,%.5f,%d,%d%n";
+    private static final String TARGET_SHORT_CSV_TEMPLATE = "%s,short,%.5f,target,%s,%.5f,%d,%d%n";
+
     private final Utils utils;
     private final Signals signals;
 
@@ -29,12 +41,25 @@ public class PositionExecutor {
     private int tickCounter;
     private int winners;
     private int losers;
+    private BufferedWriter dataWriter;
 
     @Autowired
-    public PositionExecutor(Signals signals, Utils utils) {
+    public PositionExecutor(Signals signals, Utils utils) throws IOException {
         this.signals = signals;
         this.utils = utils;
         availableToTrade = true;
+    }
+
+    void createResultsFile(String name) throws IOException {
+
+        final Path outputDirectory = Paths.get("results");
+
+        if (!Files.exists(outputDirectory)) {
+            Files.createDirectory(outputDirectory);
+        }
+
+        dataWriter = Files.newBufferedWriter(outputDirectory.resolve(name));
+        dataWriter.write(fileHeader);
     }
 
     Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount) {
@@ -76,7 +101,7 @@ public class PositionExecutor {
         this.timeToOpenPosition = timeToOpenPosition;
     }
 
-    void managePosition(UsefulTickData usefulTickData, Position position) {
+    void managePosition(UsefulTickData usefulTickData, Position position) throws IOException {
         if (availableToTrade) {
             return;
         }
@@ -86,21 +111,23 @@ public class PositionExecutor {
 
             if (isLongStopTouched(usefulTickData, position)) {
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry());
-                closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position);
+                closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position, STOPPED_LONG_CSV_TEMPLATE);
+
+
                 losers++;
             } else if (isLongTargetExceeded(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry());
-                closePosition(profitLoss, TARGET_LONG_TEMPLATE, position.getTarget(), position);
+                closePosition(profitLoss, TARGET_LONG_TEMPLATE, position.getTarget(), position, TARGET_LONG_CSV_TEMPLATE);
                 winners++;
             }
         } else {
             if (isShortStopTouched(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop());
-                closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position);
+                closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position, STOPPED_SHORT_CSV_TEMPLATE);
                 losers++;
             } else if (isShortTargetExceeded(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget());
-                closePosition(profitLoss, TARGET_SHORT_TEMPLATE, position.getTarget(), position);
+                closePosition(profitLoss, TARGET_SHORT_TEMPLATE, position.getTarget(), position, TARGET_SHORT_CSV_TEMPLATE);
                 winners++;
             }
         }
@@ -126,20 +153,24 @@ public class PositionExecutor {
         return position.getTarget() > position.getStop();
     }
 
-    private void closePosition(int profitLoss, String template, final double stopOrTarget, Position position) {
+    private void closePosition(int profitLoss, String template, final double stopOrTarget, Position position, String csvTemplate) throws IOException {
         tickCounter += profitLoss;
         availableToTrade = true;
         String winLose = "LOSE";
-        if(profitLoss > 0) {
+        if (profitLoss > 0) {
             winLose = "WIN";
         }
 
 
         System.out.printf(template, winLose, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter);
+
+        dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter));
+
         position.close();
     }
 
-    Results getResults() {
+    Results getResults() throws IOException {
+        dataWriter.close();
         return new Results(tickCounter, winners, losers);
     }
 }

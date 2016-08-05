@@ -3,6 +3,7 @@ package matcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -25,7 +26,9 @@ public class Simulation {
         this.positionOptional = Optional.empty();
     }
 
-    Results execute(String[][] hourData, String[][] tickData, int extraTicks) {
+    Results execute(String[][] hourData, String[][] tickData, int extraTicks, String resultsFile) throws IOException {
+
+        positionExecutor.createResultsFile(resultsFile);
 
         int hourCounter = 0;
         for (int i = 1; i < tickData.length; i++) {
