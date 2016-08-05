@@ -1,13 +1,13 @@
 package matcha;
 
 class Results {
+    private String outputFile;
     private final double tickCounter;
     private final int winners;
     private final int losers;
 
-    public Results(double tickCounter, int winners, int losers) {
-
-
+    public Results(String outputFile, double tickCounter, int winners, int losers) {
+        this.outputFile = outputFile;
         this.tickCounter = tickCounter;
         this.winners = winners;
         this.losers = losers;
@@ -28,7 +28,8 @@ class Results {
     @Override
     public String toString() {
         return "Results{" +
-                "tickCounter=" + tickCounter +
+                "outputFile='" + outputFile + '\'' +
+                ", tickCounter=" + tickCounter +
                 ", winners=" + winners +
                 ", losers=" + losers +
                 '}';

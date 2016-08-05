@@ -90,7 +90,7 @@ public class Simulation {
 //                    line[DAILY_HIGH]);
 //        }
 
-        return positionExecutor.getResults();
+        return positionExecutor.getResults(outputFile);
     }
 
 }

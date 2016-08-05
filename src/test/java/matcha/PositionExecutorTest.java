@@ -314,9 +314,9 @@ public class PositionExecutorTest {
         usefulTickData2.invoke();
         positionExecutor.managePosition(usefulTickData2, position);
 
-        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(1)));
-        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(60000.0)));
+        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(60000.0)));
     }
 
     @Test
@@ -341,9 +341,9 @@ public class PositionExecutorTest {
         usefulTickData2.invoke();
         positionExecutor.managePosition(usefulTickData2, position);
 
-        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(1)));
-        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(-60000.0)));
+        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(-60000.0)));
     }
 
     @Test
@@ -368,9 +368,9 @@ public class PositionExecutorTest {
         usefulTickData2.invoke();
         positionExecutor.managePosition(usefulTickData2, position);
 
-        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(0.0)));
+        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(0.0)));
     }
 
     @Test
@@ -397,9 +397,9 @@ public class PositionExecutorTest {
         usefulTickData2.invoke();
         positionExecutor.managePosition(usefulTickData2, position);
 
-        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(1)));
-        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(70000.0)));
+        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(70000.0)));
     }
 
     @Test
@@ -426,9 +426,9 @@ public class PositionExecutorTest {
         usefulTickData2.invoke();
         positionExecutor.managePosition(usefulTickData2, position);
 
-        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(1)));
-        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(-70000.0)));
+        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(-70000.0)));
     }
 
     @Test
@@ -456,9 +456,9 @@ public class PositionExecutorTest {
         usefulTickData2.invoke();
         positionExecutor.managePosition(usefulTickData2, position);
 
-        assertThat(positionExecutor.getResults().getWinners(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults().getLosers(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults().getTickCounter(), is(equalTo(0.0)));
+        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(0.0)));
     }
 
 }

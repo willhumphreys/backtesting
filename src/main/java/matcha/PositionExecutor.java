@@ -169,8 +169,8 @@ public class PositionExecutor {
         position.close();
     }
 
-    Results getResults() throws IOException {
+    Results getResults(String outputFile) throws IOException {
         dataWriter.close();
-        return new Results(tickCounter, winners, losers);
+        return new Results(outputFile, tickCounter, winners, losers);
     }
 }
