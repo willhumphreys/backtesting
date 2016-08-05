@@ -32,8 +32,8 @@ public class Simulation {
 
     Results execute(Inputs inputs, int extraTicks) throws IOException {
 
-        String[][] hourData = tickDataReader.read(inputs.getFile1());
-        String[][] tickData = tickDataReader.read(inputs.getFile2());
+        String[][] hourData = tickDataReader.read(inputs.getFile2());
+        String[][] tickData = tickDataReader.read(inputs.getFile1());
 
         final Path file2 = inputs.getFile2();
         String outputFile = file2.getName(file2.getNameCount() -1).toString().split("\\.")[0] + "Out.csv";
