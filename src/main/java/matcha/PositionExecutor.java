@@ -170,7 +170,6 @@ public class PositionExecutor {
     }
 
     Results getResults() throws IOException {
-        dataWriter.flush();
         dataWriter.close();
         return new Results(tickCounter, winners, losers);
     }
