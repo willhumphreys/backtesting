@@ -1,7 +1,8 @@
 package matcha;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 public interface TickDataReader {
-    String[][] read(String s) throws IOException;
+    String[][] read(Path s) throws IOException;
 }

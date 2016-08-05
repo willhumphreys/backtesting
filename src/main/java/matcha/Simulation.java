@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -19,16 +20,25 @@ public class Simulation {
 
     private Optional<Position> positionOptional;
 
+    private final TickDataReader tickDataReader;
+
     @Autowired
-    public Simulation(PositionExecutor positionExecutor) {
+    public Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader) {
         this.positionExecutor = positionExecutor;
+        this.tickDataReader = tickDataReader;
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
         this.positionOptional = Optional.empty();
     }
 
-    Results execute(String[][] hourData, String[][] tickData, int extraTicks, String resultsFile) throws IOException {
+    Results execute(Inputs inputs, int extraTicks) throws IOException {
 
-        positionExecutor.createResultsFile(resultsFile);
+        String[][] hourData = tickDataReader.read(inputs.getFile1());
+        String[][] tickData = tickDataReader.read(inputs.getFile2());
+
+        final Path file2 = inputs.getFile2();
+        String outputFile = file2.getName(file2.getNameCount() -1).toString().split("\\.")[0] + "Out.csv";
+
+        positionExecutor.createResultsFile(outputFile);
 
         int hourCounter = 0;
         for (int i = 1; i < tickData.length; i++) {

@@ -1,21 +1,25 @@
 package matcha;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @SpringBootApplication
 public class BacktestingApplication implements CommandLineRunner {
 
-    private static final int DATA_FILE = 0;
-    private static final int TICK_DATA_FILE = 1;
-    private final TickDataReader tickDataReader;
     private final Simulation simulation;
 
     @Autowired
-    public BacktestingApplication(TickDataReader tickDataReader, Simulation simulation) {
-        this.tickDataReader = tickDataReader;
+    public BacktestingApplication(Simulation simulation) {
         this.simulation = simulation;
     }
 
@@ -29,15 +33,19 @@ public class BacktestingApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        String[][] data = tickDataReader.read(args[DATA_FILE]);
-        String[][] tickData = tickDataReader.read(args[TICK_DATA_FILE]);
 
-        String resultsFile = "eurusd10y.csv";
+        Path dataDirectory = Paths.get("copied-data");
 
         int extraTicks = 10;
 
-        Results results = simulation.execute(data, tickData, extraTicks, resultsFile);
+        final List<String> inputLines = Files.readAllLines(Paths.get("inputFileList.csv"));
 
-        System.out.println(results);
+        for (String inputLine : inputLines) {
+            String[] lineParts = inputLine.split(",");
+            Inputs input = new Inputs(dataDirectory.resolve(lineParts[0]), dataDirectory.resolve(lineParts[1]));
+            final Results results = simulation.execute(input, extraTicks);
+
+            System.out.println(results);
+        }
     }
 }

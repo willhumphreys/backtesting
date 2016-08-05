@@ -162,7 +162,7 @@ public class PositionExecutor {
         }
 
 
-        System.out.printf(template, winLose, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter);
+        //System.out.printf(template, winLose, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter);
 
         dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter));
 
@@ -170,6 +170,7 @@ public class PositionExecutor {
     }
 
     Results getResults() throws IOException {
+        dataWriter.flush();
         dataWriter.close();
         return new Results(tickCounter, winners, losers);
     }
