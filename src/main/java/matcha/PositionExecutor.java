@@ -38,10 +38,7 @@ public class PositionExecutor {
     private boolean availableToTrade;
     private boolean timeToOpenPosition;
 
-    private int tickCounter;
-    private int winners;
-    private int losers;
-    private BufferedWriter dataWriter;
+    //private BufferedWriter dataWriter;
 
     @Autowired
     public PositionExecutor(Signals signals, Utils utils) throws IOException {
@@ -50,7 +47,7 @@ public class PositionExecutor {
         availableToTrade = true;
     }
 
-    void createResultsFile(String name) throws IOException {
+    Path createResultsFile() throws IOException {
 
         final Path outputDirectory = Paths.get("results");
 
@@ -58,8 +55,7 @@ public class PositionExecutor {
             Files.createDirectory(outputDirectory);
         }
 
-        dataWriter = Files.newBufferedWriter(outputDirectory.resolve(name));
-        dataWriter.write(fileHeader);
+        return outputDirectory;
     }
 
     Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount) {
@@ -101,7 +97,8 @@ public class PositionExecutor {
         this.timeToOpenPosition = timeToOpenPosition;
     }
 
-    void managePosition(UsefulTickData usefulTickData, Position position) throws IOException {
+    void managePosition(UsefulTickData usefulTickData, Position position, BufferedWriter dataWriter, PositionStats stats) throws
+            IOException {
         if (availableToTrade) {
             return;
         }
@@ -111,24 +108,28 @@ public class PositionExecutor {
 
             if (isLongStopTouched(usefulTickData, position)) {
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry());
-                closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position, STOPPED_LONG_CSV_TEMPLATE);
+                closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position,
+                        STOPPED_LONG_CSV_TEMPLATE, dataWriter, stats);
 
+                stats.incrementLosers();
 
-                losers++;
             } else if (isLongTargetExceeded(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry());
-                closePosition(profitLoss, TARGET_LONG_TEMPLATE, position.getTarget(), position, TARGET_LONG_CSV_TEMPLATE);
-                winners++;
+                closePosition(profitLoss, TARGET_LONG_TEMPLATE, position.getTarget(), position,
+                        TARGET_LONG_CSV_TEMPLATE, dataWriter, stats);
+                stats.incrementWinners();
             }
         } else {
             if (isShortStopTouched(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop());
-                closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position, STOPPED_SHORT_CSV_TEMPLATE);
-                losers++;
+                closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position,
+                        STOPPED_SHORT_CSV_TEMPLATE, dataWriter,stats);
+                stats.incrementLosers();
             } else if (isShortTargetExceeded(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget());
-                closePosition(profitLoss, TARGET_SHORT_TEMPLATE, position.getTarget(), position, TARGET_SHORT_CSV_TEMPLATE);
-                winners++;
+                closePosition(profitLoss, TARGET_SHORT_TEMPLATE, position.getTarget(), position,
+                        TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats);
+                stats.incrementWinners();
             }
         }
     }
@@ -153,8 +154,9 @@ public class PositionExecutor {
         return position.getTarget() > position.getStop();
     }
 
-    private void closePosition(int profitLoss, String template, final double stopOrTarget, Position position, String csvTemplate) throws IOException {
-        tickCounter += profitLoss;
+    private void closePosition(int profitLoss, String template, final double stopOrTarget, Position position, String
+            csvTemplate, BufferedWriter dataWriter, PositionStats positionStats) throws IOException {
+        positionStats.addToTickCounter(profitLoss);
         availableToTrade = true;
         String winLose = "LOSE";
         if (profitLoss > 0) {
@@ -162,15 +164,17 @@ public class PositionExecutor {
         }
 
 
-        //System.out.printf(template, winLose, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter);
+        //System.out.printf(template, winLose, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss,
+        // tickCounter);
 
-        dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss, tickCounter));
+        dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
+                profitLoss, positionStats.getTickCounter()));
 
         position.close();
     }
 
-    Results getResults(String outputFile) throws IOException {
+    Results getResults(String outputFile, BufferedWriter dataWriter, PositionStats positionStats) throws IOException {
         dataWriter.close();
-        return new Results(outputFile, tickCounter, winners, losers);
+        return new Results(outputFile, positionStats);
     }
 }

@@ -2,36 +2,30 @@ package matcha;
 
 class Results {
     private String outputFile;
-    private final double tickCounter;
-    private final int winners;
-    private final int losers;
+    private PositionStats positionStats;
 
-    public Results(String outputFile, double tickCounter, int winners, int losers) {
+    public Results(String outputFile, PositionStats positionStats) {
         this.outputFile = outputFile;
-        this.tickCounter = tickCounter;
-        this.winners = winners;
-        this.losers = losers;
+        this.positionStats = positionStats;
     }
 
-    public double getTickCounter() {
-        return tickCounter;
-    }
 
-    public int getWinners() {
-        return winners;
-    }
-
-    public int getLosers() {
-        return losers;
+    /**
+     * Gets positionStats
+     *
+     * @return value of positionStats
+     */
+    public PositionStats getPositionStats() {
+        return positionStats;
     }
 
     @Override
     public String toString() {
         return "Results{" +
                 "outputFile='" + outputFile + '\'' +
-                ", tickCounter=" + tickCounter +
-                ", winners=" + winners +
-                ", losers=" + losers +
+                ", tickCounter=" + positionStats.getTickCounter() +
+                ", winners=" + positionStats.getWinners() +
+                ", losers=" + positionStats.getLosers() +
                 '}';
     }
 }

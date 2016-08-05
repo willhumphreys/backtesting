@@ -3,7 +3,9 @@ package matcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +24,9 @@ public class Simulation {
 
     private final TickDataReader tickDataReader;
 
+    private static final String fileHeader = "date,direction,entry,exit_date,exit,ticks,cumulative_profit\n";
+
+
     @Autowired
     public Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader) {
         this.positionExecutor = positionExecutor;
@@ -38,7 +43,12 @@ public class Simulation {
         final Path file2 = inputs.getFile2();
         String outputFile = file2.getName(file2.getNameCount() -1).toString().split("\\.")[0] + "Out.csv";
 
-        positionExecutor.createResultsFile(outputFile);
+        Path outputDirectory = positionExecutor.createResultsFile();
+
+        BufferedWriter dataWriter = Files.newBufferedWriter(outputDirectory.resolve(outputFile));
+        dataWriter.write(fileHeader);
+
+        final PositionStats positionStats = new PositionStats();
 
         int hourCounter = 0;
         for (int i = 1; i < tickData.length; i++) {
@@ -72,7 +82,7 @@ public class Simulation {
 
                 if(positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
-                    positionExecutor.managePosition(usefulTickData, position);
+                    positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats );
                     if(position.isClosed()) {
                         this.positionOptional = Optional.empty();
                     }
@@ -90,7 +100,7 @@ public class Simulation {
 //                    line[DAILY_HIGH]);
 //        }
 
-        return positionExecutor.getResults(outputFile);
+        return positionExecutor.getResults(outputFile, dataWriter, positionStats);
     }
 
 }

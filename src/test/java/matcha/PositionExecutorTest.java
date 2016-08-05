@@ -2,16 +2,24 @@ package matcha;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.BufferedWriter;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PositionExecutorTest {
 
     private PositionExecutor positionExecutor;
+
+    @Mock
+    private BufferedWriter mockBufferedWriter;
 
     @Before
     public void setUp() throws Exception {
@@ -312,11 +320,12 @@ public class PositionExecutorTest {
         //Stop 14.0
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position);
+        final PositionStats stats = new PositionStats();
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
 
-        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(1)));
-        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(60000.0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getTickCounter(), is(equalTo(120000)));
     }
 
     @Test
@@ -337,13 +346,15 @@ public class PositionExecutorTest {
         //Target 2.0
         //Entry 8.0
         //Stop 14.0
+        final PositionStats stats = new PositionStats();
+
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
 
-        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(1)));
-        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(-60000.0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getTickCounter(), is(equalTo(-120000)));
     }
 
     @Test
@@ -355,6 +366,8 @@ public class PositionExecutorTest {
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"},
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
         };
+        final PositionStats stats = new PositionStats();
+
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks);
@@ -366,11 +379,11 @@ public class PositionExecutorTest {
         //Stop 14.0
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
 
-        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(0.0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getTickCounter(), is(equalTo(0)));
     }
 
     @Test
@@ -389,17 +402,18 @@ public class PositionExecutorTest {
         assertThat(optionalPosition.isPresent(), is(true));
 
         final Position position = optionalPosition.get();
+        final PositionStats stats = new PositionStats();
 
         //Target 2.0
         //Entry 8.0
         //Stop 14.0
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
 
-        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(1)));
-        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(70000.0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getTickCounter(), is(equalTo(140000)));
     }
 
     @Test
@@ -424,11 +438,12 @@ public class PositionExecutorTest {
         //Stop 14.0
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position);
+        final PositionStats stats = new PositionStats();
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
 
-        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(1)));
-        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(-70000.0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(1)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getTickCounter(), is(equalTo(-140000)));
     }
 
     @Test
@@ -454,11 +469,12 @@ public class PositionExecutorTest {
         //Stop 14.0
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position);
+        final PositionStats stats = new PositionStats();
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
 
-        assertThat(positionExecutor.getResults(outputFile).getWinners(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults(outputFile).getLosers(), is(equalTo(0)));
-        assertThat(positionExecutor.getResults(outputFile).getTickCounter(), is(equalTo(0.0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
+        assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getTickCounter(), is(equalTo(0)));
     }
 
 }
