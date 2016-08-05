@@ -8,10 +8,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 public class Simulation {
@@ -24,7 +22,8 @@ public class Simulation {
 
     private final TickDataReader tickDataReader;
 
-    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks,cumulative_profit\n";
+    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
+            "cumulative_profit\n";
 
 
     @Autowired
@@ -40,7 +39,7 @@ public class Simulation {
         String[][] hourData = tickDataReader.read(inputs.getFile2());
 
         final Path file2 = inputs.getFile2();
-        String outputFile = file2.getName(file2.getNameCount() -1).toString().split("\\.")[0] + "Out.csv";
+        String outputFile = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + "Out.csv";
 
         Path outputDirectory = positionExecutor.createResultsFile();
 
@@ -63,7 +62,7 @@ public class Simulation {
             LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE]);
 
 
-            if(ChronoUnit.MINUTES.between(hourDateTime, tickDateTime) > 61) {
+            if (ChronoUnit.MINUTES.between(hourDateTime, tickDateTime) > 61) {
                 throw new IllegalStateException("hdt: " + hourDateTime + " tdt: " + tickDateTime);
             }
 
@@ -81,15 +80,14 @@ public class Simulation {
             }
 
 
-
             if (hourCounter != 0) {
 
                 UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter).invoke();
 
-                if(positionOptional.isPresent()) {
+                if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
-                    positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats );
-                    if(position.isClosed()) {
+                    positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats);
+                    if (position.isClosed()) {
                         this.positionOptional = Optional.empty();
                     }
                 } else {
@@ -98,7 +96,6 @@ public class Simulation {
             }
 
             positionExecutor.setTimeToOpenPosition(false);
-
 
 
         }
