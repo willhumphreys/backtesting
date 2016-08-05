@@ -22,7 +22,7 @@ public class PositionExecutor {
     private static final String TARGET_SHORT_TEMPLATE =
             "%s Close short %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
 
-    private static final String fileHeader = "date,direction,entry,exit_date,exit,ticks,cumulative_profit\n";
+    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks,cumulative_profit\n";
 
     private static final String STOPPED_LONG_CSV_TEMPLATE = "%s,long,%.5f,stopped,%s,%.5f,%d,%d%n";
     private static final String TARGET_LONG_CSV_TEMPLATE = "%s,long,%.5f,target,%s,%.5f,%d,%d%n";
