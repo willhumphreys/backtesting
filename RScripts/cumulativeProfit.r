@@ -1,10 +1,15 @@
 library(ggplot2)
 
-#data <- read.table("results/eurusd_60min_10y_03082016Out.csv", header=T,sep=",")
-data <- read.table("results/audusd_60min_03082016Out.csv", header=T,sep=",")
+generate.plot <- function(file.in) {
+    file.out <- paste("graphs/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], ".png", sep = "")
 
-data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S")
-data$date <- NULL
+    data <- read.table(paste("results/",file.in, sep=""), header=T,sep=",")
+    data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S")
+    data$date <- NULL
 
-ggplot(data=data, aes(x=date.time, y=cumulative_profit, group = 1)) + geom_line()
+    ggplot(data=data, aes(x=date.time, y=cumulative_profit, group = 1)) + geom_line()
+    ggsave(file=file.out)
+}
+in_files <- list.files('results')
 
+sapply(in_files, function(x) generate.plot(x))
