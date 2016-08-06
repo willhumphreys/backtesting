@@ -62,9 +62,9 @@ public class Simulation {
             LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE]);
 
 
-            if (ChronoUnit.MINUTES.between(hourDateTime, tickDateTime) > 61) {
-                throw new IllegalStateException("hdt: " + hourDateTime + " tdt: " + tickDateTime);
-            }
+//            if (ChronoUnit.MINUTES.between(hourDateTime, tickDateTime) > 61) {
+//                throw new IllegalStateException("hdt: " + hourDateTime + " tdt: " + tickDateTime);
+//            }
 
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();

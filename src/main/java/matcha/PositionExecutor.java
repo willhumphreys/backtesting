@@ -163,13 +163,8 @@ public class PositionExecutor {
             winLose = "WIN";
         }
 
-
         //System.out.printf(template, winLose, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss,
         // tickCounter);
-
-        if(exitDate.equals("2008-12-30T01:00:00")) {
-            System.out.println("here we are");
-        }
 
         dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
                 profitLoss, positionStats.getTickCounter()));
