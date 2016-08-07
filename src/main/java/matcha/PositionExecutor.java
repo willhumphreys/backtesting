@@ -24,10 +24,10 @@ public class PositionExecutor {
 
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks,cumulative_profit\n";
 
-    private static final String STOPPED_LONG_CSV_TEMPLATE = "%s,long,%.5f,stopped,%s,%.5f,%d,%d%n";
-    private static final String TARGET_LONG_CSV_TEMPLATE = "%s,long,%.5f,target,%s,%.5f,%d,%d%n";
-    private static final String STOPPED_SHORT_CSV_TEMPLATE = "%s,short,%.5f,stopped,%s,%.5f,%d,%d%n";
-    private static final String TARGET_SHORT_CSV_TEMPLATE = "%s,short,%.5f,target,%s,%.5f,%d,%d%n";
+    private static final String STOPPED_LONG_CSV_TEMPLATE = "%s,long,%.5f,stopped,%s,%.5f,%d%n";
+    private static final String TARGET_LONG_CSV_TEMPLATE = "%s,long,%.5f,target,%s,%.5f,%d%n";
+    private static final String STOPPED_SHORT_CSV_TEMPLATE = "%s,short,%.5f,stopped,%s,%.5f,%d%n";
+    private static final String TARGET_SHORT_CSV_TEMPLATE = "%s,short,%.5f,target,%s,%.5f,%d%n";
 
     private final Utils utils;
     private final Signals signals;
@@ -38,7 +38,7 @@ public class PositionExecutor {
     private boolean availableToTrade;
     private boolean timeToOpenPosition;
 
-    //private BufferedWriter dataWriter;
+    private boolean skipNextTrade;
 
     @Autowired
     public PositionExecutor(Signals signals, Utils utils) throws IOException {
@@ -47,9 +47,9 @@ public class PositionExecutor {
         availableToTrade = true;
     }
 
-    Path createResultsFile() throws IOException {
+    Path createResultsFile(final String outputDirectoryStr) throws IOException {
 
-        final Path outputDirectory = Paths.get("results");
+        final Path outputDirectory = Paths.get(outputDirectoryStr);
 
         if (!Files.exists(outputDirectory)) {
             Files.createDirectory(outputDirectory);
@@ -158,16 +158,14 @@ public class PositionExecutor {
             csvTemplate, BufferedWriter dataWriter, PositionStats positionStats) throws IOException {
         positionStats.addToTickCounter(profitLoss);
         availableToTrade = true;
-        String winLose = "LOSE";
-        if (profitLoss > 0) {
-            winLose = "WIN";
-        }
 
-        //System.out.printf(template, winLose, entryDate, position.getEntry(), exitDate, stopOrTarget, profitLoss,
-        // tickCounter);
+       // if(!skipNextTrade) {
+            dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
+                    profitLoss));
+      //  }
 
-        dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
-                profitLoss, positionStats.getTickCounter()));
+
+        this.skipNextTrade = profitLoss > 0 && !skipNextTrade;
 
         position.close();
     }

@@ -1,11 +1,13 @@
 library(ggplot2)
 
 generate.plot <- function(file.in) {
-    file.out <- paste("graphs/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], ".png", sep = "")
+    file.out <- paste("graphs/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], "Normal.png", sep = "")
 
     data <- read.table(paste("results/",file.in, sep=""), header=T,sep=",")
     data$date.time=as.Date(as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S"))
     data$date <- NULL
+
+   data$cumulative_profit <- cumsum(data[6])
 
     ggplot(data=data, aes(x=date.time, y=cumulative_profit, group = 1)) +
     geom_line() +

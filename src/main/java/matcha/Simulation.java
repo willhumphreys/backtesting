@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -22,8 +21,7 @@ public class Simulation {
 
     private final TickDataReader tickDataReader;
 
-    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
-            "cumulative_profit\n";
+    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks\n";
 
 
     @Autowired
@@ -33,7 +31,7 @@ public class Simulation {
         this.positionOptional = Optional.empty();
     }
 
-    Results execute(Inputs inputs, int extraTicks) throws IOException {
+    Results execute(Inputs inputs, int extraTicks, final String outputDirStr) throws IOException {
 
         String[][] tickData = tickDataReader.read(inputs.getFile1());
         String[][] hourData = tickDataReader.read(inputs.getFile2());
@@ -41,7 +39,7 @@ public class Simulation {
         final Path file2 = inputs.getFile2();
         String outputFile = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + "Out.csv";
 
-        Path outputDirectory = positionExecutor.createResultsFile();
+        Path outputDirectory = positionExecutor.createResultsFile(outputDirStr);
 
         BufferedWriter dataWriter = Files.newBufferedWriter(outputDirectory.resolve(outputFile));
         dataWriter.write(fileHeader);
