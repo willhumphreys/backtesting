@@ -20,12 +20,14 @@ public class PositionExecutorTest {
 
     @Mock
     private BufferedWriter mockBufferedWriter;
+    private BackTestingParameters backTestingParameters;
 
     @Before
     public void setUp() throws Exception {
         positionExecutor = new PositionExecutor(new Signals(), new Utils());
         positionExecutor.setTimeToOpenPosition(true);
-
+        backTestingParameters = new BackTestingParameters.Builder().setExtraTicks(10).setName("test")
+                .createBackTestingParameters()
     }
 
     @Test
@@ -321,6 +323,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
+;
         positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(1)));
