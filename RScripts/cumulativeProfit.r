@@ -15,8 +15,9 @@ generate.plot <- function(file.in) {
     data$winLose <- ifelse(data$ticks > 0, 1,-1)
     data$cum.winLose <- cumsum(data$winLose)
 
-    write.table(data, file=csv.out, sep=",", row.names=FALSE)
+    data <- data[,c(7,1,2,3,4,5,6,8,9,10)]
 
+    write.table(data, file=csv.out, sep=",", row.names=FALSE)
 
     data$date.time=as.Date(data$date.time)
 
