@@ -76,7 +76,7 @@ class Simulation {
 
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
-                    positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats);
+                    positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats, backTestingParameters);
                     if (position.isClosed()) {
                         this.positionOptional = Optional.empty();
                     }

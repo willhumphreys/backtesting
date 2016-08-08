@@ -321,7 +321,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(1)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
@@ -350,7 +350,7 @@ public class PositionExecutorTest {
 
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(1)));
@@ -379,7 +379,7 @@ public class PositionExecutorTest {
         //Stop 14.0
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
@@ -409,7 +409,7 @@ public class PositionExecutorTest {
         //Stop 14.0
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(1)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
@@ -439,7 +439,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(1)));
@@ -470,7 +470,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));

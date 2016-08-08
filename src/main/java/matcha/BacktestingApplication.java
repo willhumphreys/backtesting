@@ -36,10 +36,15 @@ public class BacktestingApplication implements CommandLineRunner {
         int extraTicks = 10;
 
         parametersMap = newHashMap();
-        parametersMap.put("Normal", new BackTestingParameters.Builder().setName("Normal").setExtraTicks(extraTicks)
+        parametersMap.put("Normal", new BackTestingParameters.Builder()
+                .setName("Normal")
+                .setExtraTicks(extraTicks)
                 .createBackTestingParameters());
-        parametersMap.put("IfWinnerSkipNext", new BackTestingParameters.Builder().setName("IfWinnerSkipNext")
-                .setExtraTicks(extraTicks).createBackTestingParameters());
+        parametersMap.put("IfWinnerSkipNext", new BackTestingParameters.Builder().
+                setName("IfWinnerSkipNext")
+                .setExtraTicks(extraTicks)
+                .skipNextIfWinner()
+                .createBackTestingParameters());
 
         Path dataDirectory = Paths.get("copied-data");
 

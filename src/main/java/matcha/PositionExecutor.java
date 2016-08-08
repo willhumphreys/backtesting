@@ -94,7 +94,8 @@ public class PositionExecutor {
         this.timeToOpenPosition = timeToOpenPosition;
     }
 
-    void managePosition(UsefulTickData usefulTickData, Position position, BufferedWriter dataWriter, PositionStats stats) throws
+    void managePosition(UsefulTickData usefulTickData, Position position, BufferedWriter dataWriter,
+                        PositionStats stats, BackTestingParameters backTestingParameters) throws
             IOException {
         if (availableToTrade) {
             return;
@@ -106,26 +107,26 @@ public class PositionExecutor {
             if (isLongStopTouched(usefulTickData, position)) {
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry());
                 closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position,
-                        STOPPED_LONG_CSV_TEMPLATE, dataWriter, stats);
+                        STOPPED_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
 
                 stats.incrementLosers();
 
             } else if (isLongTargetExceeded(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry());
                 closePosition(profitLoss, TARGET_LONG_TEMPLATE, position.getTarget(), position,
-                        TARGET_LONG_CSV_TEMPLATE, dataWriter, stats);
+                        TARGET_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
             }
         } else {
             if (isShortStopTouched(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop());
                 closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position,
-                        STOPPED_SHORT_CSV_TEMPLATE, dataWriter,stats);
+                        STOPPED_SHORT_CSV_TEMPLATE, dataWriter,stats, backTestingParameters);
                 stats.incrementLosers();
             } else if (isShortTargetExceeded(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget());
                 closePosition(profitLoss, TARGET_SHORT_TEMPLATE, position.getTarget(), position,
-                        TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats);
+                        TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
             }
         }
@@ -152,14 +153,15 @@ public class PositionExecutor {
     }
 
     private void closePosition(int profitLoss, String template, final double stopOrTarget, Position position, String
-            csvTemplate, BufferedWriter dataWriter, PositionStats positionStats) throws IOException {
+            csvTemplate, BufferedWriter dataWriter, PositionStats positionStats, BackTestingParameters
+            backTestingParameters) throws IOException {
         positionStats.addToTickCounter(profitLoss);
         availableToTrade = true;
 
-       // if(!skipNextTrade) {
+        if(!skipNextTrade || !backTestingParameters.isSkipNextIfWinner()) {
             dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
                     profitLoss));
-      //  }
+        }
 
 
         this.skipNextTrade = profitLoss > 0 && !skipNextTrade;

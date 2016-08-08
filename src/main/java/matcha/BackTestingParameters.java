@@ -3,10 +3,12 @@ package matcha;
 public class BackTestingParameters {
     private String name;
     private int extraTicks;
+    private boolean skipNextIfWinner;
 
-    public BackTestingParameters(String name, int extraTicks) {
+    public BackTestingParameters(String name, int extraTicks, boolean skipNextIfWinner) {
         this.name = name;
         this.extraTicks = extraTicks;
+        this.skipNextIfWinner = skipNextIfWinner;
     }
 
     public String getName() {
@@ -17,9 +19,14 @@ public class BackTestingParameters {
         return extraTicks;
     }
 
+    public boolean isSkipNextIfWinner() {
+        return skipNextIfWinner;
+    }
+
     public static class Builder {
         private String name;
         private int extraTicks;
+        private boolean skipNextIfWinner;
 
         public Builder setName(String name) {
             this.name = name;
@@ -32,7 +39,14 @@ public class BackTestingParameters {
         }
 
         public BackTestingParameters createBackTestingParameters() {
-            return new BackTestingParameters(name, extraTicks);
+            return new BackTestingParameters(name, extraTicks, skipNextIfWinner);
         }
+
+        public Builder skipNextIfWinner() {
+            this.skipNextIfWinner = true;
+            return this;
+        }
+
+
     }
 }
