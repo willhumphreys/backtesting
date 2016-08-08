@@ -100,7 +100,7 @@ class Simulation {
 
     private String getOutputFile(Inputs inputs, String executionName) {
         final Path file2 = inputs.getFile2();
-        return file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + executionName + "Out.csv";
+        return file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + executionName + ".csv";
     }
 
 }
