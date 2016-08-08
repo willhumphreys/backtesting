@@ -17,7 +17,7 @@ generate.plot <- function(file.in) {
 
     write.table(data, file=csv.out, sep=",")
 
-    line <- paste(file.in, ",", last(data$cumulative_profit), ",", last(data$cum.winLose))
+    line <- paste(file.in, ",", last(data$cumulative_profit), ",", last(data$cum.winLose), ",", nrow(data))
     write(line,file="summary.csv",append=TRUE)
 
     ggplot(data=data, aes(x=date.time, y=cumulative_profit, group = 1)) +
@@ -28,16 +28,16 @@ generate.plot <- function(file.in) {
     ggtitle(file.in)
     ggsave(file=file.out)
 
-     ggplot(data=data, aes(x=date.time, y=cum.winLose)) +
-        geom_line() +
-        scale_x_date(date_breaks = "3 month") +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-        stat_smooth() +
-        ggtitle(file.in)
-        ggsave(file=file.out.winLose)
+    ggplot(data=data, aes(x=date.time, y=cum.winLose)) +
+    geom_line() +
+    scale_x_date(date_breaks = "3 month") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    stat_smooth() +
+    ggtitle(file.in)
+    ggsave(file=file.out.winLose)
 }
 
-write("symbol,cumulative_profit,tick_profit", file="summary.csv",append=TRUE)
+write("symbol,cumulative_profit,tick_profit,trade_count", file="summary.csv",append=TRUE)
 
 in_files <- list.files('results')
 sapply(in_files, function(x) generate.plot(x))
