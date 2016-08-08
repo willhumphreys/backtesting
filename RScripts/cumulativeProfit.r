@@ -1,5 +1,7 @@
 library(ggplot2)
 
+
+last <- function(x) { tail(x, n = 1) }
 generate.plot <- function(file.in) {
     file.out <- paste("graphs/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], ".png", sep = "")
     csv.out <- paste("r-csv/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], ".csv", sep = "")
@@ -14,6 +16,9 @@ generate.plot <- function(file.in) {
     data$cum.winLose <- cumsum(data$winLose)
 
     write.table(data, file=csv.out, sep=",")
+
+    line <- paste(file.in, ",", last(data$cumulative_profit), ",", last(data$cum.winLose))
+    write(line,file="summary.csv",append=TRUE)
 
     ggplot(data=data, aes(x=date.time, y=cumulative_profit, group = 1)) +
     geom_line() +
@@ -31,6 +36,8 @@ generate.plot <- function(file.in) {
         ggtitle(file.in)
         ggsave(file=file.out.winLose)
 }
-in_files <- list.files('results')
 
+write("symbol,cumulative_profit,tick_profit", file="summary.csv",append=TRUE)
+
+in_files <- list.files('results')
 sapply(in_files, function(x) generate.plot(x))
