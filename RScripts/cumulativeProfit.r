@@ -37,7 +37,7 @@ generate.plot <- function(file.in) {
     ggsave(file=file.out.winLose)
 }
 
-write("symbol,cumulative_profit,tick_profit,trade_count", file="summary.csv",append=TRUE)
+write("symbol,cumulative_profit,win_lose_count,trade_count", file="summary.csv",append=TRUE)
 
 in_files <- list.files('results')
 sapply(in_files, function(x) generate.plot(x))
