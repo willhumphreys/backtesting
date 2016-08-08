@@ -7,7 +7,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 @Service
@@ -47,9 +46,7 @@ public class PositionExecutor {
         availableToTrade = true;
     }
 
-    Path createResultsFile(final String outputDirectoryStr) throws IOException {
-
-        final Path outputDirectory = Paths.get(outputDirectoryStr);
+    Path createResultsFile(final Path outputDirectory) throws IOException {
 
         if (!Files.exists(outputDirectory)) {
             Files.createDirectory(outputDirectory);

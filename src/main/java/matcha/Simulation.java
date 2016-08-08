@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -39,7 +40,7 @@ public class Simulation {
         final Path file2 = inputs.getFile2();
         String outputFile = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + "Out.csv";
 
-        Path outputDirectory = positionExecutor.createResultsFile(outputDirStr);
+        Path outputDirectory = positionExecutor.createResultsFile(Paths.get(outputDirStr));
 
         BufferedWriter dataWriter = Files.newBufferedWriter(outputDirectory.resolve(outputFile));
         dataWriter.write(fileHeader);
