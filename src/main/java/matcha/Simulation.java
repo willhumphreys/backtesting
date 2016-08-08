@@ -32,13 +32,13 @@ class Simulation {
         this.positionOptional = Optional.empty();
     }
 
-    Results execute(Inputs inputs, int extraTicks, final String executionName, final Path outputDirectory) throws IOException {
+    Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters) throws IOException {
 
         String[][] tickData = tickDataReader.read(inputs.getFile1());
         String[][] hourData = tickDataReader.read(inputs.getFile2());
 
         BufferedWriter dataWriter = newBufferedWriter(positionExecutor.createResultsDirectory(outputDirectory)
-                .resolve(getOutputFile(inputs, executionName)));
+                .resolve(getOutputFile(inputs, backTestingParameters.getName())));
         dataWriter.write(fileHeader);
 
         final PositionStats positionStats = new PositionStats();
@@ -81,7 +81,7 @@ class Simulation {
                         this.positionOptional = Optional.empty();
                     }
                 } else {
-                    this.positionOptional = positionExecutor.placePositions(usefulTickData, extraTicks);
+                    this.positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters.getExtraTicks());
                 }
             }
 
@@ -95,7 +95,7 @@ class Simulation {
 //                    line[DAILY_HIGH]);
 //        }
 
-        return positionExecutor.getResults(getOutputFile(inputs, executionName), dataWriter, positionStats);
+        return positionExecutor.getResults(getOutputFile(inputs, backTestingParameters.getName()), dataWriter, positionStats);
     }
 
     private String getOutputFile(Inputs inputs, String executionName) {
