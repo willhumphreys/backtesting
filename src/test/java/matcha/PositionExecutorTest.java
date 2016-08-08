@@ -27,7 +27,7 @@ public class PositionExecutorTest {
         positionExecutor = new PositionExecutor(new Signals(), new Utils());
         positionExecutor.setTimeToOpenPosition(true);
         backTestingParameters = new BackTestingParameters.Builder().setExtraTicks(10).setName("test")
-                .createBackTestingParameters()
+                .createBackTestingParameters();
     }
 
     @Test
