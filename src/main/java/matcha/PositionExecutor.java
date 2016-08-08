@@ -46,7 +46,7 @@ public class PositionExecutor {
         availableToTrade = true;
     }
 
-    Path createResultsFile(final Path outputDirectory) throws IOException {
+    Path createResultsDirectory(final Path outputDirectory) throws IOException {
 
         if (!Files.exists(outputDirectory)) {
             Files.createDirectory(outputDirectory);

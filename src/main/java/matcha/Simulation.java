@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static java.nio.file.Files.newBufferedWriter;
 
 @Service
 class Simulation {
@@ -32,17 +32,13 @@ class Simulation {
         this.positionOptional = Optional.empty();
     }
 
-    Results execute(Inputs inputs, int extraTicks, final String outputDirStr) throws IOException {
+    Results execute(Inputs inputs, int extraTicks, final String executionName, final Path outputDirectory) throws IOException {
 
         String[][] tickData = tickDataReader.read(inputs.getFile1());
         String[][] hourData = tickDataReader.read(inputs.getFile2());
 
-        final Path file2 = inputs.getFile2();
-        String outputFile = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + "Out.csv";
-
-        Path outputDirectory = positionExecutor.createResultsFile(Paths.get(outputDirStr));
-
-        BufferedWriter dataWriter = Files.newBufferedWriter(outputDirectory.resolve(outputFile));
+        BufferedWriter dataWriter = newBufferedWriter(positionExecutor.createResultsDirectory(outputDirectory)
+                .resolve(getOutputFile(inputs, executionName)));
         dataWriter.write(fileHeader);
 
         final PositionStats positionStats = new PositionStats();
@@ -104,7 +100,12 @@ class Simulation {
 //                    line[DAILY_HIGH]);
 //        }
 
-        return positionExecutor.getResults(outputFile, dataWriter, positionStats);
+        return positionExecutor.getResults(getOutputFile(inputs, executionName), dataWriter, positionStats);
+    }
+
+    private String getOutputFile(Inputs inputs, String executionName) {
+        final Path file2 = inputs.getFile2();
+        return file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + executionName + "Out.csv";
     }
 
 }
