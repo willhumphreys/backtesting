@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class Simulation {
+class Simulation {
 
     private static final int DATE = 0;
 
