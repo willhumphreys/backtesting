@@ -25,9 +25,6 @@ public class BacktestingApplication implements CommandLineRunner {
         SpringApplication.run(BacktestingApplication.class, args);
     }
 
-    /**
-     *
-     */
     @Override
     public void run(String... args) throws Exception {
 
