@@ -8,7 +8,7 @@ generate.plot <- function(file.in) {
     file.out.winLose <- paste("graphs/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], "winLose.png", sep = "")
 
     data <- read.table(paste("results/",file.in, sep=""), header=T,sep=",")
-    data$date.time=as.Date(as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S"))
+    data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S")
     data$date <- NULL
 
     data$cumulative_profit <- cumsum(data$ticks)
@@ -16,6 +16,9 @@ generate.plot <- function(file.in) {
     data$cum.winLose <- cumsum(data$winLose)
 
     write.table(data, file=csv.out, sep=",")
+
+
+    data$date.time=as.Date(data$date.time)
 
     line <- paste(file.in, ",", last(data$cumulative_profit), ",", last(data$cum.winLose), ",", nrow(data))
     write(line,file="summary.csv",append=TRUE)
