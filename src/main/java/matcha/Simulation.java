@@ -81,7 +81,7 @@ class Simulation {
                         this.positionOptional = Optional.empty();
                     }
                 } else {
-                    this.positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters.getExtraTicks());
+                    this.positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters.getExtraTicks(), backTestingParameters.getHighLowCheckPref());
                 }
             }
 
@@ -100,7 +100,9 @@ class Simulation {
 
     private String getOutputFile(Inputs inputs, String executionName) {
         final Path file2 = inputs.getFile2();
-        return file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + executionName + ".csv";
+        final String fileName = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + executionName + ".csv";
+        System.out.println(fileName);
+        return fileName;
     }
 
 }

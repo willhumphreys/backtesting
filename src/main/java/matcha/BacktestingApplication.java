@@ -39,11 +39,18 @@ public class BacktestingApplication implements CommandLineRunner {
         parametersMap.put("Normal", new BackTestingParameters.Builder()
                 .setName("Normal")
                 .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .createBackTestingParameters());
+        parametersMap.put("NoNewLow", new BackTestingParameters.Builder()
+                .setName("NoNewLow")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(2)
                 .createBackTestingParameters());
         parametersMap.put("IfWinnerSkipNext", new BackTestingParameters.Builder().
                 setName("IfWinnerSkipNext")
                 .setExtraTicks(extraTicks)
                 .skipNextIfWinner()
+                .setHighLowCheckPref(0)
                 .createBackTestingParameters());
 
         Path dataDirectory = Paths.get("copied-data");

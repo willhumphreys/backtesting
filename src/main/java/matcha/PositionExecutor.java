@@ -55,12 +55,12 @@ public class PositionExecutor {
         return outputDirectory;
     }
 
-    Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount) {
+    Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount, int highLowCheckPref) {
 
         //1.094295
         double extraTicks = extraTicksCount / 100000.0;
 
-        if (signals.isShortSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
+        if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade) {
             double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData
                     .getCandleLow() + extraTicks);
             double target = usefulTickData.getCandleLow() - extraTicks;
@@ -74,7 +74,7 @@ public class PositionExecutor {
             return Optional.of(position);
         }
 
-        if (signals.isLongSignal(usefulTickData) && timeToOpenPosition && availableToTrade) {
+        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade) {
 
             double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
                     .getCandleClose() - extraTicks);
