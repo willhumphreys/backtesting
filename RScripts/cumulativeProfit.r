@@ -19,21 +19,21 @@ generate.plot <- function(file.in) {
     data$date <- NULL
 
     data$cumulative_profit <- cumsum(data$ticks)
-    data$winLose <- ifelse(data$ticks > 0, 1,-1)
+    data$winLose <- ifelse(data$ticks > 0, 1, -1)
     data$win <- ifelse(data$ticks > 0, 1,0)
     data$cum.win <- cumsum(data$win)
 
-    data$lose <- ifelse(data$ticks < 0, 1,0)
+    data$lose <- ifelse(data$ticks < 0, 1, 0)
     data$cum.lose <- cumsum(data$lose)
 
     data$cum.winLose <- cumsum(data$winLose)
     data$cum.winP <- (data$cum.win /  as.numeric(rownames(data))) * 100
     data$cum.loseP <- (data$cum.lose /  as.numeric(rownames(data))) * 100
 
-    data <- data[,c(7,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16)]
+    data <- data[,c(7, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16)]
 
-    data$SMA60 <- SMA(data$winLose,60)
-    data$SMA30 <- SMA(data$winLose,30)
+    data$SMA60 <- SMA(data$winLose, 60)
+    data$SMA30 <- SMA(data$winLose, 30)
     data$SMA30Ticks <- SMA(data$ticks, 30)
     data$SMA60Ticks <- SMA(data$ticks, 60)
     # data$SMAYear <- SMA(data$cum.winLose,365)
@@ -51,7 +51,7 @@ generate.plot <- function(file.in) {
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     stat_smooth() +
-    ggtitle(file.in)
+    ggtitle(file.out)
     ggsave(file=file.out)
 
     cat(file.out.winLose)
@@ -60,7 +60,7 @@ generate.plot <- function(file.in) {
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     stat_smooth() +
-    ggtitle(file.in)
+    ggtitle(file.out.winLose)
     ggsave(file=file.out.winLose)
 
     cat(file.out.sma30)
@@ -69,7 +69,7 @@ generate.plot <- function(file.in) {
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     stat_smooth() +
-    ggtitle(file.in)
+    ggtitle(file.out.sma30)
     ggsave(file=file.out.sma30)
 
     cat(file.out.sma30ticks)
@@ -78,13 +78,13 @@ generate.plot <- function(file.in) {
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     stat_smooth() +
-    ggtitle(file)
+    ggtitle(file.out.sma30ticks)
     ggsave(file=file.out.sma30ticks)
 
     cat('finished')
 }
 
-write("symbol,cumulative_profit,win_lose_count,trade_count", file="summary.csv",append=TRUE)
+write("symbol,cumulative_profit,win_lose_count,trade_count", file="summary.csv", append=TRUE)
 
 in_files <- list.files('results')
 sapply(in_files, function(x) generate.plot(x))
