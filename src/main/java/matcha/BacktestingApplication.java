@@ -52,6 +52,12 @@ public class BacktestingApplication implements CommandLineRunner {
                 .skipNextIfWinner()
                 .setHighLowCheckPref(0)
                 .createBackTestingParameters());
+        parametersMap.put("NewDayLow", new BackTestingParameters.Builder().
+                setName("NewDayLow")
+                .setExtraTicks(extraTicks)
+                .skipNextIfWinner()
+                .setHighLowCheckPref(1)
+                .createBackTestingParameters());
 
         Path dataDirectory = Paths.get("copied-data");
 
