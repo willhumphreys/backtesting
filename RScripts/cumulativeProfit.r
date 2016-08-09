@@ -7,11 +7,12 @@ generate.plot <- function(file.in) {
     symbol <- strsplit(file.in, split='_', fixed=TRUE)[[1]][1]
     dir.create(file.path("graphs", symbol))
     file.name <- (strsplit(file.in, split='.', fixed=TRUE)[[1]])[1]
+    graph.output.dir = paste("graphs/", symbol, sep = "")
     csv.out <- paste("r-csv/", file.name, ".csv", sep = "")
-    file.out <- paste("graphs/", symbol, "/", file.name, ".png", sep = "")
-    file.out.winLose <- paste("graphs/", symbol, "/",file.name, "winLose.png", sep = "")
-    file.out.sma30 <- paste("graphs/",symbol, "/", file.name, "sma30.png", sep = "")
-    file.out.sma30ticks <- paste("graphs/",symbol, "/", file.name, "sma30Ticks.png", sep = "")
+    file.out <- paste(graph.output.dir, "/", file.name, ".png", sep = "")
+    file.out.winLose <- paste(graph.output.dir, "/",file.name, "winLose.png", sep = "")
+    file.out.sma30 <- paste(graph.output.dir, "/", file.name, "sma30.png", sep = "")
+    file.out.sma30ticks <- paste(graph.output.dir, "/", file.name, "sma30Ticks.png", sep = "")
 
     data <- read.table(paste("results/",file.in, sep=""), header=T,sep=",")
     data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S")
@@ -77,7 +78,7 @@ generate.plot <- function(file.in) {
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     stat_smooth() +
-    ggtitle(file.in)
+    ggtitle(file)
     ggsave(file=file.out.sma30ticks)
 
     cat('finished')
