@@ -84,7 +84,7 @@ generate.plot <- function(file.in) {
     cat('finished')
 }
 
-write("symbol,cumulative_profit,win_lose_count,trade_count", file="summary.csv", append=TRUE)
+write("symbol,cumulative_profit,win_lose_count,trade_count", file="summary.csv", append=FALSE)
 
 in_files <- list.files('results')
 sapply(in_files, function(x) generate.plot(x))
