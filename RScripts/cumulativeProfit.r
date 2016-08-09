@@ -13,9 +13,17 @@ generate.plot <- function(file.in) {
 
     data$cumulative_profit <- cumsum(data$ticks)
     data$winLose <- ifelse(data$ticks > 0, 1,-1)
-    data$cum.winLose <- cumsum(data$winLose)
+    data$win <- ifelse(data$ticks > 0, 1,0)
+    data$cum.win <- cumsum(data$win)
 
-    data <- data[,c(7,1,2,3,4,5,6,8,9,10)]
+    data$lose <- ifelse(data$ticks < 0, 1,0)
+    data$cum.lose <- cumsum(data$lose)
+
+    data$cum.winLose <- cumsum(data$winLose)
+    data$cum.winP <- (data$cum.win /  as.numeric(rownames(data))) * 100
+    data$cum.loseP <- (data$cum.lose /  as.numeric(rownames(data))) * 100
+
+    data <- data[,c(7,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16)]
 
     write.table(data, file=csv.out, sep=",", row.names=FALSE)
 
