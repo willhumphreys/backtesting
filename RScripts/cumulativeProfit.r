@@ -4,12 +4,14 @@ library(TTR)
 
 last <- function(x) { tail(x, n = 1) }
 generate.plot <- function(file.in) {
-cat(file.in)
-    file.out <- paste("graphs/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], ".png", sep = "")
-    csv.out <- paste("r-csv/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], ".csv", sep = "")
-    file.out.winLose <- paste("graphs/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], "winLose.png", sep = "")
-    file.out.sma30 <- paste("graphs/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], "sma30.png", sep = "")
-    file.out.sma30ticks <- paste("graphs/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], "sma30Ticks.png", sep = "")
+    cat(file.in)
+    symbol <- strsplit(file.in, split='_', fixed=TRUE)[[1]][1]
+    dir.create(file.path("graphs", symbol))
+    file.out <- paste("graphs/", symbol, "/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], ".png", sep = "")
+    csv.out <- paste("r-csv/", (strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], ".csv", sep = "")
+    file.out.winLose <- paste("graphs/", symbol, "/",(strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], "winLose.png", sep = "")
+    file.out.sma30 <- paste("graphs/",symbol, "/", (strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], "sma30.png", sep = "")
+    file.out.sma30ticks <- paste("graphs/",symbol, "/", (strsplit(file.in, split='.', fixed=TRUE)[[1]])[1], "sma30Ticks.png", sep = "")
 
     data <- read.table(paste("results/",file.in, sep=""), header=T,sep=",")
     data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S")
