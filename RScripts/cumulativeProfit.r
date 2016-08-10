@@ -33,10 +33,10 @@ generate.plot <- function(file.in) {
 
     data <- data[,c(7, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16)]
 
-    data$SMA60 <- SMA(data$winLose, 60)
+
     data$SMA30 <- SMA(data$winLose, 30)
     data$SMA30Ticks <- SMA(data$ticks, 30)
-    data$SMA60Ticks <- SMA(data$ticks, 60)
+
     # data$SMAYear <- SMA(data$cum.winLose,365)
 
     write.table(data, file=csv.out, sep=",", row.names=FALSE)
@@ -88,4 +88,5 @@ generate.plot <- function(file.in) {
 write("file.in,symbol,scenario,cumulative_profit,win_lose_count,trade_count", file="summary.csv", append=FALSE)
 
 in_files <- list.files('results')
+in_files <- in_files[!grepl("NewDayLow", in_files)]
 sapply(in_files, function(x) generate.plot(x))
