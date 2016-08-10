@@ -1,7 +1,10 @@
 library(ggplot2)
 library(TTR)
+library("scales")
 
 last <- function(x) { tail(x, n = 1) }
+
+
 generate.plot <- function(file.in) {
     cat(file.in)
     symbol <- strsplit(file.in, split='_', fixed=TRUE)[[1]][1]
@@ -45,12 +48,16 @@ generate.plot <- function(file.in) {
     line <- paste(file.in, ",", symbol, ",", scenario, ",", last(data$cumulative_profit), ",", last(data$cum.winLose), ",", nrow(data))
     write(line,file="summary.csv",append=TRUE)
 
+    data$scaled_cumulative_profit <- rescale(data$cumulative_profit, to=c(-1,1))
+    data$scaled_SMA30 <- rescale(data$SMA30, to=c(-1,1))
+
     cat(file.out)
-    ggplot(data=data, aes(x=date.time, y=cumulative_profit, group = 1)) +
+    ggplot(data=data, aes(x=date.time, y=data$scaled_cumulative_profit, group = 1)) +
     geom_line() +
+    geom_line(data=data, aes(colour=SMA30, x=date.time, y=data$SMA30)) +
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    stat_smooth() +
+  #  stat_smooth() +
     ggtitle(file.out)
     ggsave(file=file.out)
 
