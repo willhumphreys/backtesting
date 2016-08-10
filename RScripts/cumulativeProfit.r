@@ -69,7 +69,6 @@ generate.plot <- function(file.in) {
     geom_line() +
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    stat_smooth() +
     ggtitle(file.out.sma30)
     ggsave(file=file.out.sma30)
 
@@ -78,7 +77,6 @@ generate.plot <- function(file.in) {
     geom_line() +
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    stat_smooth() +
     ggtitle(file.out.sma30ticks)
     ggsave(file=file.out.sma30ticks)
 
