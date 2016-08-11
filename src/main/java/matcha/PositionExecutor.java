@@ -69,6 +69,14 @@ public class PositionExecutor {
             return Optional.empty();
         }
 
+        if(backTestingParameters.isAfter4DaysOfPositiveCloses() && !usefulTickData.isLast4DaysUp()) {
+            return Optional.empty();
+        }
+
+        if(backTestingParameters.isAfter4DaysOfNegativeCloses() && !usefulTickData.isLast4DaysDown()) {
+            return Optional.empty();
+        }
+
         if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isHighsOnly()) {
             if(backTestingParameters.isFadeTheBreakout()) {
                 return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks));
