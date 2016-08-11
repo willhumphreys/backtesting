@@ -47,6 +47,23 @@ public class BacktestingApplication implements CommandLineRunner {
                 .setHighLowCheckPref(0)
                 .setLowsOnly()
                 .createBackTestingParameters());
+
+        parametersMap.put("NormalLowsOnlySkipIf4NegativeCloses", new BackTestingParameters.Builder()
+                .setName("NormalLowsOnlySkipIf4NegativeCloses")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .skipIf4DownDays()
+                .setLowsOnly()
+                .createBackTestingParameters());
+
+        parametersMap.put("NormalHighsOnlySkipIf4PositiveCloses", new BackTestingParameters.Builder()
+                .setName("NormalHighsOnlySkipIf4PositiveCloses")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .skipIf4UpDays()
+                .setHighsOnly()
+                .createBackTestingParameters());
+
         parametersMap.put("NormalHighsOnly", new BackTestingParameters.Builder()
                 .setName("NormalHighsOnly")
                 .setExtraTicks(extraTicks)
@@ -70,6 +87,8 @@ public class BacktestingApplication implements CommandLineRunner {
                 .skipNextIfWinner()
                 .setHighLowCheckPref(1)
                 .createBackTestingParameters());
+
+
 
         Path dataDirectory = Paths.get("copied-data");
 

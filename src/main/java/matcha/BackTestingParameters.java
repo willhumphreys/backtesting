@@ -7,15 +7,27 @@ public class BackTestingParameters {
     private int highLowCheckPref;
     private boolean lowsOnly;
     private boolean highsOnly;
+    private final boolean skipIf4DownDays;
+    private final boolean skipIf4UpDays;
 
     public BackTestingParameters(String name, int extraTicks, boolean skipNextIfWinner, int highLowCheckPref,
-                                 boolean lowsOnly, boolean highsOnly) {
+                                 boolean lowsOnly, boolean highsOnly, boolean skipIf4DownDays, boolean skipIf4UpDays) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.skipNextIfWinner = skipNextIfWinner;
         this.highLowCheckPref = highLowCheckPref;
         this.lowsOnly = lowsOnly;
         this.highsOnly = highsOnly;
+        this.skipIf4DownDays = skipIf4DownDays;
+        this.skipIf4UpDays = skipIf4UpDays;
+    }
+
+    public boolean isSkipIf4DownDays() {
+        return skipIf4DownDays;
+    }
+
+    public boolean isSkipIf4UpDays() {
+        return skipIf4UpDays;
     }
 
     public String getName() {
@@ -49,6 +61,8 @@ public class BackTestingParameters {
         private int highLowCheckPref;
         private boolean lowsOnly;
         private boolean highsOnly;
+        private boolean skipIf4DownDays;
+        private boolean skipIf4UpDays;
 
         public Builder setName(String name) {
             this.name = name;
@@ -66,7 +80,7 @@ public class BackTestingParameters {
         }
 
         public BackTestingParameters createBackTestingParameters() {
-            return new BackTestingParameters(name, extraTicks, skipNextIfWinner, highLowCheckPref, lowsOnly, highsOnly);
+            return new BackTestingParameters(name, extraTicks, skipNextIfWinner, highLowCheckPref, lowsOnly, highsOnly, skipIf4DownDays, skipIf4UpDays);
         }
 
         public Builder skipNextIfWinner() {
@@ -82,6 +96,16 @@ public class BackTestingParameters {
 
         public Builder setHighsOnly() {
             this.highsOnly = true;
+            return this;
+        }
+
+        public Builder skipIf4DownDays() {
+            this.skipIf4DownDays = true;
+            return this;
+        }
+
+        public Builder skipIf4UpDays() {
+            this.skipIf4UpDays = true;
             return this;
         }
     }

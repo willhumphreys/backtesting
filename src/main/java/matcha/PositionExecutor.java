@@ -61,7 +61,15 @@ public class PositionExecutor {
         //1.094295
         double extraTicks = extraTicksCount / 100000.0;
 
-        if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade) {
+        if(backTestingParameters.isSkipIf4DownDays() && usefulTickData.isLast4DaysDown()) {
+            return Optional.empty();
+        }
+
+        if(backTestingParameters.isSkipIf4UpDays() && usefulTickData.isLast4DaysUp()) {
+            return Optional.empty();
+        }
+
+        if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isHighsOnly()) {
             double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData
                     .getCandleLow() + extraTicks);
             double target = usefulTickData.getCandleLow() - extraTicks;
@@ -75,7 +83,7 @@ public class PositionExecutor {
             return Optional.of(position);
         }
 
-        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade) {
+        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isLowsOnly()) {
 
             double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
                     .getCandleClose() - extraTicks);
