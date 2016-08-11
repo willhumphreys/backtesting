@@ -96,17 +96,20 @@ public class PositionExecutor {
         entryDate = usefulTickData.getCandleDate();
         availableToTrade = false;
         double entry = usefulTickData.getCandleClose();
-        double target = 0;
-        double stop = 0;
+        double target = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
+                .getCandleClose() - extraTicks);
+        double stop = usefulTickData.getCandleHigh() + extraTicks;
         return new Position(entryDate, entry, target, stop);
     }
 
     private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks) {
         entryDate = usefulTickData.getCandleDate();
         availableToTrade = false;
-        double target = 0;
-        double stop = 0;
+
         double entry = usefulTickData.getCandleClose();
+        double target = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData
+                .getCandleLow() + extraTicks);
+        double stop = usefulTickData.getCandleLow() - extraTicks;
 
         return new Position(entryDate, entry, target, stop);
     }
