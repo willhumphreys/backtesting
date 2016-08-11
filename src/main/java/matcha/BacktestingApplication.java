@@ -95,6 +95,24 @@ public class BacktestingApplication implements CommandLineRunner {
                 .fadeTheBreakout()
                 .createBackTestingParameters());
 
+        parametersMap.put("FadeTheBreakoutNormalLowOnlyAfter4DaysOfLows", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalLowOnlyAfter4DaysOfLows")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .setLowsOnly()
+                .onlyAfter4DaysOfNegativeCloses()
+                .fadeTheBreakout()
+                .createBackTestingParameters());
+
+        parametersMap.put("FadeTheBreakoutNormalHighOnlyAfter4DaysOfHighs", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalHighOnlyAfter4DaysOfHighs")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .setLowsOnly()
+                .onlyAfter4DaysOfPositiveCloses()
+                .fadeTheBreakout()
+                .createBackTestingParameters());
+
 
         Path dataDirectory = Paths.get("copied-data");
 
