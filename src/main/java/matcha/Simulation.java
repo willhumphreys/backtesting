@@ -32,7 +32,8 @@ class Simulation {
         this.positionOptional = Optional.empty();
     }
 
-    Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters) throws IOException {
+    Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters) throws
+            IOException {
 
         String[][] tickData = tickDataReader.read(inputs.getFile1());
         String[][] hourData = tickDataReader.read(inputs.getFile2());
@@ -73,14 +74,14 @@ class Simulation {
                 final LocalDateTime currentMinuteTime = LocalDateTime.parse(tickData[i][DATE]);
 
 
-                if(currentHourTime.getHour() != currentMinuteTime.getHour()) {
+                if (currentHourTime.getHour() != currentMinuteTime.getHour()) {
                     hourCounter++;
                 }
 
                 final LocalDateTime currentHourTime2 = LocalDateTime.parse(hourData[hourCounter][DATE]);
                 final LocalDateTime currentMinuteTime2 = LocalDateTime.parse(tickData[i][DATE]);
 
-                if(currentHourTime2.getHour() != currentMinuteTime2.getHour()) {
+                if (currentHourTime2.getHour() != currentMinuteTime2.getHour()) {
                     throw new IllegalStateException("minutes not matching hours.");
                 }
             }
@@ -92,12 +93,14 @@ class Simulation {
 
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
-                    positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats, backTestingParameters);
+                    positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
+                            backTestingParameters);
                     if (position.isClosed()) {
                         this.positionOptional = Optional.empty();
                     }
                 } else {
-                    this.positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters.getExtraTicks(), backTestingParameters.getHighLowCheckPref(), backTestingParameters);
+                    this.positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters
+                            .getExtraTicks(), backTestingParameters.getHighLowCheckPref(), backTestingParameters);
                 }
             }
 
@@ -111,12 +114,14 @@ class Simulation {
 //                    line[DAILY_HIGH]);
 //        }
 
-        return positionExecutor.getResults(getOutputFile(inputs, backTestingParameters.getName()), dataWriter, positionStats);
+        return positionExecutor.getResults(getOutputFile(inputs, backTestingParameters.getName()), dataWriter,
+                positionStats);
     }
 
     private String getOutputFile(Inputs inputs, String executionName) {
         final Path file2 = inputs.getFile2();
-        final String fileName = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + executionName + ".csv";
+        final String fileName = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + executionName +
+                ".csv";
         System.out.println(fileName);
         return fileName;
     }
