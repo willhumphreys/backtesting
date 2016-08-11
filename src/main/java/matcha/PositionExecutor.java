@@ -71,7 +71,7 @@ public class PositionExecutor {
 
         if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isHighsOnly()) {
             if(backTestingParameters.isFadeTheBreakout()) {
-
+                return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks));
             } else {
                 return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks));
             }
@@ -82,7 +82,7 @@ public class PositionExecutor {
 
         if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isLowsOnly()) {
             if(backTestingParameters.isFadeTheBreakout()) {
-
+                return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks));
             } else {
                 return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks));
             }
@@ -92,13 +92,31 @@ public class PositionExecutor {
         return Optional.empty();
     }
 
+    private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks) {
+        entryDate = usefulTickData.getCandleDate();
+        availableToTrade = false;
+        double entry = usefulTickData.getCandleClose();
+        double target = 0;
+        double stop = 0;
+        return new Position(entryDate, entry, target, stop);
+    }
+
+    private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks) {
+        entryDate = usefulTickData.getCandleDate();
+        availableToTrade = false;
+        double target = 0;
+        double stop = 0;
+        double entry = usefulTickData.getCandleClose();
+
+        return new Position(entryDate, entry, target, stop);
+    }
+
     private Position createLongPositionAtHighs(UsefulTickData usefulTickData, double extraTicks) {
         double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
                 .getCandleClose() - extraTicks);
         double target = usefulTickData.getCandleHigh() + extraTicks;
         double entry = usefulTickData.getCandleClose();
         entryDate = usefulTickData.getCandleDate();
-
         availableToTrade = false;
         return new Position(entryDate, entry, target, stop);
     }
