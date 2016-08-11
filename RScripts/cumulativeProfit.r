@@ -40,6 +40,8 @@ generate.plot <- function(file.in) {
     data$SMA30Ticks <- SMA(data$ticks, 30)
 
     # data$SMAYear <- SMA(data$cum.winLose,365)
+    data$scaled_cumulative_profit <- rescale(data$cumulative_profit, to=c(-1,1))
+    data$scaled_SMA30 <- rescale(data$SMA30, to=c(-1,1))
 
     write.table(data, file=csv.out, sep=",", row.names=FALSE)
 
@@ -48,8 +50,6 @@ generate.plot <- function(file.in) {
     line <- paste(file.in, ",", symbol, ",", scenario, ",", last(data$cumulative_profit), ",", last(data$cum.winLose), ",", nrow(data))
     write(line,file="summary.csv",append=TRUE)
 
-    data$scaled_cumulative_profit <- rescale(data$cumulative_profit, to=c(-1,1))
-    data$scaled_SMA30 <- rescale(data$SMA30, to=c(-1,1))
 
     cat(file.out)
     ggplot(data=data, aes(x=date.time, y=data$scaled_cumulative_profit, group = 1)) +
