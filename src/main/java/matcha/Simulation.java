@@ -67,6 +67,22 @@ class Simulation {
             //If the hour has changed we need to update the hour counter.
             if (tickCandleHour != hourCandleHour) {
                 hourCounter++;
+
+
+                final LocalDateTime currentHourTime = LocalDateTime.parse(hourData[hourCounter][DATE]);
+                final LocalDateTime currentMinuteTime = LocalDateTime.parse(tickData[i][DATE]);
+
+
+                if(currentHourTime.getHour() != currentMinuteTime.getHour()) {
+                    hourCounter++;
+                }
+
+                final LocalDateTime currentHourTime2 = LocalDateTime.parse(hourData[hourCounter][DATE]);
+                final LocalDateTime currentMinuteTime2 = LocalDateTime.parse(tickData[i][DATE]);
+
+                if(currentHourTime2.getHour() != currentMinuteTime2.getHour()) {
+                    throw new IllegalStateException("minutes not matching hours.");
+                }
             }
 
 
@@ -81,7 +97,7 @@ class Simulation {
                         this.positionOptional = Optional.empty();
                     }
                 } else {
-                    this.positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters.getExtraTicks(), backTestingParameters.getHighLowCheckPref());
+                    this.positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters.getExtraTicks(), backTestingParameters.getHighLowCheckPref(), backTestingParameters);
                 }
             }
 

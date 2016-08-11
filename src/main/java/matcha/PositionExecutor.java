@@ -55,7 +55,8 @@ public class PositionExecutor {
         return outputDirectory;
     }
 
-    Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount, int highLowCheckPref) {
+    Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount, int highLowCheckPref,
+                                      BackTestingParameters backTestingParameters) {
 
         //1.094295
         double extraTicks = extraTicksCount / 100000.0;

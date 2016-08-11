@@ -3,12 +3,10 @@ library(TTR)
 library("scales")
 
 last <- function(x) { tail(x, n = 1) }
-
-
 generate.plot <- function(file.in) {
     cat(file.in)
     symbol <- strsplit(file.in, split='_', fixed=TRUE)[[1]][1]
-    scenario.with.extension <- strsplit(file.in, split='_', fixed=TRUE)[[1]][3]
+    scenario.with.extension <- strsplit(file.in, split='_', fixed=TRUE)[[1]][4]
     scenario <- (strsplit(scenario.with.extension, split='.', fixed=TRUE)[[1]])[1]
     dir.create(file.path("graphs", symbol))
     file.name <- (strsplit(file.in, split='.', fixed=TRUE)[[1]])[1]
@@ -37,8 +35,10 @@ generate.plot <- function(file.in) {
 
     data <- data[,c(7, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16)]
 
+
     data$SMA30 <- SMA(data$winLose, 30)
     data$SMA30Ticks <- SMA(data$ticks, 30)
+
     # data$SMAYear <- SMA(data$cum.winLose,365)
 
     write.table(data, file=csv.out, sep=",", row.names=FALSE)

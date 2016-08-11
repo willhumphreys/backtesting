@@ -41,6 +41,18 @@ public class BacktestingApplication implements CommandLineRunner {
                 .setExtraTicks(extraTicks)
                 .setHighLowCheckPref(0)
                 .createBackTestingParameters());
+        parametersMap.put("NormalLowsOnly", new BackTestingParameters.Builder()
+                .setName("NormalLowsOnly")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .setLowsOnly()
+                .createBackTestingParameters());
+        parametersMap.put("NormalHighsOnly", new BackTestingParameters.Builder()
+                .setName("NormalHighsOnly")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .setHighsOnly()
+                .createBackTestingParameters());
         parametersMap.put("NoNewLow", new BackTestingParameters.Builder()
                 .setName("NoNewLow")
                 .setExtraTicks(extraTicks)
@@ -72,6 +84,9 @@ public class BacktestingApplication implements CommandLineRunner {
         }
 
         for (String inputLine : inputLines) {
+            if(inputLine.trim().length() == 0 ) {
+                continue;
+            }
             String[] lineParts = inputLine.split(",");
             final Path oneMinutePath = dataDirectory.resolve(lineParts[0]);
             final Path sixtyMinutePath = dataDirectory.resolve(lineParts[1]);

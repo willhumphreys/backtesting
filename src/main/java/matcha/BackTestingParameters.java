@@ -5,12 +5,17 @@ public class BackTestingParameters {
     private int extraTicks;
     private boolean skipNextIfWinner;
     private int highLowCheckPref;
+    private boolean lowsOnly;
+    private boolean highsOnly;
 
-    public BackTestingParameters(String name, int extraTicks, boolean skipNextIfWinner, int highLowCheckPref) {
+    public BackTestingParameters(String name, int extraTicks, boolean skipNextIfWinner, int highLowCheckPref,
+                                 boolean lowsOnly, boolean highsOnly) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.skipNextIfWinner = skipNextIfWinner;
         this.highLowCheckPref = highLowCheckPref;
+        this.lowsOnly = lowsOnly;
+        this.highsOnly = highsOnly;
     }
 
     public String getName() {
@@ -29,11 +34,21 @@ public class BackTestingParameters {
         return highLowCheckPref;
     }
 
+    public boolean isLowsOnly() {
+        return lowsOnly;
+    }
+
+    public boolean isHighsOnly() {
+        return highsOnly;
+    }
+
     public static class Builder {
         private String name;
         private int extraTicks;
         private boolean skipNextIfWinner;
         private int highLowCheckPref;
+        private boolean lowsOnly;
+        private boolean highsOnly;
 
         public Builder setName(String name) {
             this.name = name;
@@ -51,7 +66,7 @@ public class BackTestingParameters {
         }
 
         public BackTestingParameters createBackTestingParameters() {
-            return new BackTestingParameters(name, extraTicks, skipNextIfWinner, highLowCheckPref);
+            return new BackTestingParameters(name, extraTicks, skipNextIfWinner, highLowCheckPref, lowsOnly, highsOnly);
         }
 
         public Builder skipNextIfWinner() {
@@ -60,5 +75,14 @@ public class BackTestingParameters {
         }
 
 
+        public Builder setLowsOnly() {
+            this.lowsOnly = true;
+            return this;
+        }
+
+        public Builder setHighsOnly() {
+            this.highsOnly = true;
+            return this;
+        }
     }
 }
