@@ -70,33 +70,49 @@ public class PositionExecutor {
         }
 
         if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isHighsOnly()) {
-            double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData
-                    .getCandleLow() + extraTicks);
-            double target = usefulTickData.getCandleLow() - extraTicks;
-            double entry = usefulTickData.getCandleClose();
-            entryDate = usefulTickData.getCandleDate();
+            if(backTestingParameters.isFadeTheBreakout()) {
 
-            Position position = new Position(entryDate, entry, target, stop);
+            } else {
+                return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks));
+            }
 
-            availableToTrade = false;
 
-            return Optional.of(position);
+
         }
 
         if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isLowsOnly()) {
+            if(backTestingParameters.isFadeTheBreakout()) {
 
-            double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
-                    .getCandleClose() - extraTicks);
-            double target = usefulTickData.getCandleHigh() + extraTicks;
-            double entry = usefulTickData.getCandleClose();
-            entryDate = usefulTickData.getCandleDate();
-            Position position = new Position(entryDate, entry, target, stop);
+            } else {
+                return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks));
+            }
 
-            availableToTrade = false;
-            return Optional.of(position);
         }
 
         return Optional.empty();
+    }
+
+    private Position createLongPositionAtHighs(UsefulTickData usefulTickData, double extraTicks) {
+        double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
+                .getCandleClose() - extraTicks);
+        double target = usefulTickData.getCandleHigh() + extraTicks;
+        double entry = usefulTickData.getCandleClose();
+        entryDate = usefulTickData.getCandleDate();
+
+        availableToTrade = false;
+        return new Position(entryDate, entry, target, stop);
+    }
+
+    private Position createShortPositionAtLows(UsefulTickData usefulTickData, double extraTicks) {
+        double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData
+                .getCandleLow() + extraTicks);
+        double target = usefulTickData.getCandleLow() - extraTicks;
+        double entry = usefulTickData.getCandleClose();
+        entryDate = usefulTickData.getCandleDate();
+
+        availableToTrade = false;
+
+        return new Position(entryDate, entry, target, stop);
     }
 
     void setTimeToOpenPosition(boolean timeToOpenPosition) {

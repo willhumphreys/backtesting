@@ -9,9 +9,11 @@ public class BackTestingParameters {
     private boolean highsOnly;
     private final boolean skipIf4DownDays;
     private final boolean skipIf4UpDays;
+    private boolean fadeTheBreakout;
 
     public BackTestingParameters(String name, int extraTicks, boolean skipNextIfWinner, int highLowCheckPref,
-                                 boolean lowsOnly, boolean highsOnly, boolean skipIf4DownDays, boolean skipIf4UpDays) {
+                                 boolean lowsOnly, boolean highsOnly, boolean skipIf4DownDays, boolean skipIf4UpDays,
+                                 boolean fadeTheBreakout) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.skipNextIfWinner = skipNextIfWinner;
@@ -20,6 +22,7 @@ public class BackTestingParameters {
         this.highsOnly = highsOnly;
         this.skipIf4DownDays = skipIf4DownDays;
         this.skipIf4UpDays = skipIf4UpDays;
+        this.fadeTheBreakout = fadeTheBreakout;
     }
 
     public boolean isSkipIf4DownDays() {
@@ -54,6 +57,11 @@ public class BackTestingParameters {
         return highsOnly;
     }
 
+    public boolean isFadeTheBreakout() {
+
+        return fadeTheBreakout;
+    }
+
     public static class Builder {
         private String name;
         private int extraTicks;
@@ -63,6 +71,7 @@ public class BackTestingParameters {
         private boolean highsOnly;
         private boolean skipIf4DownDays;
         private boolean skipIf4UpDays;
+        private boolean fadeTheBreakout;
 
         public Builder setName(String name) {
             this.name = name;
@@ -80,7 +89,8 @@ public class BackTestingParameters {
         }
 
         public BackTestingParameters createBackTestingParameters() {
-            return new BackTestingParameters(name, extraTicks, skipNextIfWinner, highLowCheckPref, lowsOnly, highsOnly, skipIf4DownDays, skipIf4UpDays);
+            return new BackTestingParameters(name, extraTicks, skipNextIfWinner, highLowCheckPref, lowsOnly,
+                    highsOnly, skipIf4DownDays, skipIf4UpDays, fadeTheBreakout);
         }
 
         public Builder skipNextIfWinner() {
@@ -106,6 +116,11 @@ public class BackTestingParameters {
 
         public Builder skipIf4UpDays() {
             this.skipIf4UpDays = true;
+            return this;
+        }
+
+        public Builder fadeTheBreakout() {
+            this.fadeTheBreakout = true;
             return this;
         }
     }

@@ -88,6 +88,12 @@ public class BacktestingApplication implements CommandLineRunner {
                 .setHighLowCheckPref(1)
                 .createBackTestingParameters());
 
+        parametersMap.put("FadeTheBreakoutNormal", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormal")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .fadeTheBreakout()
+                .createBackTestingParameters());
 
 
         Path dataDirectory = Paths.get("copied-data");
