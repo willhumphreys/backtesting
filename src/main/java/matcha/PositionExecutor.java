@@ -81,7 +81,9 @@ public class PositionExecutor {
 
         boolean haveEdge = configureInitialEdgeValue(backTestingParameters);
 
-        haveEdge = toggleEdges(backTestingParameters, positionStats, haveEdge);
+        if(!haveEdge) {
+            haveEdge = toggleEdges(backTestingParameters, positionStats);
+        }
 
         if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade &&
                 !backTestingParameters.isHighsOnly()) {
@@ -108,22 +110,25 @@ public class PositionExecutor {
     }
 
     private boolean toggleEdges(BackTestingParameters backTestingParameters,
-                                PositionStats positionStats,
-                                boolean haveEdge) {
+                                PositionStats positionStats) {
+        boolean haveEdge = false;
         if (backTestingParameters.isWithEdge()) {
-            haveEdge = toggleEdgeWithTimeBasedSMA(backTestingParameters, positionStats, haveEdge);
+            haveEdge = toggleEdgeWithTimeBasedSMA(backTestingParameters, positionStats);
         } else if (backTestingParameters.isWithTradeCountEdge()) {
-            haveEdge = toggleEdgeWithTradeCountSMA(backTestingParameters, positionStats, haveEdge);
+            haveEdge = toggleEdgeWithTradeCountSMA(backTestingParameters, positionStats);
         }
         return haveEdge;
     }
 
     private boolean toggleEdgeWithTradeCountSMA(BackTestingParameters backTestingParameters, PositionStats
-            positionStats, boolean haveEdge) {
+            positionStats) {
+        boolean haveEdge = false;
         final double tradeCountSma30 = positionStats.getTradeCountSma30(backTestingParameters
                 .getMovingAverageDayCount());
 
-        if (tradeCountSma30 < backTestingParameters.getEdgeLevelCount() * -1) {
+        if(tradeCountSma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
+            haveEdge = false;
+        } else if (tradeCountSma30 < backTestingParameters.getEdgeLevelCount() * -1) {
             haveEdge = true;
         } else if (tradeCountSma30 > backTestingParameters.getEdgeLevelCount()) {
             haveEdge = true;
@@ -132,17 +137,15 @@ public class PositionExecutor {
     }
 
     private boolean toggleEdgeWithTimeBasedSMA(BackTestingParameters backTestingParameters, PositionStats
-            positionStats, boolean haveEdge) {
+            positionStats) {
         final double sma30 = positionStats.getSma30(backTestingParameters.getMovingAverageDayCount());
+        boolean haveEdge = false;
         if(sma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
             haveEdge = false;
-        }
-        if (sma30
-                < backTestingParameters.getEdgeLevel() * -1) {
+        } else if (sma30 < backTestingParameters.getEdgeLevel() * -1) {
             haveEdge = true;
-        } else if (sma30
-                > backTestingParameters.getEdgeLevel()) {
-            haveEdge = false;
+        } else if (sma30 > backTestingParameters.getEdgeLevel()) {
+            haveEdge = true;
         }
         return haveEdge;
     }
