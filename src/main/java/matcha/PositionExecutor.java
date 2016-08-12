@@ -184,11 +184,13 @@ public class PositionExecutor {
                 closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position,
                         STOPPED_SHORT_CSV_TEMPLATE, dataWriter,stats, backTestingParameters);
                 stats.incrementLosers();
+                stats.addLoser(usefulTickData.getCandleDate());
             } else if (isShortTargetExceeded(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget());
                 closePosition(profitLoss, TARGET_SHORT_TEMPLATE, position.getTarget(), position,
                         TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
+                stats.addWinner(usefulTickData.getCandleDate());
             }
         }
     }
