@@ -16,6 +16,8 @@ public class BackTestingParameters {
     private boolean withTradeCountEdge;
     private double edgeLevel;
     private double edgeLevelCount;
+    private int movingAverageDayCount;
+    private int movingAverageTradeCount;
 
     public BackTestingParameters(String name,
                                  int extraTicks,
@@ -30,7 +32,10 @@ public class BackTestingParameters {
                                  boolean after4DaysOfPositiveCloses,
                                  boolean withEdge,
                                  boolean withTradeCountEdge,
-                                 double edgeLevel, double edgeLevelCount) {
+                                 double edgeLevel,
+                                 double edgeLevelCount,
+                                 int movingAverageDayCount,
+                                 int movingAverageTradeCount) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.skipNextIfWinner = skipNextIfWinner;
@@ -46,6 +51,17 @@ public class BackTestingParameters {
         this.withTradeCountEdge = withTradeCountEdge;
         this.edgeLevel = edgeLevel;
         this.edgeLevelCount = edgeLevelCount;
+        this.movingAverageDayCount = movingAverageDayCount;
+        this.movingAverageTradeCount = movingAverageTradeCount;
+    }
+
+    /**
+     * Gets movingAverageTradeCount
+     *
+     * @return value of movingAverageTradeCount
+     */
+    public int getMovingAverageTradeCount() {
+        return movingAverageTradeCount;
     }
 
     /**
@@ -119,6 +135,11 @@ public class BackTestingParameters {
         return withTradeCountEdge;
     }
 
+    public int getMovingAverageDayCount() {
+
+        return movingAverageDayCount;
+    }
+
     public static class Builder {
         private String name;
         private int extraTicks;
@@ -135,6 +156,8 @@ public class BackTestingParameters {
         private boolean withTradeCountEdge;
         private double edgeLevel;
         private double edgeLevelCount;
+        private int movingAverageDayCount;
+        private int movingAverageTradeCount;
 
         public Builder setName(String name) {
             this.name = name;
@@ -148,6 +171,11 @@ public class BackTestingParameters {
 
         public Builder setHighLowCheckPref(int highLowCheckPref) {
             this.highLowCheckPref = highLowCheckPref;
+            return this;
+        }
+
+        public Builder setMovingAverageTradeCount(int movingAverageTradeCount) {
+            this.movingAverageTradeCount = movingAverageTradeCount;
             return this;
         }
 
@@ -167,8 +195,9 @@ public class BackTestingParameters {
                     withEdge,
                     withTradeCountEdge,
                     edgeLevel,
-                    edgeLevelCount
-            );
+                    edgeLevelCount,
+                    movingAverageDayCount,
+                    movingAverageTradeCount);
         }
 
         public Builder skipNextIfWinner() {
@@ -213,15 +242,17 @@ public class BackTestingParameters {
             return this;
         }
 
-        public Builder withEdge(double edgeLevel) {
+        public Builder withEdge(double edgeLevel, int movingAverageDayCount) {
             this.withEdge = true;
             this.edgeLevel = edgeLevel;
+            this.movingAverageDayCount = movingAverageDayCount;
             return this;
         }
 
-        public Builder withTradeCountEdge(double edgeLevelCount) {
+        public Builder withTradeCountEdge(double edgeLevelCount, int movingAverageTradeCount) {
             this.withTradeCountEdge = true;
             this.edgeLevelCount = edgeLevelCount;
+            this.movingAverageTradeCount = movingAverageTradeCount;
             return this;
         }
     }

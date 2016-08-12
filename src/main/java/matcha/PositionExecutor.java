@@ -119,9 +119,9 @@ public class PositionExecutor {
         }
 
         if (backTestingParameters.isWithTradeCountEdge()) {
-            if (positionStats.getTradeCountSma30() < backTestingParameters.getEdgeLevelCount() * -1) {
+            if (positionStats.getTradeCountSma30(backTestingParameters.getMovingAverageDayCount()) < backTestingParameters.getEdgeLevelCount() * -1) {
                 haveEdge = true;
-            } else if (positionStats.getTradeCountSma30() > backTestingParameters.getEdgeLevelCount()) {
+            } else if (positionStats.getTradeCountSma30(backTestingParameters.getMovingAverageDayCount()) > backTestingParameters.getEdgeLevelCount()) {
                 haveEdge = true;
             }
         }
