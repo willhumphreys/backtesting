@@ -19,8 +19,9 @@ public class BacktestingApplication implements CommandLineRunner {
 
     private static final String DATA_DIRECTORY = "copied-data";
     private static final String FILES_TO_EXECUTE_LIST = "inputFileList.csv";
-    private final Simulation simulation;
+    private static final int EXTRA_TICKS = 10;
 
+    private final Simulation simulation;
     private Map<String,BackTestingParameters> parametersMap;
 
     @Autowired
@@ -35,13 +36,9 @@ public class BacktestingApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        int extraTicks = 10;
-
-        this.parametersMap = createParametersMap(extraTicks);
-
+        this.parametersMap = createParametersMap(EXTRA_TICKS);
 
         Path dataDirectory = Paths.get(DATA_DIRECTORY);
-
 
         final List<String> inputLines = Files.readAllLines(Paths.get(FILES_TO_EXECUTE_LIST));
 
