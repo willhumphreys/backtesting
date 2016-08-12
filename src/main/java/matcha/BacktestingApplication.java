@@ -35,7 +35,38 @@ public class BacktestingApplication implements CommandLineRunner {
 
         int extraTicks = 10;
 
-        parametersMap = newHashMap();
+        this.parametersMap = createParametersMap(extraTicks);
+
+
+        Path dataDirectory = Paths.get("copied-data");
+
+
+        final List<String> inputLines = Files.readAllLines(Paths.get("inputFileList.csv"));
+
+        final String backTestingParametersName = args[0];
+        final BackTestingParameters backTestingParameters = parametersMap.get(backTestingParametersName);
+
+        if(backTestingParameters == null) {
+            throw new IllegalArgumentException("Couldn't find the backTestingParameters for " + backTestingParametersName);
+        }
+
+        for (String inputLine : inputLines) {
+            if(inputLine.trim().length() == 0 ) {
+                continue;
+            }
+            String[] lineParts = inputLine.split(",");
+            final Path oneMinutePath = dataDirectory.resolve(lineParts[0]);
+            final Path sixtyMinutePath = dataDirectory.resolve(lineParts[1]);
+            Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
+
+            final Results results = simulation.execute(input, Paths.get("results"), backTestingParameters);
+
+            System.out.println(results);
+        }
+    }
+
+    private Map<String, BackTestingParameters> createParametersMap(int extraTicks) {
+        Map<String, BackTestingParameters> parametersMap = newHashMap();
         parametersMap.put("Normal", new BackTestingParameters.Builder()
                 .setName("Normal")
                 .setExtraTicks(extraTicks)
@@ -144,32 +175,6 @@ public class BacktestingApplication implements CommandLineRunner {
                 .onlyAfter4DaysOfPositiveCloses()
                 .fadeTheBreakout()
                 .createBackTestingParameters());
-
-
-        Path dataDirectory = Paths.get("copied-data");
-
-
-        final List<String> inputLines = Files.readAllLines(Paths.get("inputFileList.csv"));
-
-        final String backTestingParametersName = args[0];
-        final BackTestingParameters backTestingParameters = parametersMap.get(backTestingParametersName);
-
-        if(backTestingParameters == null) {
-            throw new IllegalArgumentException("Couldn't find the backTestingParameters for " + backTestingParametersName);
-        }
-
-        for (String inputLine : inputLines) {
-            if(inputLine.trim().length() == 0 ) {
-                continue;
-            }
-            String[] lineParts = inputLine.split(",");
-            final Path oneMinutePath = dataDirectory.resolve(lineParts[0]);
-            final Path sixtyMinutePath = dataDirectory.resolve(lineParts[1]);
-            Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
-
-            final Results results = simulation.execute(input, Paths.get("results"), backTestingParameters);
-
-            System.out.println(results);
-        }
+        return parametersMap;
     }
 }
