@@ -30,6 +30,7 @@ generate.plot <- function(file.in) {
     data$cum.lose <- cumsum(data$lose)
 
     data$cum.winLose <- cumsum(data$winLose)
+    data$scaled.cum.winLose <- rescale(data$cum.winLose, to=c(-1,1))
     data$cum.winP <- (data$cum.win /  as.numeric(rownames(data))) * 100
     data$cum.loseP <- (data$cum.lose /  as.numeric(rownames(data))) * 100
 
@@ -52,7 +53,7 @@ generate.plot <- function(file.in) {
 
 
     cat(file.out)
-    ggplot(data=data, aes(x=date.time, y=data$scaled_cumulative_profit, group = 1)) +
+    ggplot(data=data, aes(x=date.time, y=scaled.cum.winLose, group = 1)) +
     geom_line() +
     geom_line(data=data, aes(colour=SMA30, x=date.time, y=data$SMA30)) +
     scale_x_date(date_breaks = "3 month") +
@@ -92,5 +93,7 @@ generate.plot <- function(file.in) {
 write("file.in,symbol,scenario,cumulative_profit,win_lose_count,trade_count", file="summary.csv", append=FALSE)
 
 in_files <- list.files('results')
+
+in_files <- in_files[!grepl("4", in_files)]
 in_files <- in_files[!grepl("NewDayLow", in_files)]
 sapply(in_files, function(x) generate.plot(x))

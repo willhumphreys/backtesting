@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -31,8 +32,8 @@ public class PositionExecutor {
     private final Utils utils;
     private final Signals signals;
 
-    private String entryDate;
-    private String exitDate;
+    private LocalDateTime entryDate;
+    private LocalDateTime exitDate;
 
     private boolean availableToTrade;
     private boolean timeToOpenPosition;
@@ -151,6 +152,9 @@ public class PositionExecutor {
     void managePosition(UsefulTickData usefulTickData, Position position, BufferedWriter dataWriter,
                         PositionStats stats, BackTestingParameters backTestingParameters) throws
             IOException {
+
+        stats.cleanLists(usefulTickData.getCandleDate());
+
         if (availableToTrade) {
             return;
         }
@@ -165,11 +169,14 @@ public class PositionExecutor {
 
                 stats.incrementLosers();
 
+                stats.addLoser(usefulTickData.getCandleDate());
+
             } else if (isLongTargetExceeded(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry());
                 closePosition(profitLoss, TARGET_LONG_TEMPLATE, position.getTarget(), position,
                         TARGET_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
+                stats.addWinner(usefulTickData.getCandleDate());
             }
         } else {
             if (isShortStopTouched(usefulTickData, position)) {

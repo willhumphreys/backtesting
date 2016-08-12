@@ -95,6 +95,22 @@ public class BacktestingApplication implements CommandLineRunner {
                 .fadeTheBreakout()
                 .createBackTestingParameters());
 
+        parametersMap.put("FadeTheBreakoutNormalLowsOnly", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalLowsOnly")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .fadeTheBreakout()
+                .setLowsOnly()
+                .createBackTestingParameters());
+
+        parametersMap.put("FadeTheBreakoutNormalHighsOnly", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalHighsOnly")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .setHighsOnly()
+                .fadeTheBreakout()
+                .createBackTestingParameters());
+
         parametersMap.put("FadeTheBreakoutNormalLowOnlyAfter4DaysOfLows", new BackTestingParameters.Builder()
                 .setName("FadeTheBreakoutNormalLowOnlyAfter4DaysOfLows")
                 .setExtraTicks(extraTicks)

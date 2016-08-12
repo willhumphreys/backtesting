@@ -7,6 +7,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 import static java.nio.file.Files.newBufferedWriter;
@@ -35,8 +37,27 @@ class Simulation {
     Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters) throws
             IOException {
 
-        String[][] tickData = tickDataReader.read(inputs.getFile1());
-        String[][] hourData = tickDataReader.read(inputs.getFile2());
+        System.out.println("Starting: " + backTestingParameters.getName() + " " + inputs.getFile1() + " " + inputs.getFile2());
+
+        String[][] tickData;
+        try {
+            tickData = tickDataReader.read(inputs.getFile1());
+        } catch (IOException e) {
+            System.out.println("Failed to parse " + inputs.getFile1());
+            throw new IOException("Failed to parse " + inputs.getFile1(), e);
+        } catch(DateTimeParseException e2) {
+            System.out.println("Failed to parse " + inputs.getFile1());
+            throw e2;
+        }
+        String[][] hourData;
+        try {
+            hourData = tickDataReader.read(inputs.getFile2());
+        } catch (IOException e) {
+            throw new IOException("Failed to parse " + inputs.getFile2(), e);
+        } catch(DateTimeParseException e2) {
+            System.out.println("Failed to parse " + inputs.getFile2());
+            throw e2;
+        }
 
         BufferedWriter dataWriter = newBufferedWriter(positionExecutor.createResultsDirectory(outputDirectory)
                 .resolve(getOutputFile(inputs, backTestingParameters.getName())));

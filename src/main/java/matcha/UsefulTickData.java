@@ -1,5 +1,7 @@
 package matcha;
 
+import java.time.LocalDateTime;
+
 import static java.lang.Double.parseDouble;
 
 class UsefulTickData {
@@ -46,8 +48,8 @@ class UsefulTickData {
         this.hourCounter = hourCounter;
     }
 
-    String getCandleDate() {
-        return candleDate;
+    LocalDateTime getCandleDate() {
+        return LocalDateTime.parse(candleDate);
     }
     double getCandleClose() {
         return candleClose;
@@ -102,10 +104,10 @@ class UsefulTickData {
         return openBelowYesterdaysHigh;
     }
 
-    public boolean isLast4DaysDown() {
+    boolean isLast4DaysDown() {
         return last4DaysDown;
     }
-    public boolean isLast4DaysUp() {
+    boolean isLast4DaysUp() {
         return last4DaysUp;
     }
 
@@ -129,8 +131,8 @@ class UsefulTickData {
         lowOfYesterday = parseDouble(hourData[hourCounter - 1][TODAYS_LOW]);
         highOfYesterday = parseDouble(hourData[hourCounter - 1][TODAYS_HIGH]);
 
-       // last4DaysDown = parseDouble(hourData[hourCounter][LAST_4_DAYS_DOWN]) > 0;
-       // last4DaysUp = parseDouble(hourData[hourCounter][LAST_4_DAYS_UP]) > 0;
+        last4DaysDown = parseDouble(hourData[hourCounter][LAST_4_DAYS_DOWN]) > 0;
+        last4DaysUp = parseDouble(hourData[hourCounter][LAST_4_DAYS_UP]) > 0;
 
         takeOutYesterdaysLow = candleLow < yesterdaysLow;
         closePositive = candleClose > candleOpen;
