@@ -83,8 +83,6 @@ public class PositionStats {
         cleanList(candleDate, losingDates, "Losing");
 
         int totalTrades = winningDates.size() - losingDates.size();
-
-
         final double sma30 = totalTrades / 30.0;
 
         if(sma30 > high) {
@@ -98,8 +96,6 @@ public class PositionStats {
             System.out.println("New Low SMA: " + candleDate + " " + sma30);
             this.low = sma30;
         }
-
-
     }
 
     void addWinner(LocalDateTime candleDate) {
