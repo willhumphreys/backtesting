@@ -8,6 +8,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public class PositionStats {
 
+    static final double NOT_ENOUGH_DATA_FOR_EDGE = -100.0;
     private int tickCounter;
     private int winners;
     private int losers;
@@ -17,8 +18,6 @@ public class PositionStats {
 
     private double high = 0.0;
     private double low = 0.0;
-
-    private double sma30;
 
     private List<Boolean> last30WinnersList;
 
@@ -30,8 +29,6 @@ public class PositionStats {
         losingDates = newArrayList();
         winningDates = newArrayList();
         last30WinnersList = newArrayList();
-
-        this.sma30 = -100;
     }
 
     public void addToTickCounter(int ticks) {
@@ -91,25 +88,6 @@ public class PositionStats {
     void cleanLists(LocalDateTime candleDate, int movingAverageDayCount, int movingAverageTradeCount) {
         cleanList(candleDate, winningDates, movingAverageDayCount, movingAverageTradeCount);
         cleanList(candleDate, losingDates, movingAverageDayCount, movingAverageTradeCount);
-
-        int totalTrades = winningDates.size() - losingDates.size();
-        if(totalTrades == 0) {
-            sma30 = -100.0;
-        } else {
-            sma30 = totalTrades / (double) movingAverageDayCount;
-
-            if (sma30 > high) {
-                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
-                System.out.println("New High SMA: " + candleDate + " " + sma30);
-                this.high = sma30;
-            }
-
-            if (sma30 < low) {
-                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
-                System.out.println("New Low SMA: " + candleDate + " " + sma30);
-                this.low = sma30;
-            }
-        }
     }
 
     void addWinner(LocalDateTime candleDate) {
@@ -117,13 +95,33 @@ public class PositionStats {
         this.last30WinnersList.add(true);
     }
 
-    public double getSma30() {
+    public double getSma30(int movingAverageDayCount) {
+        double sma30;
+        int totalTrades = winningDates.size() - losingDates.size();
+        if(totalTrades == 0) {
+            sma30 = NOT_ENOUGH_DATA_FOR_EDGE;
+        } else {
+            sma30 = totalTrades / (double) movingAverageDayCount;
+
+            if (sma30 > high) {
+                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+                System.out.println("New High SMA: " + sma30);
+                this.high = sma30;
+            }
+
+            if (sma30 < low) {
+                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+                System.out.println("New Low SMA: " + sma30);
+                this.low = sma30;
+            }
+        }
+
         return sma30;
     }
 
     public double getTradeCountSma30(int movingAverageDayCount) {
         if(last30WinnersList.size() < movingAverageDayCount) {
-            return -100.0;
+            return NOT_ENOUGH_DATA_FOR_EDGE;
         }
         int winLoseCount = 0;
         for (Boolean winLose : last30WinnersList) {

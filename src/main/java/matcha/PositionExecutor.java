@@ -111,12 +111,15 @@ public class PositionExecutor {
                                 PositionStats positionStats,
                                 boolean haveEdge) {
         if (backTestingParameters.isWithEdge()) {
-            if(positionStats.getSma30() == -100.0) {
+            final double sma30 = positionStats.getSma30(backTestingParameters.getMovingAverageDayCount());
+            if(sma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
                 haveEdge = false;
             }
-            if (positionStats.getSma30() < backTestingParameters.getEdgeLevel() * -1) {
+            if (sma30
+                    < backTestingParameters.getEdgeLevel() * -1) {
                 haveEdge = true;
-            } else if (positionStats.getSma30() > backTestingParameters.getEdgeLevel()) {
+            } else if (sma30
+                    > backTestingParameters.getEdgeLevel()) {
                 haveEdge = false;
             }
         }
