@@ -30,6 +30,8 @@ public class PositionStats {
         losingDates = newArrayList();
         winningDates = newArrayList();
         last30WinnersList = newArrayList();
+
+        this.sma30 = -100;
     }
 
     public void addToTickCounter(int ticks) {
@@ -117,7 +119,7 @@ public class PositionStats {
 
     public double getTradeCountSma30(int movingAverageDayCount) {
         if(last30WinnersList.size() < movingAverageDayCount) {
-            return -1;
+            return -100.0;
         }
         int winLoseCount = 0;
         for (Boolean winLose : last30WinnersList) {
