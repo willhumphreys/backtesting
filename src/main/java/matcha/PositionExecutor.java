@@ -78,12 +78,12 @@ public class PositionExecutor {
             return Optional.empty();
         }
 
-       boolean haveEdge = true;
+       boolean haveEdge = false;
 
         if(backTestingParameters.isWithEdge()) {
-            if (positionStats.getSma30() < -0.2) {
+            if (positionStats.getSma30() < -1.5) {
                 haveEdge = true;
-            } else if (positionStats.getSma30() > 0.2) {
+            } else if (positionStats.getSma30() > 1.5) {
                 haveEdge = false;
             }
         }
