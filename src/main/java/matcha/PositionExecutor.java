@@ -79,23 +79,9 @@ public class PositionExecutor {
             return Optional.empty();
         }
 
-        boolean haveEdge = false;
+        boolean haveEdge = configureInitialEdgeValue(backTestingParameters);
 
-        if (backTestingParameters.isWithEdge()) {
-            if (positionStats.getSma30() < backTestingParameters.getEdgeLevel() * -1) {
-                haveEdge = true;
-            } else if (positionStats.getSma30() > backTestingParameters.getEdgeLevel()) {
-                haveEdge = false;
-            }
-        }
-
-        if (backTestingParameters.isWithTradeCountEdge()) {
-            if (positionStats.getTradeCountSma30() < backTestingParameters.getEdgeLevelCount() * -1) {
-                haveEdge = true;
-            } else if (positionStats.getTradeCountSma30() > backTestingParameters.getEdgeLevelCount()) {
-                haveEdge = true;
-            }
-        }
+        haveEdge = toggleEdges(backTestingParameters, positionStats, haveEdge);
 
         if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade &&
                 !backTestingParameters.isHighsOnly()) {
@@ -119,6 +105,36 @@ public class PositionExecutor {
         }
 
         return Optional.empty();
+    }
+
+    private boolean toggleEdges(BackTestingParameters backTestingParameters,
+                                PositionStats positionStats,
+                                boolean haveEdge) {
+        if (backTestingParameters.isWithEdge()) {
+            if (positionStats.getSma30() < backTestingParameters.getEdgeLevel() * -1) {
+                haveEdge = true;
+            } else if (positionStats.getSma30() > backTestingParameters.getEdgeLevel()) {
+                haveEdge = false;
+            }
+        }
+
+        if (backTestingParameters.isWithTradeCountEdge()) {
+            if (positionStats.getTradeCountSma30() < backTestingParameters.getEdgeLevelCount() * -1) {
+                haveEdge = true;
+            } else if (positionStats.getTradeCountSma30() > backTestingParameters.getEdgeLevelCount()) {
+                haveEdge = true;
+            }
+        }
+        return haveEdge;
+    }
+
+    private boolean configureInitialEdgeValue(BackTestingParameters backTestingParameters) {
+        boolean haveEdge = false;
+
+        if(!backTestingParameters.isWithEdge() && !backTestingParameters.isWithTradeCountEdge()) {
+            haveEdge = true;
+        }
+        return haveEdge;
     }
 
     private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge) {
