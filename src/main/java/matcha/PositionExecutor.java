@@ -82,7 +82,7 @@ public class PositionExecutor {
         boolean haveEdge = false;
 
         if (backTestingParameters.isWithEdge()) {
-            if (positionStats.getSma30() < backTestingParameters.getEdgeLevel()) {
+            if (positionStats.getSma30() < backTestingParameters.getEdgeLevel() * -1) {
                 haveEdge = true;
             } else if (positionStats.getSma30() > backTestingParameters.getEdgeLevel()) {
                 haveEdge = false;
@@ -90,9 +90,9 @@ public class PositionExecutor {
         }
 
         if (backTestingParameters.isWithTradeCountEdge()) {
-            if (positionStats.getTradeCountSma30() < -0.15) {
+            if (positionStats.getTradeCountSma30() < backTestingParameters.getEdgeLevelCount() * -1) {
                 haveEdge = true;
-            } else if (positionStats.getTradeCountSma30() > 0.15) {
+            } else if (positionStats.getTradeCountSma30() > backTestingParameters.getEdgeLevelCount()) {
                 haveEdge = true;
             }
         }

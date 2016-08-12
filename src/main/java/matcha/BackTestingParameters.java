@@ -15,6 +15,7 @@ public class BackTestingParameters {
     private boolean withEdge;
     private boolean withTradeCountEdge;
     private double edgeLevel;
+    private double edgeLevelCount;
 
     public BackTestingParameters(String name,
                                  int extraTicks,
@@ -29,7 +30,7 @@ public class BackTestingParameters {
                                  boolean after4DaysOfPositiveCloses,
                                  boolean withEdge,
                                  boolean withTradeCountEdge,
-                                 double edgeLevel) {
+                                 double edgeLevel, double edgeLevelCount) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.skipNextIfWinner = skipNextIfWinner;
@@ -44,6 +45,16 @@ public class BackTestingParameters {
         this.withEdge = withEdge;
         this.withTradeCountEdge = withTradeCountEdge;
         this.edgeLevel = edgeLevel;
+        this.edgeLevelCount = edgeLevelCount;
+    }
+
+    /**
+     * Gets edgeLevelCount
+     *
+     * @return value of edgeLevelCount
+     */
+    public double getEdgeLevelCount() {
+        return edgeLevelCount;
     }
 
     /**
@@ -123,6 +134,7 @@ public class BackTestingParameters {
         private boolean withEdge;
         private boolean withTradeCountEdge;
         private double edgeLevel;
+        private double edgeLevelCount;
 
         public Builder setName(String name) {
             this.name = name;
@@ -154,7 +166,8 @@ public class BackTestingParameters {
                     after4DaysOfPositiveCloses,
                     withEdge,
                     withTradeCountEdge,
-                    edgeLevel
+                    edgeLevel,
+                    edgeLevelCount
             );
         }
 
@@ -206,8 +219,9 @@ public class BackTestingParameters {
             return this;
         }
 
-        public Builder withTradeCountEdge() {
+        public Builder withTradeCountEdge(double edgeLevelCount) {
             this.withTradeCountEdge = true;
+            this.edgeLevelCount = edgeLevelCount;
             return this;
         }
     }

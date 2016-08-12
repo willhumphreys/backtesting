@@ -138,7 +138,7 @@ public class BacktestingApplication implements CommandLineRunner {
                 .setExtraTicks(extraTicks)
                 .setHighLowCheckPref(0)
                 .fadeTheBreakout()
-                .withTradeCountEdge()
+                .withTradeCountEdge(0.15)
                 .createBackTestingParameters());
 
         parametersMap.put("FadeTheBreakoutNormalLowsOnly", new BackTestingParameters.Builder()
