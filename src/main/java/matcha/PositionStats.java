@@ -93,18 +93,22 @@ public class PositionStats {
         cleanList(candleDate, losingDates, movingAverageDayCount, movingAverageTradeCount);
 
         int totalTrades = winningDates.size() - losingDates.size();
-        sma30 = totalTrades / (double)movingAverageDayCount;
+        if(totalTrades == 0) {
+            sma30 = -100.0;
+        } else {
+            sma30 = totalTrades / (double) movingAverageDayCount;
 
-        if(sma30 > high) {
-            System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
-            System.out.println("New High SMA: " + candleDate + " " + sma30);
-            this.high = sma30;
-        }
+            if (sma30 > high) {
+                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+                System.out.println("New High SMA: " + candleDate + " " + sma30);
+                this.high = sma30;
+            }
 
-        if(sma30 < low) {
-            System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
-            System.out.println("New Low SMA: " + candleDate + " " + sma30);
-            this.low = sma30;
+            if (sma30 < low) {
+                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+                System.out.println("New Low SMA: " + candleDate + " " + sma30);
+                this.low = sma30;
+            }
         }
     }
 
