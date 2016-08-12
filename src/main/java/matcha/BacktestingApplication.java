@@ -17,6 +17,8 @@ import static com.google.common.collect.Maps.newHashMap;
 @SpringBootApplication
 public class BacktestingApplication implements CommandLineRunner {
 
+    private static final String DATA_DIRECTORY = "copied-data";
+    private static final String FILES_TO_EXECUTE_LIST = "inputFileList.csv";
     private final Simulation simulation;
 
     private Map<String,BackTestingParameters> parametersMap;
@@ -38,10 +40,10 @@ public class BacktestingApplication implements CommandLineRunner {
         this.parametersMap = createParametersMap(extraTicks);
 
 
-        Path dataDirectory = Paths.get("copied-data");
+        Path dataDirectory = Paths.get(DATA_DIRECTORY);
 
 
-        final List<String> inputLines = Files.readAllLines(Paths.get("inputFileList.csv"));
+        final List<String> inputLines = Files.readAllLines(Paths.get(FILES_TO_EXECUTE_LIST));
 
         final String backTestingParametersName = args[0];
         final BackTestingParameters backTestingParameters = parametersMap.get(backTestingParametersName);
