@@ -57,7 +57,7 @@ public class PositionExecutor {
     }
 
     Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount, int highLowCheckPref,
-                                      BackTestingParameters backTestingParameters) {
+                                      BackTestingParameters backTestingParameters, PositionStats positionStats) {
 
         //1.094295
         double extraTicks = extraTicksCount / 100000.0;
@@ -78,11 +78,21 @@ public class PositionExecutor {
             return Optional.empty();
         }
 
+       boolean haveEdge = true;
+
+        if(backTestingParameters.isWithEdge()) {
+            if (positionStats.getSma30() < -0.2) {
+                haveEdge = true;
+            } else if (positionStats.getSma30() > 0.2) {
+                haveEdge = false;
+            }
+        }
+
         if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isHighsOnly()) {
             if(backTestingParameters.isFadeTheBreakout()) {
-                return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks));
+                return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, haveEdge));
             } else {
-                return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks));
+                return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks, haveEdge));
             }
 
 
@@ -91,9 +101,9 @@ public class PositionExecutor {
 
         if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isLowsOnly()) {
             if(backTestingParameters.isFadeTheBreakout()) {
-                return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks));
+                return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, haveEdge));
             } else {
-                return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks));
+                return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks, haveEdge));
             }
 
         }
@@ -101,17 +111,17 @@ public class PositionExecutor {
         return Optional.empty();
     }
 
-    private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks) {
+    private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge) {
         entryDate = usefulTickData.getCandleDate();
         availableToTrade = false;
         double entry = usefulTickData.getCandleClose();
         double target = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
                 .getCandleClose() - extraTicks);
         double stop = usefulTickData.getCandleHigh() + extraTicks;
-        return new Position(entryDate, entry, target, stop);
+        return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
-    private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks) {
+    private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge) {
         entryDate = usefulTickData.getCandleDate();
         availableToTrade = false;
 
@@ -120,20 +130,20 @@ public class PositionExecutor {
                 .getCandleLow() + extraTicks);
         double stop = usefulTickData.getCandleLow() - extraTicks;
 
-        return new Position(entryDate, entry, target, stop);
+        return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
-    private Position createLongPositionAtHighs(UsefulTickData usefulTickData, double extraTicks) {
+    private Position createLongPositionAtHighs(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge) {
         double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
                 .getCandleClose() - extraTicks);
         double target = usefulTickData.getCandleHigh() + extraTicks;
         double entry = usefulTickData.getCandleClose();
         entryDate = usefulTickData.getCandleDate();
         availableToTrade = false;
-        return new Position(entryDate, entry, target, stop);
+        return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
-    private Position createShortPositionAtLows(UsefulTickData usefulTickData, double extraTicks) {
+    private Position createShortPositionAtLows(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge) {
         double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData
                 .getCandleLow() + extraTicks);
         double target = usefulTickData.getCandleLow() - extraTicks;
@@ -142,7 +152,7 @@ public class PositionExecutor {
 
         availableToTrade = false;
 
-        return new Position(entryDate, entry, target, stop);
+        return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
     void setTimeToOpenPosition(boolean timeToOpenPosition) {
@@ -218,13 +228,16 @@ public class PositionExecutor {
     private void closePosition(int profitLoss, String template, final double stopOrTarget, Position position, String
             csvTemplate, BufferedWriter dataWriter, PositionStats positionStats, BackTestingParameters
             backTestingParameters) throws IOException {
-        positionStats.addToTickCounter(profitLoss);
+        if(position.isHaveEdge()) {
+            positionStats.addToTickCounter(profitLoss);
+            if(!skipNextTrade || !backTestingParameters.isSkipNextIfWinner()) {
+                dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
+                        profitLoss));
+            }
+
+        }
         availableToTrade = true;
 
-        if(!skipNextTrade || !backTestingParameters.isSkipNextIfWinner()) {
-            dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
-                    profitLoss));
-        }
 
 
         this.skipNextTrade = profitLoss > 0 && !skipNextTrade;

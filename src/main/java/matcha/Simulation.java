@@ -121,7 +121,7 @@ class Simulation {
                     }
                 } else {
                     this.positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters
-                            .getExtraTicks(), backTestingParameters.getHighLowCheckPref(), backTestingParameters);
+                            .getExtraTicks(), backTestingParameters.getHighLowCheckPref(), backTestingParameters, positionStats);
                 }
             }
 

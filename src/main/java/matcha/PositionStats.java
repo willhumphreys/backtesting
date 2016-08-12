@@ -15,9 +15,10 @@ public class PositionStats {
     private List<LocalDateTime> losingDates;
     private List<LocalDateTime> winningDates;
 
-
     private double high = 0.0;
     private double low = 0.0;
+
+    private double sma30;
 
     public PositionStats() {
         tickCounter = 0;
@@ -83,7 +84,7 @@ public class PositionStats {
         cleanList(candleDate, losingDates, "Losing");
 
         int totalTrades = winningDates.size() - losingDates.size();
-        final double sma30 = totalTrades / 30.0;
+        sma30 = totalTrades / 30.0;
 
         if(sma30 > high) {
             System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
@@ -100,5 +101,9 @@ public class PositionStats {
 
     void addWinner(LocalDateTime candleDate) {
         this.winningDates.add(candleDate);
+    }
+
+    public double getSma30() {
+        return sma30;
     }
 }

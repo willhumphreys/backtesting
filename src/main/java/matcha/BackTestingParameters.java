@@ -12,12 +12,13 @@ public class BackTestingParameters {
     private boolean fadeTheBreakout;
     private final boolean after4DaysOfNegativeCloses;
     private final boolean after4DaysOfPositiveCloses;
+    private boolean withEdge;
 
     public BackTestingParameters(String name, int extraTicks, boolean skipNextIfWinner, int highLowCheckPref,
                                  boolean lowsOnly, boolean highsOnly, boolean skipIf4DownDays, boolean skipIf4UpDays,
                                  boolean fadeTheBreakout,
                                  boolean after4DaysOfNegativeCloses,
-                                 boolean after4DaysOfPositiveCloses) {
+                                 boolean after4DaysOfPositiveCloses, boolean withEdge) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.skipNextIfWinner = skipNextIfWinner;
@@ -29,6 +30,7 @@ public class BackTestingParameters {
         this.fadeTheBreakout = fadeTheBreakout;
         this.after4DaysOfNegativeCloses = after4DaysOfNegativeCloses;
         this.after4DaysOfPositiveCloses = after4DaysOfPositiveCloses;
+        this.withEdge = withEdge;
     }
 
     public boolean isSkipIf4DownDays() {
@@ -76,6 +78,9 @@ public class BackTestingParameters {
         return after4DaysOfPositiveCloses;
     }
 
+    public boolean isWithEdge() {
+        return withEdge;
+    }
 
     public static class Builder {
         private String name;
@@ -89,6 +94,7 @@ public class BackTestingParameters {
         private boolean fadeTheBreakout;
         private boolean after4DaysOfNegativeCloses;
         private boolean after4DaysOfPositiveCloses;
+        private boolean withEdge;
 
         public Builder setName(String name) {
             this.name = name;
@@ -107,7 +113,7 @@ public class BackTestingParameters {
 
         public BackTestingParameters createBackTestingParameters() {
             return new BackTestingParameters(name, extraTicks, skipNextIfWinner, highLowCheckPref, lowsOnly,
-                    highsOnly, skipIf4DownDays, skipIf4UpDays, fadeTheBreakout, after4DaysOfNegativeCloses, after4DaysOfPositiveCloses);
+                    highsOnly, skipIf4DownDays, skipIf4UpDays, fadeTheBreakout, after4DaysOfNegativeCloses, after4DaysOfPositiveCloses, withEdge);
         }
 
         public Builder skipNextIfWinner() {
@@ -149,6 +155,11 @@ public class BackTestingParameters {
 
         public Builder onlyAfter4DaysOfPositiveCloses() {
             this.after4DaysOfPositiveCloses = true;
+            return this;
+        }
+
+        public Builder withEdge() {
+            this.withEdge = true;
             return this;
         }
     }
