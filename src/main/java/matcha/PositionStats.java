@@ -68,28 +68,30 @@ public class PositionStats {
 
     void addLoser(LocalDateTime candleDate) {
         this.losingDates.add(candleDate);
+        this.last30WinnersList.add(false);
     }
 
-    private void cleanList(LocalDateTime candleDate, List<LocalDateTime> dateList) {
+    private void cleanList(LocalDateTime candleDate, List<LocalDateTime> dateList, int movingAverageDayCount, int
+            movingAverageTradeCount) {
         for (ListIterator<LocalDateTime> losingDatesIterator = dateList.listIterator(); losingDatesIterator.hasNext();){
             final LocalDateTime next = losingDatesIterator.next();
 
-            if(next.isBefore(candleDate.minusDays(30))) {
+            if(next.isBefore(candleDate.minusDays(movingAverageDayCount))) {
                 losingDatesIterator.remove();
             }
         }
 
-        while(last30WinnersList.size() > 30) {
+        while(last30WinnersList.size() > movingAverageTradeCount) {
             last30WinnersList.remove(0);
         }
     }
 
-    void cleanLists(LocalDateTime candleDate) {
-        cleanList(candleDate, winningDates);
-        cleanList(candleDate, losingDates);
+    void cleanLists(LocalDateTime candleDate, int movingAverageDayCount, int movingAverageTradeCount) {
+        cleanList(candleDate, winningDates, movingAverageDayCount, movingAverageTradeCount);
+        cleanList(candleDate, losingDates, movingAverageDayCount, movingAverageTradeCount);
 
         int totalTrades = winningDates.size() - losingDates.size();
-        sma30 = totalTrades / 30.0;
+        sma30 = totalTrades / (double)movingAverageDayCount;
 
         if(sma30 > high) {
             System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
@@ -106,6 +108,7 @@ public class PositionStats {
 
     void addWinner(LocalDateTime candleDate) {
         this.winningDates.add(candleDate);
+        this.last30WinnersList.add(true);
     }
 
     public double getSma30() {

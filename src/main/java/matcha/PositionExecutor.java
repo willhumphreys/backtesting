@@ -189,7 +189,10 @@ public class PositionExecutor {
                         PositionStats stats, BackTestingParameters backTestingParameters) throws
             IOException {
 
-        stats.cleanLists(usefulTickData.getCandleDate());
+        stats.cleanLists(usefulTickData.getCandleDate(),
+                backTestingParameters.getMovingAverageDayCount(),
+                backTestingParameters.getMovingAverageTradeCount()
+        );
 
         if (availableToTrade) {
             return;
