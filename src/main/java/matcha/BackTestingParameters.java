@@ -174,11 +174,6 @@ public class BackTestingParameters {
             return this;
         }
 
-        public Builder setMovingAverageTradeCount(int movingAverageTradeCount) {
-            this.movingAverageTradeCount = movingAverageTradeCount;
-            return this;
-        }
-
         public BackTestingParameters createBackTestingParameters() {
             return new BackTestingParameters(
                     name,
