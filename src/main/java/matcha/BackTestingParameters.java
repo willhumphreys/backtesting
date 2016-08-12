@@ -14,12 +14,22 @@ public class BackTestingParameters {
     private final boolean after4DaysOfPositiveCloses;
     private boolean withEdge;
     private boolean withTradeCountEdge;
+    private double edgeLevel;
 
-    public BackTestingParameters(String name, int extraTicks, boolean skipNextIfWinner, int highLowCheckPref,
-                                 boolean lowsOnly, boolean highsOnly, boolean skipIf4DownDays, boolean skipIf4UpDays,
+    public BackTestingParameters(String name,
+                                 int extraTicks,
+                                 boolean skipNextIfWinner,
+                                 int highLowCheckPref,
+                                 boolean lowsOnly,
+                                 boolean highsOnly,
+                                 boolean skipIf4DownDays,
+                                 boolean skipIf4UpDays,
                                  boolean fadeTheBreakout,
                                  boolean after4DaysOfNegativeCloses,
-                                 boolean after4DaysOfPositiveCloses, boolean withEdge, boolean withTradeCountEdge) {
+                                 boolean after4DaysOfPositiveCloses,
+                                 boolean withEdge,
+                                 boolean withTradeCountEdge,
+                                 double edgeLevel) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.skipNextIfWinner = skipNextIfWinner;
@@ -33,6 +43,16 @@ public class BackTestingParameters {
         this.after4DaysOfPositiveCloses = after4DaysOfPositiveCloses;
         this.withEdge = withEdge;
         this.withTradeCountEdge = withTradeCountEdge;
+        this.edgeLevel = edgeLevel;
+    }
+
+    /**
+     * Gets edgeLevel
+     *
+     * @return value of edgeLevel
+     */
+    public double getEdgeLevel() {
+        return edgeLevel;
     }
 
     public boolean isSkipIf4DownDays() {
@@ -102,6 +122,7 @@ public class BackTestingParameters {
         private boolean after4DaysOfPositiveCloses;
         private boolean withEdge;
         private boolean withTradeCountEdge;
+        private double edgeLevel;
 
         public Builder setName(String name) {
             this.name = name;
@@ -119,8 +140,22 @@ public class BackTestingParameters {
         }
 
         public BackTestingParameters createBackTestingParameters() {
-            return new BackTestingParameters(name, extraTicks, skipNextIfWinner, highLowCheckPref, lowsOnly,
-                    highsOnly, skipIf4DownDays, skipIf4UpDays, fadeTheBreakout, after4DaysOfNegativeCloses, after4DaysOfPositiveCloses, withEdge, withTradeCountEdge);
+            return new BackTestingParameters(
+                    name,
+                    extraTicks,
+                    skipNextIfWinner,
+                    highLowCheckPref,
+                    lowsOnly,
+                    highsOnly,
+                    skipIf4DownDays,
+                    skipIf4UpDays,
+                    fadeTheBreakout,
+                    after4DaysOfNegativeCloses,
+                    after4DaysOfPositiveCloses,
+                    withEdge,
+                    withTradeCountEdge,
+                    edgeLevel
+            );
         }
 
         public Builder skipNextIfWinner() {
@@ -165,8 +200,9 @@ public class BackTestingParameters {
             return this;
         }
 
-        public Builder withEdge() {
+        public Builder withEdge(double edgeLevel) {
             this.withEdge = true;
+            this.edgeLevel = edgeLevel;
             return this;
         }
 

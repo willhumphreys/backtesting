@@ -82,9 +82,9 @@ public class PositionExecutor {
         boolean haveEdge = false;
 
         if (backTestingParameters.isWithEdge()) {
-            if (positionStats.getSma30() < -0.15) {
+            if (positionStats.getSma30() < backTestingParameters.getEdgeLevel()) {
                 haveEdge = true;
-            } else if (positionStats.getSma30() > 0.15) {
+            } else if (positionStats.getSma30() > backTestingParameters.getEdgeLevel()) {
                 haveEdge = false;
             }
         }
