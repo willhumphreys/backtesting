@@ -37,8 +37,8 @@ generate.plot <- function(file.in) {
     data <- data[,c(7, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16)]
 
 
-    data$SMA30 <- SMA(data$winLose, 30)
-    data$SMA30Ticks <- SMA(data$ticks, 30)
+    data$SMA30 <- SMA(data$winLose, 10)
+    data$SMA30Ticks <- SMA(data$ticks, 10)
 
     # data$SMAYear <- SMA(data$cum.winLose,365)
     data$scaled_cumulative_profit <- rescale(data$cumulative_profit, to=c(-1,1))

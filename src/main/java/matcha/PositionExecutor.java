@@ -22,7 +22,8 @@ public class PositionExecutor {
     private static final String TARGET_SHORT_TEMPLATE =
             "%s Close short %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
 
-    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks,cumulative_profit\n";
+    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
+            "cumulative_profit\n";
 
     private static final String STOPPED_LONG_CSV_TEMPLATE = "%s,long,%.5f,stopped,%s,%.5f,%d%n";
     private static final String TARGET_LONG_CSV_TEMPLATE = "%s,long,%.5f,target,%s,%.5f,%d%n";
@@ -62,45 +63,54 @@ public class PositionExecutor {
         //1.094295
         double extraTicks = extraTicksCount / 100000.0;
 
-        if(backTestingParameters.isSkipIf4DownDays() && usefulTickData.isLast4DaysDown()) {
+        if (backTestingParameters.isSkipIf4DownDays() && usefulTickData.isLast4DaysDown()) {
             return Optional.empty();
         }
 
-        if(backTestingParameters.isSkipIf4UpDays() && usefulTickData.isLast4DaysUp()) {
+        if (backTestingParameters.isSkipIf4UpDays() && usefulTickData.isLast4DaysUp()) {
             return Optional.empty();
         }
 
-        if(backTestingParameters.isAfter4DaysOfPositiveCloses() && !usefulTickData.isLast4DaysUp()) {
+        if (backTestingParameters.isAfter4DaysOfPositiveCloses() && !usefulTickData.isLast4DaysUp()) {
             return Optional.empty();
         }
 
-        if(backTestingParameters.isAfter4DaysOfNegativeCloses() && !usefulTickData.isLast4DaysDown()) {
+        if (backTestingParameters.isAfter4DaysOfNegativeCloses() && !usefulTickData.isLast4DaysDown()) {
             return Optional.empty();
         }
 
-       boolean haveEdge = false;
+        boolean haveEdge = false;
 
-        if(backTestingParameters.isWithEdge()) {
-            if (positionStats.getSma30() < - 0.15) {
+        if (backTestingParameters.isWithEdge()) {
+            if (positionStats.getSma30() < -0.15) {
                 haveEdge = true;
             } else if (positionStats.getSma30() > 0.15) {
                 haveEdge = false;
             }
         }
 
-        if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isHighsOnly()) {
-            if(backTestingParameters.isFadeTheBreakout()) {
+        if (backTestingParameters.isWithTradeCountEdge()) {
+            if (positionStats.getTradeCountSma30() < -0.15) {
+                haveEdge = true;
+            } else if (positionStats.getTradeCountSma30() > 0.15) {
+                haveEdge = true;
+            }
+        }
+
+        if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade &&
+                !backTestingParameters.isHighsOnly()) {
+            if (backTestingParameters.isFadeTheBreakout()) {
                 return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, haveEdge));
             } else {
                 return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks, haveEdge));
             }
 
 
-
         }
 
-        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade && !backTestingParameters.isLowsOnly()) {
-            if(backTestingParameters.isFadeTheBreakout()) {
+        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade &&
+                !backTestingParameters.isLowsOnly()) {
+            if (backTestingParameters.isFadeTheBreakout()) {
                 return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, haveEdge));
             } else {
                 return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks, haveEdge));
@@ -192,7 +202,7 @@ public class PositionExecutor {
             if (isShortStopTouched(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop());
                 closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position,
-                        STOPPED_SHORT_CSV_TEMPLATE, dataWriter,stats, backTestingParameters);
+                        STOPPED_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementLosers();
                 stats.addLoser(usefulTickData.getCandleDate());
             } else if (isShortTargetExceeded(usefulTickData, position)) {
@@ -227,17 +237,16 @@ public class PositionExecutor {
 
     private void closePosition(int profitLoss, String template, final double stopOrTarget, Position position, String
             csvTemplate, BufferedWriter dataWriter, PositionStats positionStats, BackTestingParameters
-            backTestingParameters) throws IOException {
-        if(position.isHaveEdge()) {
+                                       backTestingParameters) throws IOException {
+        if (position.isHaveEdge()) {
             positionStats.addToTickCounter(profitLoss);
-            if(!skipNextTrade || !backTestingParameters.isSkipNextIfWinner()) {
+            if (!skipNextTrade || !backTestingParameters.isSkipNextIfWinner()) {
                 dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
                         profitLoss));
             }
 
         }
         availableToTrade = true;
-
 
 
         this.skipNextTrade = profitLoss > 0 && !skipNextTrade;

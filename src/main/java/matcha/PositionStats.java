@@ -20,6 +20,8 @@ public class PositionStats {
 
     private double sma30;
 
+    private List<Boolean> last30WinnersList;
+
     public PositionStats() {
         tickCounter = 0;
         winners = 0;
@@ -27,8 +29,7 @@ public class PositionStats {
 
         losingDates = newArrayList();
         winningDates = newArrayList();
-
-
+        last30WinnersList = newArrayList();
     }
 
     public void addToTickCounter(int ticks) {
@@ -77,6 +78,10 @@ public class PositionStats {
                 losingDatesIterator.remove();
             }
         }
+
+        while(last30WinnersList.size() > 30) {
+            last30WinnersList.remove(0);
+        }
     }
 
     void cleanLists(LocalDateTime candleDate) {
@@ -105,5 +110,18 @@ public class PositionStats {
 
     public double getSma30() {
         return sma30;
+    }
+
+    public double getTradeCountSma30() {
+        if(last30WinnersList.size() < 30) {
+            return -1;
+        }
+        int winLoseCount = 0;
+        for (Boolean winLose : last30WinnersList) {
+            if(winLose) {
+                winLoseCount++;
+            }
+        }
+        return winLoseCount / 30.0;
     }
 }
