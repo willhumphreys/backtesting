@@ -41,6 +41,8 @@ public class PositionExecutor {
 
     private boolean skipNextTrade;
 
+    private boolean haveEdge;
+
     @Autowired
     public PositionExecutor(Signals signals, Utils utils) throws IOException {
         this.signals = signals;
@@ -122,7 +124,7 @@ public class PositionExecutor {
 
     private boolean toggleEdgeWithTradeCountSMA(BackTestingParameters backTestingParameters, PositionStats
             positionStats) {
-        boolean haveEdge = false;
+        //boolean haveEdge = false;
         final double tradeCountSma30 = positionStats.getTradeCountSma(backTestingParameters
                 .getMovingAverageTradeCount()).getMovingAverage();
 
@@ -131,7 +133,7 @@ public class PositionExecutor {
         } else if (tradeCountSma30 < backTestingParameters.getEdgeLevelCount() * -1) {
             haveEdge = true;
         } else if (tradeCountSma30 > backTestingParameters.getEdgeLevelCount()) {
-            haveEdge = true;
+            haveEdge = false;
         }
         return haveEdge;
     }
@@ -139,13 +141,13 @@ public class PositionExecutor {
     private boolean toggleEdgeWithTimeBasedSMA(BackTestingParameters backTestingParameters, PositionStats
             positionStats) {
         final double sma30 = positionStats.getSma30(backTestingParameters.getMovingAverageDayCount());
-        boolean haveEdge = false;
+        //boolean haveEdge = false;
         if(sma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
             haveEdge = false;
         } else if (sma30 < backTestingParameters.getEdgeLevel() * -1) {
             haveEdge = true;
         } else if (sma30 > backTestingParameters.getEdgeLevel()) {
-            haveEdge = true;
+            haveEdge = false;
         }
         return haveEdge;
     }

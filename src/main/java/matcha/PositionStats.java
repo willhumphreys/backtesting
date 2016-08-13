@@ -129,6 +129,8 @@ public class PositionStats {
         for (Boolean winLose : last30WinnersList) {
             if(winLose) {
                 winLoseCount++;
+            } else {
+                winLoseCount--;
             }
         }
         final double movingAverage = winLoseCount / (double) movingAverageDayCount;
@@ -146,8 +148,6 @@ public class PositionStats {
             this.low = movingAverage;
             newLow = true;
         }
-
-
         return new SmaResults(movingAverage, newHigh, newLow);
     }
 }
