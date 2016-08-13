@@ -129,6 +129,20 @@ public class PositionStats {
                 winLoseCount++;
             }
         }
-        return winLoseCount / (double) movingAverageDayCount;
+        final double movingAverage = winLoseCount / (double) movingAverageDayCount;
+
+        if (movingAverage > high) {
+            System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+            System.out.println("New High SMA: " + movingAverage);
+            this.high = movingAverage;
+        }
+
+        if (movingAverage < low) {
+            System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+            System.out.println("New Low SMA: " + movingAverage);
+            this.low = movingAverage;
+        }
+
+        return movingAverage;
     }
 }
