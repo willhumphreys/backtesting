@@ -131,8 +131,9 @@ class UsefulTickData {
         lowOfYesterday = parseDouble(hourData[hourCounter - 1][TODAYS_LOW]);
         highOfYesterday = parseDouble(hourData[hourCounter - 1][TODAYS_HIGH]);
 
-        last4DaysDown = parseDouble(hourData[hourCounter][LAST_4_DAYS_DOWN]) > 0;
-        last4DaysUp = parseDouble(hourData[hourCounter][LAST_4_DAYS_UP]) > 0;
+        //TODO Put back last 4 days down.
+//        last4DaysDown = parseDouble(hourData[hourCounter][LAST_4_DAYS_DOWN]) > 0;
+//        last4DaysUp = parseDouble(hourData[hourCounter][LAST_4_DAYS_UP]) > 0;
 
         takeOutYesterdaysLow = candleLow < yesterdaysLow;
         closePositive = candleClose > candleOpen;
