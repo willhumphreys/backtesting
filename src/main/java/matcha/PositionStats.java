@@ -119,9 +119,11 @@ public class PositionStats {
         return sma30;
     }
 
-    public double getTradeCountSma(int movingAverageDayCount) {
+    SmaResults getTradeCountSma(int movingAverageDayCount) {
+        boolean newHigh = false;
+        boolean newLow = false;
         if(last30WinnersList.size() < movingAverageDayCount) {
-            return NOT_ENOUGH_DATA_FOR_EDGE;
+            return new SmaResults(NOT_ENOUGH_DATA_FOR_EDGE, newHigh, newLow);
         }
         int winLoseCount = 0;
         for (Boolean winLose : last30WinnersList) {
@@ -135,14 +137,17 @@ public class PositionStats {
             System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
             System.out.println("New High SMA: " + movingAverage);
             this.high = movingAverage;
+            newHigh = true;
         }
 
         if (movingAverage < low) {
             System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
             System.out.println("New Low SMA: " + movingAverage);
             this.low = movingAverage;
+            newLow = true;
         }
 
-        return movingAverage;
+
+        return new SmaResults(movingAverage, newHigh, newLow);
     }
 }

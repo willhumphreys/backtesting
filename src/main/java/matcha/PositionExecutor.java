@@ -124,7 +124,7 @@ public class PositionExecutor {
             positionStats) {
         boolean haveEdge = false;
         final double tradeCountSma30 = positionStats.getTradeCountSma(backTestingParameters
-                .getMovingAverageTradeCount());
+                .getMovingAverageTradeCount()).getMovingAverage();
 
         if(tradeCountSma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
             haveEdge = false;
