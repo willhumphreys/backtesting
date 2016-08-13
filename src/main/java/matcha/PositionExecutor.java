@@ -123,7 +123,7 @@ public class PositionExecutor {
     private boolean toggleEdgeWithTradeCountSMA(BackTestingParameters backTestingParameters, PositionStats
             positionStats) {
         boolean haveEdge = false;
-        final double tradeCountSma30 = positionStats.getTradeCountSma30(backTestingParameters
+        final double tradeCountSma30 = positionStats.getTradeCountSma(backTestingParameters
                 .getMovingAverageTradeCount());
 
         if(tradeCountSma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {

@@ -119,7 +119,7 @@ public class PositionStats {
         return sma30;
     }
 
-    public double getTradeCountSma30(int movingAverageDayCount) {
+    public double getTradeCountSma(int movingAverageDayCount) {
         if(last30WinnersList.size() < movingAverageDayCount) {
             return NOT_ENOUGH_DATA_FOR_EDGE;
         }
