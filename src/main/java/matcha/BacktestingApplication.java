@@ -75,7 +75,30 @@ public class BacktestingApplication implements CommandLineRunner {
             }
 
 
-        } else {
+        } else if (backTestingParametersName.equals("allFadesRange")){
+            final Set<Double> smas = newLinkedHashSet(newArrayList(10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0));
+            final Set<Double> levels = newLinkedHashSet(newArrayList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
+                    0.9, 1.0, 1.1, 1.2));
+
+            final Set<List<Double>> smaLevelCombinations = cartesianProduct(smas, levels);
+
+
+            for (List<Double> smaLevelCombination : smaLevelCombinations) {
+                final Double sma = smaLevelCombination.get(0);
+                final Double level = smaLevelCombination.get(1);
+                final BackTestingParameters backTestingParameters = new BackTestingParameters.Builder()
+                        .setName("FadeTheBreakoutNormalWithTradeCountEdge-level:" + level + "_sma:" + sma)
+                        .setExtraTicks(EXTRA_TICKS)
+                        .setHighLowCheckPref(0)
+                        .fadeTheBreakout()
+                        .withTradeCountEdge(level, sma.intValue())
+                        .createBackTestingParameters();
+
+                backTestingParametersList.add(backTestingParameters);
+            }
+
+        }
+        else {
             final BackTestingParameters backTestingParameters = parametersMap.get(backTestingParametersName);
             backTestingParametersList.add(backTestingParameters);
         }
