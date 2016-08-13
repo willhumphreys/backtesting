@@ -104,13 +104,13 @@ public class PositionStats {
             sma30 = totalTrades / (double) movingAverageDayCount;
 
             if (sma30 > high) {
-                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+                System.out.println("Winners: " + winners + "Losing Losers: " + losers);
                 System.out.println("New High SMA: " + sma30);
                 this.high = sma30;
             }
 
             if (sma30 < low) {
-                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+                System.out.println("Winners: " + winners + "Losers: " + losers);
                 System.out.println("New Low SMA: " + sma30);
                 this.low = sma30;
             }
