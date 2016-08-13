@@ -1,6 +1,8 @@
 package matcha;
 
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,8 +13,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Sets.cartesianProduct;
+import static com.google.common.collect.Sets.newLinkedHashSet;
 
 @SpringBootApplication
 public class BacktestingApplication implements CommandLineRunner {
@@ -22,7 +28,7 @@ public class BacktestingApplication implements CommandLineRunner {
     private static final int EXTRA_TICKS = 10;
 
     private final Simulation simulation;
-    private Map<String,BackTestingParameters> parametersMap;
+    private Map<String, BackTestingParameters> parametersMap;
 
     @Autowired
     public BacktestingApplication(Simulation simulation) {
@@ -43,25 +49,60 @@ public class BacktestingApplication implements CommandLineRunner {
         final List<String> inputLines = Files.readAllLines(Paths.get(FILES_TO_EXECUTE_LIST));
 
         final String backTestingParametersName = args[0];
-        final BackTestingParameters backTestingParameters = parametersMap.get(backTestingParametersName);
 
-        if(backTestingParameters == null) {
-            throw new IllegalArgumentException("Couldn't find the backTestingParameters for " + backTestingParametersName);
-        }
+        List<BackTestingParameters> backTestingParametersList = newArrayList();
 
-        for (String inputLine : inputLines) {
-            if(inputLine.trim().length() == 0 ) {
-                continue;
+        if (backTestingParametersName.equals("allFadeCounts")) {
+            final Set<Double> smas = newLinkedHashSet(newArrayList(10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0));
+            final Set<Double> levels = newLinkedHashSet(newArrayList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
+                    0.9, 1.0, 1.1, 1.2));
+
+            final Set<List<Double>> smaLevelCombinations = cartesianProduct(smas, levels);
+
+
+            for (List<Double> smaLevelCombination : smaLevelCombinations) {
+                final Double sma = smaLevelCombination.get(0);
+                final Double level = smaLevelCombination.get(1);
+                final BackTestingParameters backTestingParameters = new BackTestingParameters.Builder()
+                            .setName("FadeTheBreakoutNormalWithTradeCountEdge-level:" + level + "_sma:" + sma)
+                            .setExtraTicks(EXTRA_TICKS)
+                            .setHighLowCheckPref(0)
+                            .fadeTheBreakout()
+                            .withTradeCountEdge(level, sma.intValue())
+                            .createBackTestingParameters();
+
+                backTestingParametersList.add(backTestingParameters);
             }
-            String[] lineParts = inputLine.split(",");
-            final Path oneMinutePath = dataDirectory.resolve(lineParts[0]);
-            final Path sixtyMinutePath = dataDirectory.resolve(lineParts[1]);
-            Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
 
-            final Results results = simulation.execute(input, Paths.get("results"), backTestingParameters);
 
-            System.out.println(results);
+        } else {
+            final BackTestingParameters backTestingParameters = parametersMap.get(backTestingParametersName);
+            backTestingParametersList.add(backTestingParameters);
         }
+
+        if (backTestingParametersList.isEmpty()) {
+            throw new IllegalArgumentException("Couldn't find the backTestingParameters for " +
+                    backTestingParametersName);
+        }
+
+        for (BackTestingParameters backTestingParameters : backTestingParametersList) {
+            System.out.println("Executing " + backTestingParameters.getName());
+            simulation.reset();
+            for (String inputLine : inputLines) {
+                if (inputLine.trim().length() == 0) {
+                    continue;
+                }
+                String[] lineParts = inputLine.split(",");
+                final Path oneMinutePath = dataDirectory.resolve(lineParts[0]);
+                final Path sixtyMinutePath = dataDirectory.resolve(lineParts[1]);
+                Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
+
+                final Results results = simulation.execute(input, Paths.get("results"), backTestingParameters);
+
+                System.out.println(results);
+            }
+        }
+
     }
 
     private Map<String, BackTestingParameters> createParametersMap(int extraTicks) {
@@ -71,6 +112,7 @@ public class BacktestingApplication implements CommandLineRunner {
                 .setExtraTicks(extraTicks)
                 .setHighLowCheckPref(0)
                 .createBackTestingParameters());
+
         parametersMap.put("NormalLowsOnly", new BackTestingParameters.Builder()
                 .setName("NormalLowsOnly")
                 .setExtraTicks(extraTicks)

@@ -299,4 +299,9 @@ public class PositionExecutor {
         dataWriter.close();
         return new Results(outputFile, positionStats);
     }
+
+    public void reset() {
+        availableToTrade = true;
+        timeToOpenPosition = false;
+    }
 }

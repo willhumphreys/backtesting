@@ -148,4 +148,9 @@ class Simulation {
         return fileName;
     }
 
+    public void reset() {
+        positionExecutor.reset();
+
+
+    }
 }
