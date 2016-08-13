@@ -37,7 +37,7 @@ public class TickDataReaderImpl implements TickDataReader {
                 continue;
             }
 
-            LocalDateTime hourDateTime = null;
+            LocalDateTime hourDateTime;
             try {
                 hourDateTime = LocalDateTime.parse(lineArray[0], formatter);
             } catch (DateTimeParseException e) {
