@@ -95,7 +95,7 @@ public class PositionStats {
         this.last30WinnersList.add(true);
     }
 
-    public double getSma30(int movingAverageDayCount) {
+    double getSma30(int movingAverageDayCount) {
         double sma30;
         int totalTrades = winningDates.size() - losingDates.size();
         if(totalTrades == 0) {
