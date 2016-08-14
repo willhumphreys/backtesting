@@ -25,13 +25,7 @@ public class BacktestingApplication implements CommandLineRunner {
     private static final String FILES_TO_EXECUTE_LIST = "inputFileList.csv";
     private static final int EXTRA_TICKS = 10;
 
-    private final Simulation simulation;
     private Map<String, BackTestingParameters> parametersMap;
-
-    @Autowired
-    public BacktestingApplication(Simulation simulation) {
-        this.simulation = simulation;
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(BacktestingApplication.class, args);
@@ -94,7 +88,9 @@ public class BacktestingApplication implements CommandLineRunner {
 
         for (BackTestingParameters backTestingParameters : backTestingParametersList) {
             System.out.println("Executing " + backTestingParameters.getName());
-            simulation.reset();
+
+            final Simulation simulation = new Simulation(new PositionExecutor(new Signals(), new Utils()), new TickDataReaderImpl());
+
             for (String inputLine : inputLines) {
                 if (inputLine.trim().length() == 0) {
                     continue;
@@ -126,6 +122,13 @@ public class BacktestingApplication implements CommandLineRunner {
 
     private Map<String, BackTestingParameters> createParametersMap(int extraTicks) {
         Map<String, BackTestingParameters> parametersMap = newHashMap();
+        parametersMap.put("NormalWithTradeCountEdge-05-30SMA", new BackTestingParameters.Builder()
+                .setName("NormalWithTradeCountEdge-05-30SMA")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .withEdge(0.5, 30)
+                .createBackTestingParameters());
+
         parametersMap.put("Normal", new BackTestingParameters.Builder()
                 .setName("Normal")
                 .setExtraTicks(extraTicks)
@@ -186,12 +189,12 @@ public class BacktestingApplication implements CommandLineRunner {
                 .fadeTheBreakout()
                 .createBackTestingParameters());
 
-        parametersMap.put("FadeTheBreakoutNormalWithEdge_015_30SMA", new BackTestingParameters.Builder()
-                .setName("FadeTheBreakoutNormalWithEdge_015_30SMA")
+        parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge_01_20SMA", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalWithTradeCountEdge_01_20SMA")
                 .setExtraTicks(extraTicks)
                 .setHighLowCheckPref(0)
                 .fadeTheBreakout()
-                .withEdge(0.15, 30)
+                .withTradeCountEdge(0.1, 20)
                 .createBackTestingParameters());
 
         parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge-015-30SMA", new BackTestingParameters.Builder()
@@ -202,12 +205,28 @@ public class BacktestingApplication implements CommandLineRunner {
                 .withTradeCountEdge(0.15, 30)
                 .createBackTestingParameters());
 
-        parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge-05-30SMA", new BackTestingParameters.Builder()
-                .setName("FadeTheBreakoutNormalWithTradeCountEdge-05-30SMA")
+        parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge-05-30SMA-0", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalWithTradeCountEdge-05-30SMA-0")
                 .setExtraTicks(extraTicks)
                 .setHighLowCheckPref(0)
                 .fadeTheBreakout()
                 .withTradeCountEdge(0.5, 30)
+                .createBackTestingParameters());
+
+        parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge-03-30SMA-0", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalWithTradeCountEdge-03-30SMA-0")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .fadeTheBreakout()
+                .withTradeCountEdge(0.3, 30)
+                .createBackTestingParameters());
+
+        parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge-04-30SMA--1", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalWithTradeCountEdge-04-30SMA--1")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(0)
+                .fadeTheBreakout()
+                .withTradeCountEdge(0.4, 30)
                 .createBackTestingParameters());
 
         parametersMap.put("FadeTheBreakoutNormalLowsOnly", new BackTestingParameters.Builder()

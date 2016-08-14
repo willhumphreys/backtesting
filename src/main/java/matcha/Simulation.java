@@ -155,10 +155,4 @@ class Simulation {
         System.out.println(fileName);
         return fileName;
     }
-
-    public void reset() {
-        positionExecutor.reset();
-
-
-    }
 }
