@@ -1,7 +1,6 @@
 package matcha;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -88,7 +87,12 @@ public class BacktestingApplication implements CommandLineRunner {
 
         for (BackTestingParameters backTestingParameters : backTestingParametersList) {
             System.out.println("Executing " + backTestingParameters.getName());
-
+     .setName("FadeTheBreakoutNormalWithTradeCountEdge-level:" + level + "-sma:" + sma)
+                        .setExtraTicks(EXTRA_TICKS)
+                        .setHighLowCheckPref(0)
+                        .fadeTheBreakout()
+                        .withTradeCountEdge(level, sma.intValue())
+                        .createBackTestingParameters();
             final Simulation simulation = new Simulation(new PositionExecutor(new Signals(), new Utils()), new TickDataReaderImpl());
 
             for (String inputLine : inputLines) {
@@ -122,11 +126,12 @@ public class BacktestingApplication implements CommandLineRunner {
 
     private Map<String, BackTestingParameters> createParametersMap(int extraTicks) {
         Map<String, BackTestingParameters> parametersMap = newHashMap();
-        parametersMap.put("NormalWithTradeCountEdge-05-30SMA", new BackTestingParameters.Builder()
-                .setName("NormalWithTradeCountEdge-05-30SMA")
+        parametersMap.put("SNormalWithTradeCountEdge-03-10SMA", new BackTestingParameters.Builder()
+                .setName("SNormalWithTradeCountEdge-03-10SMA")
                 .setExtraTicks(extraTicks)
                 .setHighLowCheckPref(0)
-                .withEdge(0.5, 30)
+                .fadeTheBreakout()
+                .withTradeCountEdge(0.3, 10)
                 .createBackTestingParameters());
 
         parametersMap.put("Normal", new BackTestingParameters.Builder()
