@@ -18,6 +18,7 @@ public class BackTestingParameters {
     private double edgeLevelCount;
     private int movingAverageDayCount;
     private int movingAverageTradeCount;
+    private double edgeStopLevelCount;
 
     public BackTestingParameters(String name,
                                  int extraTicks,
@@ -35,7 +36,8 @@ public class BackTestingParameters {
                                  double edgeLevel,
                                  double edgeLevelCount,
                                  int movingAverageDayCount,
-                                 int movingAverageTradeCount) {
+                                 int movingAverageTradeCount,
+                                 double edgeStopLevelCount) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.skipNextIfWinner = skipNextIfWinner;
@@ -53,6 +55,7 @@ public class BackTestingParameters {
         this.edgeLevelCount = edgeLevelCount;
         this.movingAverageDayCount = movingAverageDayCount;
         this.movingAverageTradeCount = movingAverageTradeCount;
+        this.edgeStopLevelCount = edgeStopLevelCount;
     }
 
     /**
@@ -140,6 +143,11 @@ public class BackTestingParameters {
         return movingAverageDayCount;
     }
 
+    public double getEdgeStopLevelCount() {
+
+        return edgeStopLevelCount;
+    }
+
     public static class Builder {
         private String name;
         private int extraTicks;
@@ -158,6 +166,7 @@ public class BackTestingParameters {
         private double edgeLevelCount;
         private int movingAverageDayCount;
         private int movingAverageTradeCount;
+        private double edgeStopLevelCount;
 
         public Builder setName(String name) {
             this.name = name;
@@ -192,7 +201,8 @@ public class BackTestingParameters {
                     edgeLevel,
                     edgeLevelCount,
                     movingAverageDayCount,
-                    movingAverageTradeCount);
+                    movingAverageTradeCount,
+                    edgeStopLevelCount);
         }
 
         public Builder skipNextIfWinner() {
@@ -248,6 +258,11 @@ public class BackTestingParameters {
             this.withTradeCountEdge = true;
             this.edgeLevelCount = edgeLevelCount;
             this.movingAverageTradeCount = movingAverageTradeCount;
+            return this;
+        }
+
+        public Builder withEdgeStopLevelCount(double edgeStopLevelCount) {
+            this.edgeStopLevelCount = edgeStopLevelCount;
             return this;
         }
     }

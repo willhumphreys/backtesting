@@ -132,7 +132,8 @@ public class PositionExecutor {
             haveEdge = false;
         } else if (tradeCountSma30 < backTestingParameters.getEdgeLevelCount() * -1) {
             haveEdge = true;
-        } else if (tradeCountSma30 > backTestingParameters.getEdgeLevelCount()) {
+        } else if (tradeCountSma30 > backTestingParameters.getEdgeLevelCount() +
+                backTestingParameters.getEdgeStopLevelCount()) {
             haveEdge = false;
         }
         return haveEdge;
