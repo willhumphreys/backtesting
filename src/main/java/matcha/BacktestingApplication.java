@@ -51,8 +51,7 @@ public class BacktestingApplication implements CommandLineRunner {
         List<BackTestingParameters> backTestingParametersList = newArrayList();
 
         if (backTestingParametersName.equals("allFadeCounts")) {
-            final Set<Double> smas = newLinkedHashSet(newArrayList(10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0,
-                    90.0));
+            final Set<Double> smas = newLinkedHashSet(newArrayList(10.0, 20.0, 30.0, 40.0));
             final Set<Double> levels = newLinkedHashSet(newArrayList(0.1, 0.2, 0.3, 0.4, 0.5));
             final Set<Double> stopEdgeModifiers = newLinkedHashSet(newArrayList(-0.2, -0.1, 0.0, 0.1, 0.2));
 
