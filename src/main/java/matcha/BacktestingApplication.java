@@ -76,6 +76,7 @@ public class BacktestingApplication implements CommandLineRunner {
                         .fadeTheBreakout()
                         .withTradeCountEdge(level, sma.intValue())
                         .withEdgeStopLevelCount(stopEdgeModifier)
+                        .withTargetMultiplier(2)
                         .createBackTestingParameters();
 
                 backTestingParametersList.add(backTestingParameters);

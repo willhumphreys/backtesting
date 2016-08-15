@@ -19,6 +19,7 @@ public class BackTestingParameters {
     private int movingAverageDayCount;
     private int movingAverageTradeCount;
     private double edgeStopLevelCount;
+    private double targetMultiplier;
 
     public BackTestingParameters(String name,
                                  int extraTicks,
@@ -37,7 +38,8 @@ public class BackTestingParameters {
                                  double edgeLevelCount,
                                  int movingAverageDayCount,
                                  int movingAverageTradeCount,
-                                 double edgeStopLevelCount) {
+                                 double edgeStopLevelCount,
+                                 double targetMultiplier) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.skipNextIfWinner = skipNextIfWinner;
@@ -56,6 +58,7 @@ public class BackTestingParameters {
         this.movingAverageDayCount = movingAverageDayCount;
         this.movingAverageTradeCount = movingAverageTradeCount;
         this.edgeStopLevelCount = edgeStopLevelCount;
+        this.targetMultiplier = targetMultiplier;
     }
 
     /**
@@ -148,6 +151,10 @@ public class BackTestingParameters {
         return edgeStopLevelCount;
     }
 
+    public double getTargetMultiplier() {
+        return targetMultiplier;
+    }
+
     public static class Builder {
         private String name;
         private int extraTicks;
@@ -167,6 +174,7 @@ public class BackTestingParameters {
         private int movingAverageDayCount;
         private int movingAverageTradeCount;
         private double edgeStopLevelCount;
+        private double targetMultiplier = 1;
 
         public Builder setName(String name) {
             this.name = name;
@@ -202,7 +210,7 @@ public class BackTestingParameters {
                     edgeLevelCount,
                     movingAverageDayCount,
                     movingAverageTradeCount,
-                    edgeStopLevelCount);
+                    edgeStopLevelCount, targetMultiplier);
         }
 
         public Builder skipNextIfWinner() {
@@ -263,6 +271,11 @@ public class BackTestingParameters {
 
         public Builder withEdgeStopLevelCount(double edgeStopLevelCount) {
             this.edgeStopLevelCount = edgeStopLevelCount;
+            return this;
+        }
+
+        public Builder withTargetMultiplier(double targetMultiplier) {
+            this.targetMultiplier = targetMultiplier;
             return this;
         }
     }
