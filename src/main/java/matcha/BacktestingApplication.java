@@ -1,8 +1,6 @@
 package matcha;
 
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -53,7 +51,8 @@ public class BacktestingApplication implements CommandLineRunner {
         List<BackTestingParameters> backTestingParametersList = newArrayList();
 
         if (backTestingParametersName.equals("allFadeCounts")) {
-            final Set<Double> smas = newLinkedHashSet(newArrayList(10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0));
+            final Set<Double> smas = newLinkedHashSet(newArrayList(10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0,
+                    90.0));
             final Set<Double> levels = newLinkedHashSet(newArrayList(0.1, 0.2, 0.3, 0.4, 0.5));
             final Set<Double> stopEdgeModifiers = newLinkedHashSet(newArrayList(-0.2, -0.1, 0.0, 0.1, 0.2));
 
@@ -65,18 +64,19 @@ public class BacktestingApplication implements CommandLineRunner {
                 final Double level = smaLevelCombination.get(1);
                 final Double stopEdgeModifier = smaLevelCombination.get(2);
 
-                if(Math.abs(stopEdgeModifier) >= level) {
+                if (Math.abs(stopEdgeModifier) >= level) {
                     continue;
                 }
 
                 final BackTestingParameters backTestingParameters = new BackTestingParameters.Builder()
-                            .setName("FadeTheBreakoutNormalWithTradeCountEdgeSEM-level:" + level + "_sma:" + sma + "_stopEdgeModifier:" + stopEdgeModifier)
-                            .setExtraTicks(EXTRA_TICKS)
-                            .setHighLowCheckPref(0)
-                            .fadeTheBreakout()
-                            .withTradeCountEdge(level, sma.intValue())
-                            .withEdgeStopLevelCount(stopEdgeModifier)
-                            .createBackTestingParameters();
+                        .setName("FadeTheBreakoutNormalWithTradeCountEdgeSEM-level:" + level + "_sma:" + sma +
+                                "_stopEdgeModifier:" + stopEdgeModifier)
+                        .setExtraTicks(EXTRA_TICKS)
+                        .setHighLowCheckPref(0)
+                        .fadeTheBreakout()
+                        .withTradeCountEdge(level, sma.intValue())
+                        .withEdgeStopLevelCount(stopEdgeModifier)
+                        .createBackTestingParameters();
 
                 backTestingParametersList.add(backTestingParameters);
             }
