@@ -21,6 +21,7 @@ public class PositionExecutorTest {
     @Mock
     private BufferedWriter mockBufferedWriter;
     private BackTestingParameters backTestingParameters;
+    private DecimalPointPlace decimalPointPlace;
 
     @Before
     public void setUp() throws Exception {
@@ -28,7 +29,10 @@ public class PositionExecutorTest {
         positionExecutor.setTimeToOpenPosition(true);
         backTestingParameters = new BackTestingParameters.Builder().setExtraTicks(10).setName("test")
                 .createBackTestingParameters();
+
+        decimalPointPlace = DecimalPointPlace.NORMAL;
     }
+
 
     @Test
     public void shouldOpenAShortPositionAtCloseIfPreviousDaysLowIsExceeded() throws Exception {
@@ -340,7 +344,8 @@ public class PositionExecutorTest {
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
 ;
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters,
+                decimalPointPlace);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(1)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
@@ -370,7 +375,8 @@ public class PositionExecutorTest {
 
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters,
+                decimalPointPlace);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(1)));
@@ -400,7 +406,7 @@ public class PositionExecutorTest {
         //Stop 14.0
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters, decimalPointPlace);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
@@ -431,7 +437,7 @@ public class PositionExecutorTest {
         //Stop 14.0
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters, decimalPointPlace);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(1)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));
@@ -462,7 +468,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters, decimalPointPlace);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(1)));
@@ -473,10 +479,10 @@ public class PositionExecutorTest {
     public void shouldNotCloseLongPositionIfTargetOrStopNotHit() throws Exception {
         int extraTicks = 0;
         final String[][] data = {
-                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                {"2015-8-4T8:0:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
-                {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"},
-                {"2015-8-4T10:0:0", "3", "2", "9", "2", "4", "7", "10", "20"}
+                {"2015-8-4T9:0:0:0", "3", "2", "9", "2", "4", "7", "10", "20"},
+                {"2015-8-4T10:0:0:0", "3", "2", "9", "2", "4", "7", "10", "20"}
         };
 
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
@@ -494,7 +500,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
-        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters);
+        positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters, decimalPointPlace);
 
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getWinners(), is(equalTo(0)));
         assertThat(positionExecutor.getResults("test", mockBufferedWriter, stats).getPositionStats().getLosers(), is(equalTo(0)));

@@ -33,7 +33,8 @@ class Simulation {
         this.positionOptional = Optional.empty();
     }
 
-    Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters) throws
+    Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters,
+                    DecimalPointPlace decimalPointPlace) throws
             IOException {
 
         System.out.println("Starting: " + backTestingParameters.getName() + " " + inputs.getFile1() + " " + inputs
@@ -115,7 +116,7 @@ class Simulation {
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
                     positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
-                            backTestingParameters);
+                            backTestingParameters, decimalPointPlace);
                     if (position.isClosed()) {
                         this.positionOptional = Optional.empty();
                     }

@@ -215,7 +215,8 @@ public class PositionExecutor {
     }
 
     void managePosition(UsefulTickData usefulTickData, Position position, BufferedWriter dataWriter,
-                        PositionStats stats, BackTestingParameters backTestingParameters) throws
+                        PositionStats stats, BackTestingParameters backTestingParameters, DecimalPointPlace
+                                decimalPointPlace) throws
             IOException {
 
         stats.cleanLists(usefulTickData.getCandleDate(),
@@ -231,7 +232,7 @@ public class PositionExecutor {
         if (isLongPosition(position)) {
 
             if (isLongStopTouched(usefulTickData, position)) {
-                int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry());
+                int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry(), decimalPointPlace);
                 closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position,
                         STOPPED_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
 
@@ -240,7 +241,7 @@ public class PositionExecutor {
                 stats.addLoser(usefulTickData.getCandleDate());
 
             } else if (isLongTargetExceeded(usefulTickData, position)) {
-                final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry());
+                final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry(), decimalPointPlace);
                 closePosition(profitLoss, TARGET_LONG_TEMPLATE, position.getTarget(), position,
                         TARGET_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
@@ -248,13 +249,13 @@ public class PositionExecutor {
             }
         } else {
             if (isShortStopTouched(usefulTickData, position)) {
-                final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop());
+                final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop(), decimalPointPlace);
                 closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position,
                         STOPPED_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementLosers();
                 stats.addLoser(usefulTickData.getCandleDate());
             } else if (isShortTargetExceeded(usefulTickData, position)) {
-                final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget());
+                final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget(), decimalPointPlace);
                 closePosition(profitLoss, TARGET_SHORT_TEMPLATE, position.getTarget(), position,
                         TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();

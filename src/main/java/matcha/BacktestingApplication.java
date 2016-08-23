@@ -99,17 +99,29 @@ public class BacktestingApplication implements CommandLineRunner {
                 if (inputLine.trim().length() == 0) {
                     continue;
                 }
+
                 String[] lineParts = inputLine.split(",");
                 final Path oneMinutePath = dataDirectory.resolve(lineParts[0]);
                 final Path sixtyMinutePath = dataDirectory.resolve(lineParts[1]);
                 Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
 
-                final Results results = simulation.execute(input, Paths.get("results"), backTestingParameters);
+                final Results results = simulation.execute(input, Paths.get("results"), backTestingParameters,
+                        getDecimalPointPlace(inputLine));
 
                 System.out.println(results);
             }
         }
 
+    }
+
+    private DecimalPointPlace getDecimalPointPlace(String inputLine) {
+        DecimalPointPlace decimalPointPlace;
+        if (inputLine.contains("jpy")) {
+            decimalPointPlace = DecimalPointPlace.JPY;
+        } else {
+            decimalPointPlace = DecimalPointPlace.NORMAL;
+        }
+        return decimalPointPlace;
     }
 
     private Map<String, BackTestingParameters> createParametersMap(int extraTicks) {
