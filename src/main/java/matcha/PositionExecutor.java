@@ -176,7 +176,7 @@ public class PositionExecutor {
         availableToTrade = false;
         double entry = usefulTickData.getCandleClose();
         double target = usefulTickData.getCandleClose() - ((usefulTickData.getCandleHigh() - usefulTickData
-                .getCandleClose() - extraTicks) * targetMultiplier);
+                .getCandleClose() - extraTicks)) * targetMultiplier;
         double stop = usefulTickData.getCandleHigh() + extraTicks;
         return new Position(entryDate, entry, target, stop, haveEdge);
     }
@@ -188,7 +188,7 @@ public class PositionExecutor {
 
         double entry = usefulTickData.getCandleClose();
         double target = usefulTickData.getCandleClose() + ((usefulTickData.getCandleClose() - usefulTickData
-                .getCandleLow() + extraTicks) * targetMultiplier);
+                .getCandleLow() + extraTicks)) * targetMultiplier;
         double stop = usefulTickData.getCandleLow() - extraTicks;
 
         return new Position(entryDate, entry, target, stop, haveEdge);

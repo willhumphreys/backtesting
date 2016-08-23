@@ -44,34 +44,38 @@ public class BacktestingApplication implements CommandLineRunner {
         List<BackTestingParameters> backTestingParametersList = newArrayList();
 
         if (backTestingParametersName.equals("allFadeCounts")) {
-            final Set<Double> smas = newLinkedHashSet(newArrayList(10.0, 20.0, 30.0, 40.0));
-            final Set<Double> levels = newLinkedHashSet(newArrayList(0.1, 0.2, 0.3, 0.4, 0.5));
-            final Set<Double> stopEdgeModifiers = newLinkedHashSet(newArrayList(-0.2, -0.1, 0.0, 0.1, 0.2));
+            final Set<Double> smas = newLinkedHashSet(newArrayList(30.0, 40.0));
+            final Set<Double> levels = newLinkedHashSet(newArrayList(0.2, 0.3, 0.4));
+            final Set<Double> stopEdgeModifiers = newLinkedHashSet(newArrayList(0.0));
 
             final Set<List<Double>> smaLevelCombinations = cartesianProduct(smas, levels, stopEdgeModifiers);
 
 
-            for (List<Double> smaLevelCombination : smaLevelCombinations) {
-                final Double sma = smaLevelCombination.get(0);
-                final Double level = smaLevelCombination.get(1);
-                final Double stopEdgeModifier = smaLevelCombination.get(2);
+            for(int x = 1; x < 5; x++) {
 
-                if (Math.abs(stopEdgeModifier) >= level) {
-                    continue;
+
+                for (List<Double> smaLevelCombination : smaLevelCombinations) {
+                    final Double sma = smaLevelCombination.get(0);
+                    final Double level = smaLevelCombination.get(1);
+                    final Double stopEdgeModifier = smaLevelCombination.get(2);
+
+                    if (Math.abs(stopEdgeModifier) >= level) {
+                        continue;
+                    }
+
+                    final BackTestingParameters backTestingParameters = new BackTestingParameters.Builder()
+                            .setName("FadeTheBreakoutNormalWithTradeCountEdgeSEM-TM-2-level:" + level + "-sma:" + sma +
+                                    "-stopEdgeModifier:" + stopEdgeModifier+ "-targetMultiplier:" + x)
+                            .setExtraTicks(EXTRA_TICKS)
+                            .setHighLowCheckPref(0)
+                            .fadeTheBreakout()
+                            .withTradeCountEdge(level, sma.intValue())
+                            .withEdgeStopLevelCount(stopEdgeModifier)
+                            .withTargetMultiplier(x)
+                            .createBackTestingParameters();
+
+                    backTestingParametersList.add(backTestingParameters);
                 }
-
-                final BackTestingParameters backTestingParameters = new BackTestingParameters.Builder()
-                        .setName("FadeTheBreakoutNormalWithTradeCountEdgeSEM-level:" + level + "_sma:" + sma +
-                                "_stopEdgeModifier:" + stopEdgeModifier)
-                        .setExtraTicks(EXTRA_TICKS)
-                        .setHighLowCheckPref(0)
-                        .fadeTheBreakout()
-                        .withTradeCountEdge(level, sma.intValue())
-                        .withEdgeStopLevelCount(stopEdgeModifier)
-                        .withTargetMultiplier(2)
-                        .createBackTestingParameters();
-
-                backTestingParametersList.add(backTestingParameters);
             }
 
 
@@ -87,12 +91,6 @@ public class BacktestingApplication implements CommandLineRunner {
 
         for (BackTestingParameters backTestingParameters : backTestingParametersList) {
             System.out.println("Executing " + backTestingParameters.getName());
-     .setName("FadeTheBreakoutNormalWithTradeCountEdge-level:" + level + "-sma:" + sma)
-                        .setExtraTicks(EXTRA_TICKS)
-                        .setHighLowCheckPref(0)
-                        .fadeTheBreakout()
-                        .withTradeCountEdge(level, sma.intValue())
-                        .createBackTestingParameters();
             final Simulation simulation = new Simulation(new PositionExecutor(new Signals(), new Utils()), new TickDataReaderImpl());
 
             for (String inputLine : inputLines) {
@@ -134,10 +132,10 @@ public class BacktestingApplication implements CommandLineRunner {
                 .withTradeCountEdge(0.3, 10)
                 .createBackTestingParameters());
 
-        parametersMap.put("Normal", new BackTestingParameters.Builder()
-                .setName("Normal")
+        parametersMap.put("NormalDaily", new BackTestingParameters.Builder()
+                .setName("NormalDaily")
                 .setExtraTicks(extraTicks)
-                .setHighLowCheckPref(0)
+                .setHighLowCheckPref(1)
                 .createBackTestingParameters());
 
         parametersMap.put("NormalLowsOnly", new BackTestingParameters.Builder()
@@ -194,6 +192,13 @@ public class BacktestingApplication implements CommandLineRunner {
                 .fadeTheBreakout()
                 .createBackTestingParameters());
 
+        parametersMap.put("FadeTheBreakoutNormalDaily", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalDaily")
+                .setExtraTicks(extraTicks)
+                .setHighLowCheckPref(1)
+                .fadeTheBreakout()
+                .createBackTestingParameters());
+
         parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge_01_20SMA", new BackTestingParameters.Builder()
                 .setName("FadeTheBreakoutNormalWithTradeCountEdge_01_20SMA")
                 .setExtraTicks(extraTicks)
@@ -202,12 +207,12 @@ public class BacktestingApplication implements CommandLineRunner {
                 .withTradeCountEdge(0.1, 20)
                 .createBackTestingParameters());
 
-        parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge-015-30SMA", new BackTestingParameters.Builder()
-                .setName("FadeTheBreakoutNormalWithTradeCountEdge-015-30SMA")
+        parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge-02-30SMA", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalWithTradeCountEdge-02-30SMA")
                 .setExtraTicks(extraTicks)
                 .setHighLowCheckPref(0)
                 .fadeTheBreakout()
-                .withTradeCountEdge(0.15, 30)
+                .withTradeCountEdge(0.2, 30)
                 .createBackTestingParameters());
 
         parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge-05-30SMA-0", new BackTestingParameters.Builder()

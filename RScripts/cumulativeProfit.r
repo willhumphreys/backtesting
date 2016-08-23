@@ -47,7 +47,7 @@ generate.plot <- function(file.in) {
 
     data$date.time=as.Date(data$date.time)
 
-    line <- paste(file.in, ",", symbol, ",", scenario, ",", last(data$cumulative_profit), ",", last(data$cum.winLose), ",", nrow(data), ",", last(data$cum.win) / last(data$cum.lose))
+    line <- paste(file.in, ",", symbol, ",", scenario, ",", last(data$cumulative_profit), ",", last(data$cum.winLose), ",", nrow(data), ",", last(data$cum.win) / last(data$cum.lose), ",", sum(data$ticks) / nrow(data))
     write(line,file="summary.csv",append=TRUE)
 
 
@@ -89,7 +89,7 @@ generate.plot <- function(file.in) {
     cat('finished')
 }
 
-write("file.in,symbol,scenario,cumulative_profit,win_lose_count,trade_count,win_lose_ratio", file="summary.csv", append=FALSE)
+write("file.in,symbol,scenario,cumulative_profit,win_lose_count,trade_count,win_lose_ratio,ticks_per_trade", file="summary.csv", append=FALSE)
 
 in_files <- list.files('results')
 
