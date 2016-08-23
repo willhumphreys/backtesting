@@ -79,6 +79,13 @@ class Simulation {
             LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE]);
             LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE]);
 
+
+            if(tickDateTime.isAfter(LocalDateTime.of(2016, 7, 28, 0, 0, 0)) &&
+                    tickDateTime.isBefore(LocalDateTime.of(2016,7,29,0,0,0))) {
+
+              //  System.out.println("Check here");
+            }
+
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
 

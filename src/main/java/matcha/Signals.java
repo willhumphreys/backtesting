@@ -12,17 +12,25 @@ public class Signals {
     }
 
     boolean isLongSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
-        return usefulTickData.isTakeOutYesterdaysHigh() &&
-                usefulTickData.isCloseNegative() &&
-                usefulTickData.isCloseBelowYesterdaysHigh() &&
-                usefulTickData.isOpenBelowYesterdaysHigh() &&
-                getHighCheck(usefulTickData, highLowCheckPref);
+        final boolean takeOutYesterdaysHigh = usefulTickData.isTakeOutYesterdaysHigh();
+        final boolean closeNegative = usefulTickData.isCloseNegative();
+        final boolean closeBelowYesterdaysHigh = usefulTickData.isCloseBelowYesterdaysHigh();
+        final boolean openBelowYesterdaysHigh = usefulTickData.isOpenBelowYesterdaysHigh();
+        final boolean highCheck = getHighCheck(usefulTickData, highLowCheckPref);
+        return takeOutYesterdaysHigh &&
+                closeNegative &&
+                closeBelowYesterdaysHigh &&
+                openBelowYesterdaysHigh &&
+                highCheck;
     }
 
     boolean isShortSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
-        return usefulTickData.isTakeOutYesterdaysLow() &&
-                usefulTickData.isClosePositive() &&
-                usefulTickData.isCloseAboveYesterdaysLow() &&
+        final boolean takeOutYesterdaysLow = usefulTickData.isTakeOutYesterdaysLow();
+        final boolean closePositive = usefulTickData.isClosePositive();
+        final boolean closeAboveYesterdaysLow = usefulTickData.isCloseAboveYesterdaysLow();
+        return takeOutYesterdaysLow &&
+                closePositive &&
+                closeAboveYesterdaysLow &&
                 usefulTickData.isOpenAboveYesterdaysLow() &&
                 getLowCheck(usefulTickData, highLowCheckPref);
     }

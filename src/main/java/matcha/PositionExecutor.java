@@ -89,25 +89,31 @@ public class PositionExecutor {
 
         double targetMultiplier = backTestingParameters.getTargetMultiplier();
 
-        if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade &&
+        if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition &&
                 !backTestingParameters.isHighsOnly()) {
-            if (backTestingParameters.isFadeTheBreakout()) {
-                return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, haveEdge, targetMultiplier));
-            } else {
-                return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks, haveEdge));
-            }
+
+
+
+                if (backTestingParameters.isFadeTheBreakout()) {
+                    return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, haveEdge, targetMultiplier));
+
+                } else {
+                    return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks, haveEdge));
+                }
+
+
 
 
         }
 
-        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition && availableToTrade &&
+        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition  &&
                 !backTestingParameters.isLowsOnly()) {
-            if (backTestingParameters.isFadeTheBreakout()) {
-                return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, haveEdge, targetMultiplier));
-            } else {
-                return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks, haveEdge));
-            }
+                if (backTestingParameters.isFadeTheBreakout()) {
+                    return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, haveEdge, targetMultiplier));
 
+                } else {
+                    return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks, haveEdge));
+                }
         }
 
         return Optional.empty();
@@ -290,6 +296,7 @@ public class PositionExecutor {
         if (position.isHaveEdge()) {
             positionStats.addToTickCounter(profitLoss);
             if (!skipNextTrade || !backTestingParameters.isSkipNextIfWinner()) {
+                System.out.println("Closing Position from: " + entryDate + " to " + exitDate);
                 dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
                         profitLoss));
             }

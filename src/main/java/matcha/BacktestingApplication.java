@@ -179,10 +179,10 @@ public class BacktestingApplication implements CommandLineRunner {
                 .setHighLowCheckPref(1)
                 .createBackTestingParameters());
 
-        parametersMap.put("FadeTheBreakoutNormal", new BackTestingParameters.Builder()
-                .setName("FadeTheBreakoutNormal")
+        parametersMap.put("FadeTheBreakoutNormalDaily", new BackTestingParameters.Builder()
+                .setName("FadeTheBreakoutNormalDaily")
                 .setExtraTicks(extraTicks)
-                .setHighLowCheckPref(0)
+                .setHighLowCheckPref(1)
                 .fadeTheBreakout()
                 .createBackTestingParameters());
 
