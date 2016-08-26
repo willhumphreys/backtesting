@@ -175,6 +175,8 @@ public class PositionExecutor {
         double target = usefulTickData.getCandleClose() - ((usefulTickData.getCandleHigh() - usefulTickData
                 .getCandleClose() - extraTicks)) * targetMultiplier;
         double stop = usefulTickData.getCandleHigh() + extraTicks;
+
+        System.out.println("Opening short position at " + entry);
         return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
@@ -188,6 +190,8 @@ public class PositionExecutor {
                 .getCandleLow() + extraTicks)) * targetMultiplier;
         double stop = usefulTickData.getCandleLow() - extraTicks;
 
+        System.out.println("Opening long position at " + entry);
+
         return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
@@ -198,6 +202,7 @@ public class PositionExecutor {
         double entry = usefulTickData.getCandleClose();
         entryDate = usefulTickData.getCandleDate();
         availableToTrade = false;
+        System.out.println("Opening long position at " + entry);
         return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
@@ -210,6 +215,7 @@ public class PositionExecutor {
 
         availableToTrade = false;
 
+        System.out.println("Opening short position at " + entry);
         return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
@@ -234,6 +240,12 @@ public class PositionExecutor {
         exitDate = usefulTickData.getCandleDate();
         if (isLongPosition(position)) {
 
+            final int longUnderWater = utils.convertTicksToInt(position.getEntry() - usefulTickData.getCandleLow(), decimalPointPlace);
+            if(longUnderWater > position.getCouldOfBeenBetter() && longUnderWater > 0) {
+                System.out.println("New Better entry " + longUnderWater);
+                position.setCouldOfBeenBetter(longUnderWater);
+            }
+
             if (isLongStopTouched(usefulTickData, position)) {
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry(), decimalPointPlace);
                 closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position,
@@ -249,13 +261,14 @@ public class PositionExecutor {
                         TARGET_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
-            } else {
-                final int longUnderWater = utils.convertTicksToInt(position.getEntry() - usefulTickData.getCandleLow(), decimalPointPlace);
-                if(longUnderWater > position.getCouldOfBeenBetter() && longUnderWater > 0) {
-                    position.setCouldOfBeenBetter(longUnderWater);
-                }
             }
         } else {
+
+            final int shortUnderWater = utils.convertTicksToInt(usefulTickData.getCandleHigh() - position.getEntry(), decimalPointPlace);
+            if(shortUnderWater > position.getCouldOfBeenBetter() && shortUnderWater > 0) {
+                position.setCouldOfBeenBetter(shortUnderWater);
+            }
+
             if (isShortStopTouched(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop(), decimalPointPlace);
                 closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position,
@@ -268,11 +281,6 @@ public class PositionExecutor {
                         TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
-            } else {
-                final int shortUnderWater = utils.convertTicksToInt(usefulTickData.getCandleHigh() - position.getEntry(), decimalPointPlace);
-                if(shortUnderWater > position.getCouldOfBeenBetter() && shortUnderWater > 0) {
-                    position.setCouldOfBeenBetter(shortUnderWater);
-                }
             }
         }
     }
@@ -303,7 +311,7 @@ public class PositionExecutor {
         if (position.isHaveEdge()) {
             positionStats.addToTickCounter(profitLoss);
             if (!skipNextTrade || !backTestingParameters.isSkipNextIfWinner()) {
-                System.out.println("Closing Position from: " + entryDate + " to " + exitDate);
+                System.out.println("Closing Position from: " + entryDate + " to " + exitDate + " at " + stopOrTarget);
                 dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
                         profitLoss, position.getCouldOfBeenBetter()));
             }
