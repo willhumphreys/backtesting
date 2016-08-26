@@ -22,13 +22,10 @@ public class PositionExecutor {
     private static final String TARGET_SHORT_TEMPLATE =
             "%s Close short %s @ %.5f target: %s %.5f ticks %d cumulative profit %d%n";
 
-    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
-            "cumulative_profit\n";
-
-    private static final String STOPPED_LONG_CSV_TEMPLATE = "%s,long,%.5f,stopped,%s,%.5f,%d%n";
-    private static final String TARGET_LONG_CSV_TEMPLATE = "%s,long,%.5f,target,%s,%.5f,%d%n";
-    private static final String STOPPED_SHORT_CSV_TEMPLATE = "%s,short,%.5f,stopped,%s,%.5f,%d%n";
-    private static final String TARGET_SHORT_CSV_TEMPLATE = "%s,short,%.5f,target,%s,%.5f,%d%n";
+    private static final String STOPPED_LONG_CSV_TEMPLATE = "%s,long,%.5f,stopped,%s,%.5f,%d,%d%n";
+    private static final String TARGET_LONG_CSV_TEMPLATE = "%s,long,%.5f,target,%s,%.5f,%d,%d%n";
+    private static final String STOPPED_SHORT_CSV_TEMPLATE = "%s,short,%.5f,stopped,%s,%.5f,%d,%d%n";
+    private static final String TARGET_SHORT_CSV_TEMPLATE = "%s,short,%.5f,target,%s,%.5f,%d,%d%n";
 
     private final Utils utils;
     private final Signals signals;
@@ -253,8 +250,8 @@ public class PositionExecutor {
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
             } else {
-                final double longUnderWater = usefulTickData.getCandleLow() - position.getEntry();
-                if(longUnderWater > position.getCouldOfBeenBetter()) {
+                final int longUnderWater = utils.convertTicksToInt(position.getEntry() - usefulTickData.getCandleLow(), decimalPointPlace);
+                if(longUnderWater > position.getCouldOfBeenBetter() && longUnderWater > 0) {
                     position.setCouldOfBeenBetter(longUnderWater);
                 }
             }
@@ -303,7 +300,7 @@ public class PositionExecutor {
             if (!skipNextTrade || !backTestingParameters.isSkipNextIfWinner()) {
                 System.out.println("Closing Position from: " + entryDate + " to " + exitDate);
                 dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
-                        profitLoss));
+                        profitLoss, position.getCouldOfBeenBetter()));
             }
 
         }

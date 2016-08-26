@@ -23,7 +23,7 @@ class Simulation {
 
     private final TickDataReader tickDataReader;
 
-    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks\n";
+    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks,could_of_been_better\n";
 
 
     @Autowired

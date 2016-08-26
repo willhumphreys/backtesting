@@ -9,7 +9,7 @@ class Position {
     private final double stop;
     private boolean haveEdge;
     private boolean closed;
-    private double couldOfBeenBetter;
+    private int couldOfBeenBetter;
 
     Position(LocalDateTime entryDate, double entry, double target, double stop, boolean haveEdge) {
         this.entryDate = entryDate;
@@ -47,11 +47,11 @@ class Position {
         return haveEdge;
     }
 
-    public double getCouldOfBeenBetter() {
+    public int getCouldOfBeenBetter() {
         return couldOfBeenBetter;
     }
 
-    public void setCouldOfBeenBetter(double couldOfBeenBetter) {
+    public void setCouldOfBeenBetter(int couldOfBeenBetter) {
         this.couldOfBeenBetter = couldOfBeenBetter;
     }
 }
