@@ -268,6 +268,11 @@ public class PositionExecutor {
                         TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
+            } else {
+                final int shortUnderWater = utils.convertTicksToInt(usefulTickData.getCandleHigh() - position.getEntry(), decimalPointPlace);
+                if(shortUnderWater > position.getCouldOfBeenBetter() && shortUnderWater > 0) {
+                    position.setCouldOfBeenBetter(shortUnderWater);
+                }
             }
         }
     }
