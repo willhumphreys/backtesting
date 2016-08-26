@@ -252,6 +252,11 @@ public class PositionExecutor {
                         TARGET_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
+            } else {
+                final double longUnderWater = usefulTickData.getCandleLow() - position.getEntry();
+                if(longUnderWater > position.getCouldOfBeenBetter()) {
+                    position.setCouldOfBeenBetter(longUnderWater);
+                }
             }
         } else {
             if (isShortStopTouched(usefulTickData, position)) {
