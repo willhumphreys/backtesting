@@ -119,7 +119,7 @@ class Simulation {
 
             if (hourCounter != 0) {
 
-                UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter).invoke();
+                UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, i).invoke();
 
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
@@ -152,7 +152,7 @@ class Simulation {
 
     private String getOutputFile(Inputs inputs, String executionName) {
         final Path file2 = inputs.getFile2();
-        final String fileName = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0] + executionName +
+        final String fileName = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0].split("_")[0] + "_" + executionName +
                 ".csv";
         System.out.println(fileName);
         return fileName;

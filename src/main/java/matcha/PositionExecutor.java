@@ -80,7 +80,7 @@ public class PositionExecutor {
 
         boolean haveEdge = configureInitialEdgeValue(backTestingParameters);
 
-        if(!haveEdge) {
+        if (!haveEdge) {
             haveEdge = toggleEdges(backTestingParameters, positionStats);
         }
 
@@ -90,27 +90,24 @@ public class PositionExecutor {
                 !backTestingParameters.isHighsOnly()) {
 
 
+            if (backTestingParameters.isFadeTheBreakout()) {
+                return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, haveEdge, targetMultiplier));
 
-                if (backTestingParameters.isFadeTheBreakout()) {
-                    return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, haveEdge, targetMultiplier));
-
-                } else {
-                    return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks, haveEdge));
-                }
-
-
+            } else {
+                return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks, haveEdge));
+            }
 
 
         }
 
-        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition  &&
+        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition &&
                 !backTestingParameters.isLowsOnly()) {
-                if (backTestingParameters.isFadeTheBreakout()) {
-                    return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, haveEdge, targetMultiplier));
+            if (backTestingParameters.isFadeTheBreakout()) {
+                return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, haveEdge, targetMultiplier));
 
-                } else {
-                    return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks, haveEdge));
-                }
+            } else {
+                return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks, haveEdge));
+            }
         }
 
         return Optional.empty();
@@ -133,7 +130,7 @@ public class PositionExecutor {
         final double tradeCountSma30 = positionStats.getTradeCountSma(backTestingParameters
                 .getMovingAverageTradeCount()).getMovingAverage();
 
-        if(tradeCountSma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
+        if (tradeCountSma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
             haveEdge = false;
         } else if (tradeCountSma30 < backTestingParameters.getEdgeLevelCount() * -1) {
             haveEdge = true;
@@ -148,7 +145,7 @@ public class PositionExecutor {
             positionStats) {
         final double sma30 = positionStats.getSma30(backTestingParameters.getMovingAverageDayCount());
         //boolean haveEdge = false;
-        if(sma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
+        if (sma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
             haveEdge = false;
         } else if (sma30 < backTestingParameters.getEdgeLevel() * -1) {
             haveEdge = true;
@@ -161,7 +158,7 @@ public class PositionExecutor {
     private boolean configureInitialEdgeValue(BackTestingParameters backTestingParameters) {
         boolean haveEdge = false;
 
-        if(!backTestingParameters.isWithEdge() && !backTestingParameters.isWithTradeCountEdge()) {
+        if (!backTestingParameters.isWithEdge() && !backTestingParameters.isWithTradeCountEdge()) {
             haveEdge = true;
         }
         return haveEdge;
@@ -176,7 +173,8 @@ public class PositionExecutor {
                 .getCandleClose() - extraTicks)) * targetMultiplier;
         double stop = usefulTickData.getCandleHigh() + extraTicks;
 
-        System.out.println("Opening short position at " + entry);
+        System.out.println("Opening short position at " + entry + " stop " + stop + " target " + target);
+
         return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
@@ -190,7 +188,7 @@ public class PositionExecutor {
                 .getCandleLow() + extraTicks)) * targetMultiplier;
         double stop = usefulTickData.getCandleLow() - extraTicks;
 
-        System.out.println("Opening long position at " + entry);
+        System.out.println("Opening long position at " + entry + " stop " + stop + " target " + target);
 
         return new Position(entryDate, entry, target, stop, haveEdge);
     }
@@ -202,7 +200,8 @@ public class PositionExecutor {
         double entry = usefulTickData.getCandleClose();
         entryDate = usefulTickData.getCandleDate();
         availableToTrade = false;
-        System.out.println("Opening long position at " + entry);
+        System.out.println("Opening long position at " + entry + " stop " + stop + " target " + target);
+
         return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
@@ -215,7 +214,8 @@ public class PositionExecutor {
 
         availableToTrade = false;
 
-        System.out.println("Opening short position at " + entry);
+        System.out.println("Opening short position at " + entry + " stop " + stop + " target " + target);
+
         return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
@@ -240,11 +240,8 @@ public class PositionExecutor {
         exitDate = usefulTickData.getCandleDate();
         if (isLongPosition(position)) {
 
-            final int longUnderWater = utils.convertTicksToInt(position.getEntry() - usefulTickData.getCandleLow(), decimalPointPlace);
-            if(longUnderWater > position.getCouldOfBeenBetter() && longUnderWater > 0) {
-                System.out.println("New Better entry " + longUnderWater);
-                position.setCouldOfBeenBetter(longUnderWater);
-            }
+            final int longUnderWater = utils.convertTicksToInt(position.getEntry() - usefulTickData.getTickLow(), decimalPointPlace);
+
 
             if (isLongStopTouched(usefulTickData, position)) {
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry(), decimalPointPlace);
@@ -261,13 +258,14 @@ public class PositionExecutor {
                         TARGET_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
+            } else if (longUnderWater > position.getCouldOfBeenBetter() && longUnderWater > 0) {
+                System.out.println("New Better entry: " + longUnderWater + " entry: " + position.getEntry() + " candle low: " + usefulTickData.getTickLow());
+                position.setCouldOfBeenBetter(longUnderWater);
             }
         } else {
 
-            final int shortUnderWater = utils.convertTicksToInt(usefulTickData.getCandleHigh() - position.getEntry(), decimalPointPlace);
-            if(shortUnderWater > position.getCouldOfBeenBetter() && shortUnderWater > 0) {
-                position.setCouldOfBeenBetter(shortUnderWater);
-            }
+            final int shortUnderWater = utils.convertTicksToInt(usefulTickData.getTickHigh() - position.getEntry(), decimalPointPlace);
+
 
             if (isShortStopTouched(usefulTickData, position)) {
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop(), decimalPointPlace);
@@ -281,24 +279,26 @@ public class PositionExecutor {
                         TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
+            } else if (shortUnderWater > position.getCouldOfBeenBetter() && shortUnderWater > 0) {
+                position.setCouldOfBeenBetter(shortUnderWater);
             }
         }
     }
 
     private boolean isShortTargetExceeded(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getCandleLow() < position.getTarget();
+        return usefulTickData.getTickLow() < position.getTarget();
     }
 
     private boolean isShortStopTouched(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getCandleHigh() >= position.getStop();
+        return usefulTickData.getTickHigh() >= position.getStop();
     }
 
     private boolean isLongTargetExceeded(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getCandleHigh() > position.getTarget();
+        return usefulTickData.getTickHigh() > position.getTarget();
     }
 
     private boolean isLongStopTouched(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getCandleLow() <= position.getStop();
+        return usefulTickData.getTickLow() <= position.getStop();
     }
 
     private boolean isLongPosition(Position position) {

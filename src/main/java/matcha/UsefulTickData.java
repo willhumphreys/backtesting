@@ -17,6 +17,8 @@ class UsefulTickData {
     private static final int TODAYS_HIGH = 8;
     private static final int LAST_4_DAYS_DOWN = 9;
     private static final int LAST_4_DAYS_UP = 10;
+    private final int tickCounter;
+    private final String[][] tickData;
 
     private String[][] hourData;
     private int hourCounter;
@@ -42,10 +44,14 @@ class UsefulTickData {
 
     private boolean last4DaysDown;
     private boolean last4DaysUp;
+    private double tickLow;
+    private double tickHigh;
 
-    UsefulTickData(String[][] hourData, int hourCounter) {
+    UsefulTickData(String[][] hourData, int hourCounter, String[][] tickData, int tickCounter) {
         this.hourData = hourData;
         this.hourCounter = hourCounter;
+        this.tickData = tickData;
+        this.tickCounter = tickCounter;
     }
 
     LocalDateTime getCandleDate() {
@@ -111,6 +117,14 @@ class UsefulTickData {
         return last4DaysUp;
     }
 
+    double getTickHigh() {
+        return tickHigh;
+    }
+
+    double getTickLow() {
+        return tickLow;
+    }
+
     UsefulTickData invoke() {
 
         try {
@@ -121,6 +135,8 @@ class UsefulTickData {
         candleClose = parseDouble(hourData[hourCounter][CLOSE]);
         double candleOpen = parseDouble(hourData[hourCounter][OPEN]);
         candleLow = parseDouble(hourData[hourCounter][LOW]);
+        tickLow = parseDouble(tickData[tickCounter][LOW]);
+        tickHigh = parseDouble(tickData[tickCounter][HIGH]);
         previousCandleLow = parseDouble(hourData[hourCounter - 1][LOW]);
         candleHigh = parseDouble(hourData[hourCounter][HIGH]);
         previousCandleHigh = parseDouble(hourData[hourCounter - 1][HIGH]);
