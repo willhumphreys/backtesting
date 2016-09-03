@@ -21,7 +21,6 @@ import static com.google.common.collect.Sets.newLinkedHashSet;
 import static java.nio.file.Files.readAllLines;
 import static org.slf4j.LoggerFactory.getLogger;
 
-
 public class BacktestingApplication {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
@@ -35,11 +34,8 @@ public class BacktestingApplication {
     public static void main(String[] args) throws Exception {
 
 
-        Injector injector = Guice.createInjector(new Module() {
-            @Override
-            public void configure(Binder binder) {
+        Injector injector = Guice.createInjector((Module) binder -> {
 
-            }
         });
 
         final BacktestingApplication instance = injector.getInstance(BacktestingApplication.class);
