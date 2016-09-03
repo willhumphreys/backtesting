@@ -29,8 +29,6 @@ public class BacktestingApplication {
     private static final int EXTRA_TICKS = 10;
     private static final Path DEFAULT_OUTPUT_DIRECTORY = Paths.get("results");
 
-    private Map<String, BackTestingParameters> parametersMap;
-
     public static void main(String[] args) throws Exception {
 
 
@@ -48,7 +46,7 @@ public class BacktestingApplication {
 
         List<Results> allResults = newArrayList();
 
-        this.parametersMap = createParametersMap(EXTRA_TICKS);
+        Map<String, BackTestingParameters> parametersMap = createParametersMap(EXTRA_TICKS);
 
         Path outputDirectory = getOutputDirectory(args);
 
