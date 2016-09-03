@@ -42,7 +42,7 @@ public class BacktestingApplication {
     }
 
 
-    public List<Results> run(String... args) throws Exception {
+    List<Results> run(String... args) throws Exception {
 
         List<Results> allResults = newArrayList();
 
