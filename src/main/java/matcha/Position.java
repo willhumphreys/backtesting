@@ -21,7 +21,7 @@ class Position {
         this.filled = filled;
     }
 
-    public LocalDateTime getEntryDate() {
+    LocalDateTime getEntryDate() {
         return entryDate;
     }
 
@@ -37,7 +37,7 @@ class Position {
         return stop;
     }
 
-    public boolean isClosed() {
+    boolean isClosed() {
         return closed;
     }
 
@@ -45,23 +45,23 @@ class Position {
         this.closed = true;
     }
 
-    public boolean isHaveEdge() {
+    boolean isHaveEdge() {
         return haveEdge;
     }
 
-    public int getCouldOfBeenBetter() {
+    int getCouldOfBeenBetter() {
         return couldOfBeenBetter;
     }
 
-    public void setCouldOfBeenBetter(int couldOfBeenBetter) {
+    void setCouldOfBeenBetter(int couldOfBeenBetter) {
         this.couldOfBeenBetter = couldOfBeenBetter;
     }
 
-    public boolean isFilled() {
+    boolean isFilled() {
         return filled;
     }
 
-    public void fill() {
+    void fill() {
         this.filled = true;
     }
 }
