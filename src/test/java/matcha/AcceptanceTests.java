@@ -1,6 +1,5 @@
 package matcha;
 
-import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -12,7 +11,6 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-
 
 public class AcceptanceTests {
 
@@ -34,6 +32,6 @@ public class AcceptanceTests {
         final Results results = allResults.get(0);
 
         assertThat(results.getPositionStats().getWinners(), is(equalTo(1)));
-        assertThat(results.getPositionStats().getLosers() , is(equalTo(0)));
+        assertThat(results.getPositionStats().getLosers(), is(equalTo(0)));
     }
 }
