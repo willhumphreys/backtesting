@@ -175,7 +175,7 @@ public class PositionExecutor {
 
         System.out.println("Opening short position at " + entry + " stop " + stop + " target " + target);
 
-        return new Position(entryDate, entry, target, stop, haveEdge);
+        return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
 
     private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge,
@@ -190,7 +190,7 @@ public class PositionExecutor {
 
         System.out.println("Opening long position at " + entry + " stop " + stop + " target " + target);
 
-        return new Position(entryDate, entry, target, stop, haveEdge);
+        return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
 
     private Position createLongPositionAtHighs(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge) {
@@ -202,7 +202,7 @@ public class PositionExecutor {
         availableToTrade = false;
         System.out.println("Opening long position at " + entry + " stop " + stop + " target " + target);
 
-        return new Position(entryDate, entry, target, stop, haveEdge);
+        return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
 
     private Position createShortPositionAtLows(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge) {
@@ -216,7 +216,7 @@ public class PositionExecutor {
 
         System.out.println("Opening short position at " + entry + " stop " + stop + " target " + target);
 
-        return new Position(entryDate, entry, target, stop, haveEdge);
+        return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
 
     void setTimeToOpenPosition(boolean timeToOpenPosition) {

@@ -23,6 +23,8 @@ class Simulation {
 
     private final TickDataReader tickDataReader;
 
+    private int tickRetracment = 10;
+
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
             "could_of_been_better\n";
 
@@ -121,7 +123,9 @@ class Simulation {
 
                 UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, i).invoke();
 
-                if (positionOptional.isPresent()) {
+
+
+                if (positionOptional.isPresent() && !positionOptional.get().isFilled()) {
                     final Position position = positionOptional.get();
                     positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
                             backTestingParameters, decimalPointPlace);
@@ -133,6 +137,11 @@ class Simulation {
                                     .getExtraTicks(), backTestingParameters.getHighLowCheckPref(),
                             backTestingParameters,
                             positionStats);
+
+                    if(tickRetracment == 0 && this.positionOptional.isPresent()) {
+                        this.positionOptional.get().fill();
+                    }
+
                 }
             }
 
