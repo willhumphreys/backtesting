@@ -1,11 +1,12 @@
 package matcha;
 
 
+import org.slf4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.nio.file.Files;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -17,9 +18,13 @@ import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.cartesianProduct;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static java.nio.file.Files.readAllLines;
+import static org.slf4j.LoggerFactory.getLogger;
 
 @SpringBootApplication
 public class BacktestingApplication implements CommandLineRunner {
+
+
+    private static final Logger LOG = getLogger(MethodHandles.lookup().getClass());
 
     private static final String DATA_DIRECTORY = "copied-data";
     private static final String FILES_TO_EXECUTE_LIST = "inputFileList.csv";
@@ -51,7 +56,7 @@ public class BacktestingApplication implements CommandLineRunner {
             final Set<List<Double>> smaLevelCombinations = cartesianProduct(smas, levels, stopEdgeModifiers);
 
 
-            for(int x = 1; x < 5; x++) {
+            for (int x = 1; x < 5; x++) {
 
 
                 for (List<Double> smaLevelCombination : smaLevelCombinations) {
@@ -65,7 +70,7 @@ public class BacktestingApplication implements CommandLineRunner {
 
                     final BackTestingParameters backTestingParameters = new BackTestingParameters.Builder()
                             .setName("FadeTheBreakoutNormalWithTradeCountEdgeSEM-TM-2-level:" + level + "-sma:" + sma +
-                                    "-stopEdgeModifier:" + stopEdgeModifier+ "-targetMultiplier:" + x)
+                                    "-stopEdgeModifier:" + stopEdgeModifier + "-targetMultiplier:" + x)
                             .setExtraTicks(EXTRA_TICKS)
                             .setHighLowCheckPref(0)
                             .fadeTheBreakout()
@@ -114,9 +119,11 @@ public class BacktestingApplication implements CommandLineRunner {
 
     private Path getInputFileStr(String[] args) {
         String inputFileStr = FILES_TO_EXECUTE_LIST;
-        if(args.length > 1) {
+        if (args.length > 1) {
             inputFileStr = args[1];
         }
+
+        LOG.info(String.format("Using input file '%s'", inputFileStr));
         return Paths.get(inputFileStr);
     }
 
