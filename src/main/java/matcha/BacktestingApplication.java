@@ -49,7 +49,9 @@ public class BacktestingApplication {
     }
 
 
-    public void run(String... args) throws Exception {
+    public List<Results> run(String... args) throws Exception {
+
+        List<Results> allResults = newArrayList();
 
         this.parametersMap = createParametersMap(EXTRA_TICKS);
 
@@ -124,10 +126,13 @@ public class BacktestingApplication {
                 final Results results = simulation.execute(input, outputDirectory, backTestingParameters,
                         getDecimalPointPlace(inputLine));
 
+                allResults.add(results);
+
                 System.out.println(results);
             }
         }
 
+        return allResults;
     }
 
     private Path getOutputDirectory(String[] args) {
