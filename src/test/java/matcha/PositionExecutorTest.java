@@ -41,7 +41,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         int extraTicks = 0;
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
@@ -69,7 +77,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -84,8 +100,16 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
         };
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
         int extraTicks = 0;
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -113,7 +137,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "5", todaysLow, "9", "8", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -136,7 +168,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "5", todaysLow, "9", todaysClose, "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -156,7 +196,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "2", "2", "6", "3", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -175,7 +223,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "3", "2", "9", "8", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -191,7 +247,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "5", "4", "9", "8", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -213,7 +277,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -243,7 +315,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -265,7 +345,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "3", "2", "9", "4", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -281,7 +369,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "3", "2", "4", "2", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -297,7 +393,15 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "8", "2", "9", "2", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -313,7 +417,14 @@ public class PositionExecutorTest {
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "10", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -328,9 +439,16 @@ public class PositionExecutorTest {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"},
-                {"2015-8-4T10:0:0", "5", "1", "9", "8", "4", "7", "10", "20"}
+                {"2015-8-4T10:0:0", "5", "1, tickData,0" +
+                        "", "9", "8", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -340,7 +458,9 @@ public class PositionExecutorTest {
         //Target 2.0
         //Entry 8.0
         //Stop 14.0
-        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+
+
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2, tickData, 0);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
 ;
@@ -359,9 +479,18 @@ public class PositionExecutorTest {
                 {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
                 //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"},
-                {"2015-8-4T10:0:0", "5", "1", "14", "8", "4", "7", "10", "20"}
+                {"2015-8-4T10:0:0", "5", "1, tickData,0" +
+                        "", "14", "8", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -373,7 +502,7 @@ public class PositionExecutorTest {
         //Stop 14.0
         final PositionStats stats = new PositionStats();
 
-        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2, tickData,0);
         usefulTickData2.invoke();
         positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters,
                 decimalPointPlace);
@@ -392,9 +521,17 @@ public class PositionExecutorTest {
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"},
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
         };
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
         final PositionStats stats = new PositionStats();
 
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -404,7 +541,7 @@ public class PositionExecutorTest {
         //Target 2.0
         //Entry 8.0
         //Stop 14.0
-        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2, tickData, 0);
         usefulTickData2.invoke();
         positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters, decimalPointPlace);
 
@@ -422,7 +559,15 @@ public class PositionExecutorTest {
                 {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"},
                 {"2015-8-4T10:0:0", "3", "2", "20", "2", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -435,7 +580,7 @@ public class PositionExecutorTest {
         //Target 2.0
         //Entry 8.0
         //Stop 14.0
-        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2, tickData, 0);
         usefulTickData2.invoke();
         positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters, decimalPointPlace);
 
@@ -453,7 +598,14 @@ public class PositionExecutorTest {
                 {"2015-8-4T9:0:0", "3", "2", "9", "2", "4", "7", "10", "20"},
                 {"2015-8-4T10:0:0", "3", "-6", "9", "2", "4", "7", "10", "20"}
         };
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -465,7 +617,7 @@ public class PositionExecutorTest {
         //Target 2.0
         //Entry 8.0
         //Stop 14.0
-        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2, tickData, 0);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
         positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters, decimalPointPlace);
@@ -485,7 +637,14 @@ public class PositionExecutorTest {
                 {"2015-8-4T10:0:0:0", "3", "2", "9", "2", "4", "7", "10", "20"}
         };
 
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1);
+        final String[][] tickData = {
+                {"2015-8-4T8:0:0", "5", "3", "6", "4", "10", "20", "10", "20"},
+                //open, low, high, close, yesterdays, low, yesterdays high, todays low, todays high
+                {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
+        };
+
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
+        );
         usefulTickData.invoke();
         final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
         );
@@ -497,7 +656,7 @@ public class PositionExecutorTest {
         //Target 2.0
         //Entry 8.0
         //Stop 14.0
-        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2);
+        final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2, tickData, 0);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
         positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters, decimalPointPlace);
