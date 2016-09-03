@@ -25,7 +25,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class BacktestingApplication {
 
 
-    private static final Logger LOG = getLogger(MethodHandles.lookup().getClass());
+    private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
 
     private static final String FILES_TO_EXECUTE_LIST = "inputFileList.csv";
     private static final int EXTRA_TICKS = 10;
