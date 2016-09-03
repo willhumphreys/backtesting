@@ -16,6 +16,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.cartesianProduct;
 import static com.google.common.collect.Sets.newLinkedHashSet;
+import static java.nio.file.Files.readAllLines;
 
 @SpringBootApplication
 public class BacktestingApplication implements CommandLineRunner {
@@ -36,10 +37,9 @@ public class BacktestingApplication implements CommandLineRunner {
         this.parametersMap = createParametersMap(EXTRA_TICKS);
 
         Path dataDirectory = Paths.get(DATA_DIRECTORY);
-
-        final List<String> inputLines = Files.readAllLines(Paths.get(FILES_TO_EXECUTE_LIST));
-
         final String backTestingParametersName = args[0];
+
+        final List<String> inputLines = readAllLines(getInputFileStr(args));
 
         List<BackTestingParameters> backTestingParametersList = newArrayList();
 
@@ -110,6 +110,14 @@ public class BacktestingApplication implements CommandLineRunner {
             }
         }
 
+    }
+
+    private Path getInputFileStr(String[] args) {
+        String inputFileStr = FILES_TO_EXECUTE_LIST;
+        if(args.length > 1) {
+            inputFileStr = args[1];
+        }
+        return Paths.get(inputFileStr);
     }
 
     private DecimalPointPlace getDecimalPointPlace(String inputLine) {
