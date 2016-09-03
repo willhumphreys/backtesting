@@ -26,9 +26,9 @@ public class BacktestingApplication implements CommandLineRunner {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().getClass());
 
-    private static final String DATA_DIRECTORY = "copied-data";
     private static final String FILES_TO_EXECUTE_LIST = "inputFileList.csv";
     private static final int EXTRA_TICKS = 10;
+    public static final Path DEFAULT_OUTPUT_DIRECTORY = Paths.get("results");
 
     private Map<String, BackTestingParameters> parametersMap;
 
@@ -41,7 +41,8 @@ public class BacktestingApplication implements CommandLineRunner {
 
         this.parametersMap = createParametersMap(EXTRA_TICKS);
 
-        Path dataDirectory = Paths.get(DATA_DIRECTORY);
+        Path outputDirectory = getOutputDirectory(args);
+
         final String backTestingParametersName = args[0];
 
         final List<String> inputLines = readAllLines(getInputFileStr(args));
@@ -104,17 +105,26 @@ public class BacktestingApplication implements CommandLineRunner {
                 }
 
                 String[] lineParts = inputLine.split(",");
-                final Path oneMinutePath = dataDirectory.resolve(lineParts[0]);
-                final Path sixtyMinutePath = dataDirectory.resolve(lineParts[1]);
+                final Path oneMinutePath = Paths.get(lineParts[0]);
+                final Path sixtyMinutePath = Paths.get(lineParts[1]);
                 Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
 
-                final Results results = simulation.execute(input, Paths.get("results"), backTestingParameters,
+                final Results results = simulation.execute(input, outputDirectory, backTestingParameters,
                         getDecimalPointPlace(inputLine));
 
                 System.out.println(results);
             }
         }
 
+    }
+
+    private Path getOutputDirectory(String[] args) {
+        Path outputDirectory = DEFAULT_OUTPUT_DIRECTORY;
+        if(args.length > 2) {
+            outputDirectory =  Paths.get(args[2]);
+        }
+        LOG.info(String.format("Using output directory '%s'", outputDirectory));
+        return outputDirectory;
     }
 
     private Path getInputFileStr(String[] args) {
