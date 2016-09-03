@@ -1,10 +1,11 @@
 package matcha;
 
 
+import com.google.inject.Binder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import org.slf4j.Logger;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
@@ -20,8 +21,8 @@ import static com.google.common.collect.Sets.newLinkedHashSet;
 import static java.nio.file.Files.readAllLines;
 import static org.slf4j.LoggerFactory.getLogger;
 
-@SpringBootApplication
-public class BacktestingApplication implements CommandLineRunner {
+
+public class BacktestingApplication {
 
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().getClass());
@@ -32,11 +33,22 @@ public class BacktestingApplication implements CommandLineRunner {
 
     private Map<String, BackTestingParameters> parametersMap;
 
-    public static void main(String[] args) {
-        SpringApplication.run(BacktestingApplication.class, args);
+    public static void main(String[] args) throws Exception {
+
+
+        Injector injector = Guice.createInjector(new Module() {
+            @Override
+            public void configure(Binder binder) {
+
+            }
+        });
+
+        final BacktestingApplication instance = injector.getInstance(BacktestingApplication.class);
+
+        instance.run(args);
     }
 
-    @Override
+
     public void run(String... args) throws Exception {
 
         this.parametersMap = createParametersMap(EXTRA_TICKS);
@@ -120,8 +132,8 @@ public class BacktestingApplication implements CommandLineRunner {
 
     private Path getOutputDirectory(String[] args) {
         Path outputDirectory = DEFAULT_OUTPUT_DIRECTORY;
-        if(args.length > 2) {
-            outputDirectory =  Paths.get(args[2]);
+        if (args.length > 2) {
+            outputDirectory = Paths.get(args[2]);
         }
         LOG.info(String.format("Using output directory '%s'", outputDirectory));
         return outputDirectory;

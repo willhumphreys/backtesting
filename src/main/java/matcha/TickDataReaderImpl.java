@@ -1,7 +1,6 @@
 package matcha;
 
 import com.opencsv.CSVReader;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,7 +12,6 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.ListIterator;
 
-@Service
 public class TickDataReaderImpl implements TickDataReader {
 
     private DateTimeFormatter formatter;

@@ -1,8 +1,5 @@
 package matcha;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -12,7 +9,6 @@ import java.util.Optional;
 
 import static java.nio.file.Files.newBufferedWriter;
 
-@Service
 class Simulation {
 
     private static final int DATE = 0;
@@ -29,7 +25,6 @@ class Simulation {
             "could_of_been_better\n";
 
 
-    @Autowired
     public Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;

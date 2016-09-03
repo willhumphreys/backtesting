@@ -1,8 +1,5 @@
 package matcha;
 
-import org.springframework.stereotype.Service;
-
-@Service
 class Utils {
 
     int convertTicksToInt(double doubleTicks, DecimalPointPlace decimalPointPlace) {

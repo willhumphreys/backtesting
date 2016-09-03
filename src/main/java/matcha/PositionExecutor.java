@@ -1,7 +1,5 @@
 package matcha;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -10,7 +8,6 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@Service
 public class PositionExecutor {
 
     private static final String STOPPED_LONG_TEMPLATE =
@@ -40,7 +37,6 @@ public class PositionExecutor {
 
     private boolean haveEdge;
 
-    @Autowired
     public PositionExecutor(Signals signals, Utils utils) throws IOException {
         this.signals = signals;
         this.utils = utils;
