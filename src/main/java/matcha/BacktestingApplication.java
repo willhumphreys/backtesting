@@ -41,7 +41,6 @@ public class BacktestingApplication {
         instance.run(args);
     }
 
-
     List<Results> run(String... args) throws Exception {
 
         List<Results> allResults = newArrayList();
@@ -103,7 +102,7 @@ public class BacktestingApplication {
         }
 
         for (BackTestingParameters backTestingParameters : backTestingParametersList) {
-            System.out.println("Executing " + backTestingParameters.getName());
+            LOG.info("Executing " + backTestingParameters.getName());
             final Simulation simulation = new Simulation(new PositionExecutor(new Signals(), new Utils()), new TickDataReaderImpl());
 
             for (String inputLine : inputLines) {
@@ -121,7 +120,7 @@ public class BacktestingApplication {
 
                 allResults.add(results);
 
-                System.out.println(results);
+                LOG.info(results.toString());
             }
         }
 

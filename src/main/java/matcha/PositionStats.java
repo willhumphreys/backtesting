@@ -1,12 +1,18 @@
 package matcha;
 
+import org.slf4j.Logger;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ListIterator;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class PositionStats {
+
+    private static final Logger LOG = getLogger(lookup().lookupClass());
 
     static final double NOT_ENOUGH_DATA_FOR_EDGE = -100.0;
     private int tickCounter;
@@ -104,14 +110,14 @@ public class PositionStats {
             sma30 = totalTrades / (double) movingAverageDayCount;
 
             if (sma30 > high) {
-                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
-                System.out.println("New High SMA: " + sma30);
+                LOG.info("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+                LOG.info("New High SMA: " + sma30);
                 this.high = sma30;
             }
 
             if (sma30 < low) {
-                System.out.println("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
-                System.out.println("New Low SMA: " + sma30);
+                LOG.info("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
+                LOG.info("New Low SMA: " + sma30);
                 this.low = sma30;
             }
         }
@@ -136,16 +142,16 @@ public class PositionStats {
         final double movingAverage = winLoseCount / (double) movingAverageDayCount;
 
         if (movingAverage > high) {
-            System.out.println("Winners: " + winners + "Losing Losers: " + losers);
-            System.out.println("New High SMA: " + movingAverage);
+            LOG.info("Winners: " + winners + "Losing Losers: " + losers);
+            LOG.info("New High SMA: " + movingAverage);
 
             this.high = movingAverage;
             newHigh = true;
         }
 
         if (movingAverage < low) {
-            System.out.println("Winners: " + winners + "Losers: " + losers);
-            System.out.println("New Low SMA: " + movingAverage);
+            LOG.info("Winners: " + winners + "Losers: " + losers);
+            LOG.info("New Low SMA: " + movingAverage);
             this.low = movingAverage;
             newLow = true;
         }

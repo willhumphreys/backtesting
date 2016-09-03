@@ -1,6 +1,7 @@
 package matcha;
 
 import com.opencsv.CSVReader;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileReader;
@@ -12,7 +13,12 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.ListIterator;
 
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class TickDataReaderImpl implements TickDataReader {
+
+    private static final Logger LOG = getLogger(lookup().lookupClass());
 
     private DateTimeFormatter formatter;
 
@@ -39,7 +45,7 @@ public class TickDataReaderImpl implements TickDataReader {
             try {
                 hourDateTime = LocalDateTime.parse(lineArray[0], formatter);
             } catch (DateTimeParseException e) {
-                System.out.println("Failed to parse '" + lineArray[0] + "'");
+                LOG.info("Failed to parse '" + lineArray[0] + "'");
                 throw e;
             }
             lineArray[0] =  hourDateTime.format(DateTimeFormatter.ISO_DATE_TIME);

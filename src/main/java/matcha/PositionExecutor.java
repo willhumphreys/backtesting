@@ -1,6 +1,8 @@
 package matcha;
 
 
+import org.slf4j.Logger;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,7 +10,12 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class PositionExecutor {
+
+    private static final Logger LOG = getLogger(lookup().lookupClass());
 
     private static final String STOPPED_LONG_TEMPLATE =
             "%s Close long  %s @ %.5f stopped: %s %.5f ticks %d cumulative profit %d%n";
@@ -169,7 +176,7 @@ public class PositionExecutor {
                 .getCandleClose() - extraTicks)) * targetMultiplier;
         double stop = usefulTickData.getCandleHigh() + extraTicks;
 
-        System.out.println("Opening short position at " + entry + " stop " + stop + " target " + target);
+        LOG.info("Opening short position at " + entry + " stop " + stop + " target " + target);
 
         return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
@@ -184,7 +191,7 @@ public class PositionExecutor {
                 .getCandleLow() + extraTicks)) * targetMultiplier;
         double stop = usefulTickData.getCandleLow() - extraTicks;
 
-        System.out.println("Opening long position at " + entry + " stop " + stop + " target " + target);
+        LOG.info("Opening long position at " + entry + " stop " + stop + " target " + target);
 
         return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
@@ -196,7 +203,7 @@ public class PositionExecutor {
         double entry = usefulTickData.getCandleClose();
         entryDate = usefulTickData.getCandleDate();
         availableToTrade = false;
-        System.out.println("Opening long position at " + entry + " stop " + stop + " target " + target);
+        LOG.info("Opening long position at " + entry + " stop " + stop + " target " + target);
 
         return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
@@ -210,7 +217,7 @@ public class PositionExecutor {
 
         availableToTrade = false;
 
-        System.out.println("Opening short position at " + entry + " stop " + stop + " target " + target);
+        LOG.info("Opening short position at " + entry + " stop " + stop + " target " + target);
 
         return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
@@ -255,7 +262,7 @@ public class PositionExecutor {
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
             } else if (longUnderWater > position.getCouldOfBeenBetter() && longUnderWater > 0) {
-                System.out.println("New Better entry: " + longUnderWater + " entry: " + position.getEntry() + " candle low: " + usefulTickData.getTickLow());
+                LOG.info("New Better entry: " + longUnderWater + " entry: " + position.getEntry() + " candle low: " + usefulTickData.getTickLow());
                 position.setCouldOfBeenBetter(longUnderWater);
             }
         } else {
@@ -307,7 +314,7 @@ public class PositionExecutor {
         if (position.isHaveEdge()) {
             positionStats.addToTickCounter(profitLoss);
             if (!skipNextTrade || !backTestingParameters.isSkipNextIfWinner()) {
-                System.out.println("Closing Position from: " + entryDate + " to " + exitDate + " at " + stopOrTarget);
+                LOG.info("Closing Position from: " + entryDate + " to " + exitDate + " at " + stopOrTarget);
                 dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
                         profitLoss, position.getCouldOfBeenBetter()));
             }

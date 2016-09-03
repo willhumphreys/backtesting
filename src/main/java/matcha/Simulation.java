@@ -1,5 +1,7 @@
 package matcha;
 
+import org.slf4j.Logger;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -7,9 +9,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.nio.file.Files.newBufferedWriter;
+import static org.slf4j.LoggerFactory.getLogger;
 
 class Simulation {
+
+    private static final Logger LOG = getLogger(lookup().lookupClass());
 
     private static final int DATE = 0;
 
@@ -35,17 +41,17 @@ class Simulation {
                     DecimalPointPlace decimalPointPlace) throws
             IOException {
 
-        System.out.println("Starting: " + backTestingParameters.getName() + " " + inputs.getFile1() + " " + inputs
+        LOG.info("Starting: " + backTestingParameters.getName() + " " + inputs.getFile1() + " " + inputs
                 .getFile2());
 
         String[][] tickData;
         try {
             tickData = tickDataReader.read(inputs.getFile1());
         } catch (IOException e) {
-            System.out.println("Failed to parse " + inputs.getFile1());
+            LOG.info("Failed to parse " + inputs.getFile1());
             throw new IOException("Failed to parse " + inputs.getFile1(), e);
         } catch (DateTimeParseException e2) {
-            System.out.println("Failed to parse " + inputs.getFile1());
+            LOG.info("Failed to parse " + inputs.getFile1());
             throw e2;
         }
         String[][] hourData;
@@ -54,7 +60,7 @@ class Simulation {
         } catch (IOException e) {
             throw new IOException("Failed to parse " + inputs.getFile2(), e);
         } catch (DateTimeParseException e2) {
-            System.out.println("Failed to parse " + inputs.getFile2());
+            LOG.info("Failed to parse " + inputs.getFile2());
             throw e2;
         }
 
@@ -81,7 +87,7 @@ class Simulation {
             if (tickDateTime.isAfter(LocalDateTime.of(2016, 7, 28, 0, 0, 0)) &&
                     tickDateTime.isBefore(LocalDateTime.of(2016, 7, 29, 0, 0, 0))) {
 
-                //  System.out.println("Check here");
+                //  LOG.info("Check here");
             }
 
             int hourCandleHour = hourDateTime.getHour();
@@ -146,7 +152,7 @@ class Simulation {
         }
 
 //        for (String[] line : hourData) {
-//            System.out.println(line[DATE] + line[OPEN] + line[LOW] + line[HIGH] + line[CLOSE] + line[DAILY_LOW] +
+//            LOG.info(line[DATE] + line[OPEN] + line[LOW] + line[HIGH] + line[CLOSE] + line[DAILY_LOW] +
 //                    line[DAILY_HIGH]);
 //        }
 
@@ -158,7 +164,7 @@ class Simulation {
         final Path file2 = inputs.getFile2();
         final String fileName = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0].split("_")[0] + "_" + executionName +
                 ".csv";
-        System.out.println(fileName);
+        LOG.info(fileName);
         return fileName;
     }
 }
