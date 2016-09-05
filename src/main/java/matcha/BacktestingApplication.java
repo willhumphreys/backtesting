@@ -102,7 +102,7 @@ public class BacktestingApplication {
 
         for (BackTestingParameters backTestingParameters : backTestingParametersList) {
             LOG.info("Executing " + backTestingParameters.getName());
-            final Simulation simulation = new Simulation(new PositionExecutor(new Signals(), new Utils()), new TickDataReaderImpl());
+            final Simulation simulation = new Simulation(new PositionExecutor(new Signals(), new Utils()), new TickDataReaderImpl(), new SyncTicks());
 
             for (String inputLine : inputLines) {
                 if (inputLine.trim().length() == 0) {

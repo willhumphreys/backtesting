@@ -26,14 +26,16 @@ class Simulation {
     private List<Position> positions;
 
     private final TickDataReader tickDataReader;
+    private SyncTicks syncTicks;
 
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
             "could_of_been_better\n";
 
 
-    Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader) {
+    Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;
+        this.syncTicks = syncTicks;
         this.positions = newArrayList();
     }
 
@@ -80,27 +82,7 @@ class Simulation {
             if (tickDateTime.getHour() != nextTickDateTime.getHour()) {
                 positionExecutor.setTimeToOpenPosition(true);
             }
-
-            //If the hour has changed we need to update the hour counter.
-            if (tickCandleHour != hourCandleHour) {
-                hourCounter++;
-
-
-                final LocalDateTime currentHourTime = LocalDateTime.parse(hourData[hourCounter][DATE]);
-                final LocalDateTime currentMinuteTime = LocalDateTime.parse(tickData[i][DATE]);
-
-
-                if (currentHourTime.getHour() != currentMinuteTime.getHour()) {
-                    hourCounter++;
-                }
-
-                final LocalDateTime currentHourTime2 = LocalDateTime.parse(hourData[hourCounter][DATE]);
-                final LocalDateTime currentMinuteTime2 = LocalDateTime.parse(tickData[i][DATE]);
-
-                if (currentHourTime2.getHour() != currentMinuteTime2.getHour()) {
-                    throw new IllegalStateException("minutes not matching hours.");
-                }
-            }
+            hourCounter = syncTicks.updateHourCounterToMatchMinuteCounter(tickData, hourData, hourCounter, i, hourCandleHour, tickCandleHour);
 
 
             if (hourCounter != 0) {
