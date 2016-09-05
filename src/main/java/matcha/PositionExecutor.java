@@ -13,7 +13,7 @@ import java.util.Optional;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class PositionExecutor {
+class PositionExecutor {
 
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
@@ -44,7 +44,7 @@ public class PositionExecutor {
 
     private boolean haveEdge;
 
-    public PositionExecutor(Signals signals, Utils utils) throws IOException {
+    PositionExecutor(Signals signals, Utils utils) throws IOException {
         this.signals = signals;
         this.utils = utils;
         availableToTrade = true;
