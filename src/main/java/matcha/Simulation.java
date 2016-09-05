@@ -47,13 +47,11 @@ class Simulation {
         String[][] tickData;
         try {
             tickData = tickDataReader.read(inputs.getFile1());
-        } catch (IOException e) {
+        } catch (IOException | DateTimeParseException e) {
             LOG.info("Failed to parse " + inputs.getFile1());
             throw new IOException("Failed to parse " + inputs.getFile1(), e);
-        } catch (DateTimeParseException e2) {
-            LOG.info("Failed to parse " + inputs.getFile1());
-            throw e2;
         }
+
         String[][] hourData;
         try {
             hourData = tickDataReader.read(inputs.getFile2());
@@ -83,12 +81,6 @@ class Simulation {
             LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE]);
             LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE]);
 
-
-//            if (tickDateTime.isAfter(LocalDateTime.of(2016, 7, 28, 0, 0, 0)) &&
-//                    tickDateTime.isBefore(LocalDateTime.of(2016, 7, 29, 0, 0, 0))) {
-//
-//                //  LOG.info("Check here");
-//            }
 
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
