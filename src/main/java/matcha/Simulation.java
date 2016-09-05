@@ -136,11 +136,6 @@ class Simulation {
 
         }
 
-//        for (String[] line : hourData) {
-//            LOG.info(line[DATE] + line[OPEN] + line[LOW] + line[HIGH] + line[CLOSE] + line[DAILY_LOW] +
-//                    line[DAILY_HIGH]);
-//        }
-
         return positionExecutor.getResults(getOutputFile(inputs, backTestingParameters.getName()), dataWriter,
                 positionStats);
     }
