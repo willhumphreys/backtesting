@@ -1,7 +1,6 @@
 package matcha;
 
 
-import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
