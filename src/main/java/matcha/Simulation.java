@@ -45,15 +45,9 @@ class Simulation {
                 .getFile2());
 
         String[][] tickData;
-        try {
-            tickData = tickDataReader.read(inputs.getFile1());
-        } catch (IOException | DateTimeParseException e) {
-            LOG.info("Failed to parse " + inputs.getFile1());
-            throw new IOException("Failed to parse " + inputs.getFile1(), e);
-        }
-
         String[][] hourData;
         try {
+            tickData = tickDataReader.read(inputs.getFile1());
             hourData = tickDataReader.read(inputs.getFile2());
         } catch (IOException | DateTimeParseException e) {
             throw new IOException("Failed to parse " + inputs.getFile2(), e);
