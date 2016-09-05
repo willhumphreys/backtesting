@@ -29,7 +29,6 @@ public class BacktestingApplication {
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
 
     private static final int EXTRA_TICKS = 10;
-    private static final Path DEFAULT_OUTPUT_DIRECTORY = Paths.get("results");
 
     public static void main(String[] args) throws Exception {
 
@@ -47,7 +46,8 @@ public class BacktestingApplication {
 
         Options options = new Options();
         options.addOption("scenario", true, "The scenario to use.");
-        options.addOption("input", true, "The input file to use");
+        options.addOption("input", true, "The input file to use.");
+        options.addOption("output", true, "Where to output the results.");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse( options, args);
@@ -56,7 +56,8 @@ public class BacktestingApplication {
 
         Map<String, BackTestingParameters> parametersMap = createParametersMap(EXTRA_TICKS);
 
-        Path outputDirectory = getOutputDirectory(args);
+        Path outputDirectory = Paths.get(cmd.getOptionValue("output"));
+        LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
         final String backTestingParametersName = cmd.getOptionValue("scenario");
 
@@ -136,15 +137,6 @@ public class BacktestingApplication {
         }
 
         return allResults;
-    }
-
-    private Path getOutputDirectory(String[] args) {
-        Path outputDirectory = DEFAULT_OUTPUT_DIRECTORY;
-        if (args.length > 2) {
-            outputDirectory = Paths.get(args[2]);
-        }
-        LOG.info(String.format("Using output directory '%s'", outputDirectory));
-        return outputDirectory;
     }
 
     private DecimalPointPlace getDecimalPointPlace(String inputLine) {
