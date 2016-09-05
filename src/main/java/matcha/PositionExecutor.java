@@ -17,10 +17,10 @@ class PositionExecutor {
 
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
-    private static final String STOPPED_LONG_CSV_TEMPLATE = "%s,long,%.5f,stopped,%s,%.5f,%d,%d%n";
-    private static final String TARGET_LONG_CSV_TEMPLATE = "%s,long,%.5f,target,%s,%.5f,%d,%d%n";
-    private static final String STOPPED_SHORT_CSV_TEMPLATE = "%s,short,%.5f,stopped,%s,%.5f,%d,%d%n";
-    private static final String TARGET_SHORT_CSV_TEMPLATE = "%s,short,%.5f,target,%s,%.5f,%d,%d%n";
+    private static final String STOPPED_LONG_CSV_TEMPLATE = "%s,long,%.5f,stopped,%s,%.5f,%d%n";
+    private static final String TARGET_LONG_CSV_TEMPLATE = "%s,long,%.5f,target,%s,%.5f,%d%n";
+    private static final String STOPPED_SHORT_CSV_TEMPLATE = "%s,short,%.5f,stopped,%s,%.5f,%d%n";
+    private static final String TARGET_SHORT_CSV_TEMPLATE = "%s,short,%.5f,target,%s,%.5f,%d%n";
 
     private final Utils utils;
     private final Signals signals;
@@ -92,9 +92,6 @@ class PositionExecutor {
         exitDate = usefulTickData.getCandleDate();
         if (isLongPosition(position)) {
 
-            final int longUnderWater = utils.convertTicksToInt(position.getEntry() - usefulTickData.getTickLow(), decimalPointPlace);
-
-
             if (isLongStopTouched(usefulTickData, position)) {
                 stats.incrementLongTrades();
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry(), decimalPointPlace);
@@ -111,14 +108,8 @@ class PositionExecutor {
                         TARGET_LONG_CSV_TEMPLATE, dataWriter, stats);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
-            } else if (longUnderWater > position.getCouldOfBeenBetter() && longUnderWater > 0) {
-                LOG.info("New Better entry: " + longUnderWater + " entry: " + position.getEntry() + " candle low: " + usefulTickData.getTickLow());
-                position.setCouldOfBeenBetter(longUnderWater);
             }
         } else {
-
-
-            final int shortUnderWater = utils.convertTicksToInt(usefulTickData.getTickHigh() - position.getEntry(), decimalPointPlace);
 
             if (isShortStopTouched(usefulTickData, position)) {
                 stats.incrementShortTrades();
@@ -134,8 +125,6 @@ class PositionExecutor {
                         TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
-            } else if (shortUnderWater > position.getCouldOfBeenBetter() && shortUnderWater > 0) {
-                position.setCouldOfBeenBetter(shortUnderWater);
             }
         }
     }
@@ -167,7 +156,7 @@ class PositionExecutor {
 
         LOG.info(format("Closing Position from: %s to %s at %.5f for profit of %d", entryDate, exitDate, stopOrTarget, profitLoss));
         dataWriter.write(format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
-                profitLoss, position.getCouldOfBeenBetter()));
+                profitLoss));
 
         position.close();
     }

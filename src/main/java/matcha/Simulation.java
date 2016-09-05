@@ -28,8 +28,7 @@ class Simulation {
     private final TickDataReader tickDataReader;
     private SyncTicks syncTicks;
 
-    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
-            "could_of_been_better\n";
+    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks\n";
 
     Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks) {
         this.positionExecutor = positionExecutor;
