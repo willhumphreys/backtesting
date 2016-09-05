@@ -57,9 +57,9 @@ class Position {
         this.couldOfBeenBetter = couldOfBeenBetter;
     }
 
-    boolean isFilled() {
-        return filled;
-    }
+//    boolean isFilled() {
+//        return filled;
+//    }
 
     void fill() {
         this.filled = true;

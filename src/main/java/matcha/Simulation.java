@@ -90,7 +90,7 @@ class Simulation {
 
             UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, tickCounter).invoke();
 
-            if (!positions.isEmpty() && positions.get(0).isFilled()) {
+            if (!positions.isEmpty()) {
                 final Position position = positions.get(0);
                 positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
                         backTestingParameters, decimalPointPlace);
