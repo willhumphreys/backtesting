@@ -25,7 +25,7 @@ public class AcceptanceTests {
     }
 
     @Test
-    public void shouldAShortWinningTrade() throws Exception {
+    public void shouldAShortWinningTradeAtHighs() throws Exception {
         final List<Results> allResults = backtestingApplication.run("FadeTheBreakoutNormalDaily",
                 "input_one_winner.csv", "acceptance_results");
 
@@ -35,4 +35,29 @@ public class AcceptanceTests {
         assertThat(results.getPositionStats().getWinners(), is(equalTo(1)));
         assertThat(results.getPositionStats().getLosers(), is(equalTo(0)));
     }
+
+    @Test
+    public void shouldGoLongAWinningTradeAtLows() throws Exception {
+        final List<Results> allResults = backtestingApplication.run("FadeTheBreakoutNormalDaily",
+                "eurjpy_long_winner.csv", "acceptance_results");
+
+        assertThat(allResults.size(), is(equalTo(1)));
+        final Results results = allResults.get(0);
+
+        assertThat(results.getPositionStats().getWinners(), is(equalTo(1)));
+        assertThat(results.getPositionStats().getLosers(), is(equalTo(0)));
+    }
+
+    @Test
+    public void shouldAShortLosingTradeAtHighs() throws Exception {
+        final List<Results> allResults = backtestingApplication.run("FadeTheBreakoutNormalDaily",
+                "eurjpy_short_loser.csv", "acceptance_results");
+
+        assertThat(allResults.size(), is(equalTo(1)));
+        final Results results = allResults.get(0);
+
+        assertThat(results.getPositionStats().getWinners(), is(equalTo(0)));
+        assertThat(results.getPositionStats().getLosers(), is(equalTo(1)));
+    }
+
 }

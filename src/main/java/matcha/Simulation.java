@@ -25,7 +25,7 @@ class Simulation {
 
     private final TickDataReader tickDataReader;
 
-    private int tickRetracement = 10;
+    private int tickRetracement = 0;
 
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
             "could_of_been_better\n";
@@ -84,11 +84,11 @@ class Simulation {
             LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE]);
 
 
-            if (tickDateTime.isAfter(LocalDateTime.of(2016, 7, 28, 0, 0, 0)) &&
-                    tickDateTime.isBefore(LocalDateTime.of(2016, 7, 29, 0, 0, 0))) {
-
-                //  LOG.info("Check here");
-            }
+//            if (tickDateTime.isAfter(LocalDateTime.of(2016, 7, 28, 0, 0, 0)) &&
+//                    tickDateTime.isBefore(LocalDateTime.of(2016, 7, 29, 0, 0, 0))) {
+//
+//                //  LOG.info("Check here");
+//            }
 
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
@@ -126,7 +126,7 @@ class Simulation {
 
 
 
-                if (positionOptional.isPresent() && !positionOptional.get().isFilled()) {
+                if (positionOptional.isPresent() && positionOptional.get().isFilled()) {
                     final Position position = positionOptional.get();
                     positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
                             backTestingParameters, decimalPointPlace);
