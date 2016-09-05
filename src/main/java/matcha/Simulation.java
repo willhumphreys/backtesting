@@ -55,11 +55,8 @@ class Simulation {
         String[][] hourData;
         try {
             hourData = tickDataReader.read(inputs.getFile2());
-        } catch (IOException e) {
+        } catch (IOException | DateTimeParseException e) {
             throw new IOException("Failed to parse " + inputs.getFile2(), e);
-        } catch (DateTimeParseException e2) {
-            LOG.info("Failed to parse " + inputs.getFile2());
-            throw e2;
         }
 
         BufferedWriter dataWriter = newBufferedWriter(positionExecutor.createResultsDirectory(outputDirectory)
