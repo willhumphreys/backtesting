@@ -4,6 +4,10 @@ package matcha;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 
 import java.lang.invoke.MethodHandles;
@@ -24,7 +28,6 @@ public class BacktestingApplication {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final String FILES_TO_EXECUTE_LIST = "inputFileList.csv";
     private static final int EXTRA_TICKS = 10;
     private static final Path DEFAULT_OUTPUT_DIRECTORY = Paths.get("results");
 
@@ -42,15 +45,24 @@ public class BacktestingApplication {
 
     List<Results> run(String... args) throws Exception {
 
+        Options options = new Options();
+        options.addOption("scenario", true, "The scenario to use.");
+        options.addOption("input", true, "The input file to use");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse( options, args);
+
         List<Results> allResults = newArrayList();
 
         Map<String, BackTestingParameters> parametersMap = createParametersMap(EXTRA_TICKS);
 
         Path outputDirectory = getOutputDirectory(args);
 
-        final String backTestingParametersName = args[0];
+        final String backTestingParametersName = cmd.getOptionValue("scenario");
 
-        final List<String> inputLines = readAllLines(getInputFileStr(args));
+        final Path inputPath = Paths.get(cmd.getOptionValue("input"));
+        LOG.info(String.format("Using input file '%s'", inputPath));
+        final List<String> inputLines = readAllLines(inputPath);
 
         List<BackTestingParameters> backTestingParametersList = newArrayList();
 
@@ -135,16 +147,6 @@ public class BacktestingApplication {
         return outputDirectory;
     }
 
-    private Path getInputFileStr(String[] args) {
-        String inputFileStr = FILES_TO_EXECUTE_LIST;
-        if (args.length > 1) {
-            inputFileStr = args[1];
-        }
-
-        LOG.info(String.format("Using input file '%s'", inputFileStr));
-        return Paths.get(inputFileStr);
-    }
-
     private DecimalPointPlace getDecimalPointPlace(String inputLine) {
         DecimalPointPlace decimalPointPlace;
         if (inputLine.contains("jpy")) {
@@ -225,12 +227,6 @@ public class BacktestingApplication {
                 .fadeTheBreakout()
                 .createBackTestingParameters());
 
-        parametersMap.put("FadeTheBreakoutNormalDaily", new BackTestingParameters.Builder()
-                .setName("FadeTheBreakoutNormalDaily")
-                .setExtraTicks(extraTicks)
-                .setHighLowCheckPref(1)
-                .fadeTheBreakout()
-                .createBackTestingParameters());
 
         parametersMap.put("FadeTheBreakoutNormalWithTradeCountEdge_01_20SMA", new BackTestingParameters.Builder()
                 .setName("FadeTheBreakoutNormalWithTradeCountEdge_01_20SMA")
