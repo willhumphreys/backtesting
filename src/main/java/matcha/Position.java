@@ -8,17 +8,15 @@ class Position {
     private final double target;
     private final double stop;
     private boolean haveEdge;
-    private boolean filled;
     private boolean closed;
     private int couldOfBeenBetter;
 
-    Position(LocalDateTime entryDate, double entry, double target, double stop, boolean haveEdge, boolean filled) {
+    Position(LocalDateTime entryDate, double entry, double target, double stop, boolean haveEdge) {
         this.entryDate = entryDate;
         this.entry = entry;
         this.target = target;
         this.stop = stop;
         this.haveEdge = haveEdge;
-        this.filled = filled;
     }
 
     LocalDateTime getEntryDate() {
@@ -55,13 +53,5 @@ class Position {
 
     void setCouldOfBeenBetter(int couldOfBeenBetter) {
         this.couldOfBeenBetter = couldOfBeenBetter;
-    }
-
-//    boolean isFilled() {
-//        return filled;
-//    }
-
-    void fill() {
-        this.filled = true;
     }
 }

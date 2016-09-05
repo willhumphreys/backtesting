@@ -105,7 +105,6 @@ class Simulation {
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
                     positions.add(position);
-                    position.fill();
                 }
 
             }

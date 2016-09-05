@@ -99,7 +99,7 @@ class PositionExecutor {
 
         LOG.info("Opening short position at " + entry + " stop " + stop + " target " + target);
 
-        return new Position(entryDate, entry, target, stop, haveEdge, false);
+        return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
     private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge,
@@ -113,7 +113,7 @@ class PositionExecutor {
 
         LOG.info("Opening long position at " + entry + " stop " + stop + " target " + target);
 
-        return new Position(entryDate, entry, target, stop, haveEdge, false);
+        return new Position(entryDate, entry, target, stop, haveEdge);
     }
 
     void setTimeToOpenPosition(boolean timeToOpenPosition) {
