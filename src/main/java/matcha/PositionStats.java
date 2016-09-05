@@ -103,63 +103,6 @@ class PositionStats {
         this.last30WinnersList.add(true);
     }
 
-    double getSma30(int movingAverageDayCount) {
-        double sma30;
-        int totalTrades = winningDates.size() - losingDates.size();
-        if(totalTrades == 0) {
-            sma30 = NOT_ENOUGH_DATA_FOR_EDGE;
-        } else {
-            sma30 = totalTrades / (double) movingAverageDayCount;
-
-            if (sma30 > high) {
-                LOG.info("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
-                LOG.info("New High SMA: " + sma30);
-                this.high = sma30;
-            }
-
-            if (sma30 < low) {
-                LOG.info("Winning dates: " + winningDates.size() + "Losing Dates: " + losingDates.size());
-                LOG.info("New Low SMA: " + sma30);
-                this.low = sma30;
-            }
-        }
-
-        return sma30;
-    }
-
-    SmaResults getTradeCountSma(int movingAverageDayCount) {
-        boolean newHigh = false;
-        boolean newLow = false;
-        if(last30WinnersList.size() < movingAverageDayCount) {
-            return new SmaResults(NOT_ENOUGH_DATA_FOR_EDGE, newHigh, newLow);
-        }
-        int winLoseCount = 0;
-        for (Boolean winLose : last30WinnersList) {
-            if(winLose) {
-                winLoseCount++;
-            } else {
-                winLoseCount--;
-            }
-        }
-        final double movingAverage = winLoseCount / (double) movingAverageDayCount;
-
-        if (movingAverage > high) {
-            LOG.info("Winners: " + winners + "Losing Losers: " + losers);
-            LOG.info("New High SMA: " + movingAverage);
-
-            this.high = movingAverage;
-            newHigh = true;
-        }
-
-        if (movingAverage < low) {
-            LOG.info("Winners: " + winners + "Losers: " + losers);
-            LOG.info("New Low SMA: " + movingAverage);
-            this.low = movingAverage;
-            newLow = true;
-        }
-        return new SmaResults(movingAverage, newHigh, newLow);
-    }
-
     int getShortTradeCount() {
         return shortTradeCount;
     }
