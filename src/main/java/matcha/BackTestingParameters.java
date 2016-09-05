@@ -1,6 +1,6 @@
 package matcha;
 
-public class BackTestingParameters {
+class BackTestingParameters {
     private String name;
     private int extraTicks;
     private int highLowCheckPref;
@@ -15,8 +15,6 @@ public class BackTestingParameters {
         this.highLowCheckPref = highLowCheckPref;
         this.targetMultiplier = targetMultiplier;
     }
-
-
 
     String getName() {
         return name;
@@ -66,7 +64,5 @@ public class BackTestingParameters {
         Builder fadeTheBreakout() {
             return this;
         }
-
-
     }
 }

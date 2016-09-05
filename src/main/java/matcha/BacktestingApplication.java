@@ -64,10 +64,8 @@ public class BacktestingApplication {
 
         List<BackTestingParameters> backTestingParametersList = newArrayList();
 
-
         final BackTestingParameters backTestingParameters2 = parametersMap.get(backTestingParametersName);
         backTestingParametersList.add(backTestingParameters2);
-
 
         if (backTestingParametersList.isEmpty()) {
             throw new IllegalArgumentException("Couldn't find the backTestingParameters for " +
