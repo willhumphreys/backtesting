@@ -48,12 +48,10 @@ public class PositionExecutorTest {
                 {"2015-8-4T9:0:0", "5", "2", "9", "8", "4", "7", "10", "20"}
         };
 
-        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
-        );
+        final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0);
         usefulTickData.invoke();
-        int extraTicks = 0;
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, backTestingParameters
-        );
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData,
+                backTestingParameters);
 
         assertThat(optionalPosition.isPresent(), is(true));
 
