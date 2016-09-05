@@ -68,6 +68,10 @@ class Simulation {
                 continue;
             }
 
+//            if(hourData[hourCounter][DATE].contains("2009-10-20")) {
+//                System.out.println("here we are");
+//            }
+
             //Get tick hour and the hour hour.
             LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE]);
             LocalDateTime tickDateTime = LocalDateTime.parse(tickData[tickCounter][DATE]);
@@ -105,13 +109,9 @@ class Simulation {
                     final Position position = positionOptional.get();
                     positions.add(position);
                 }
-
             }
+            positionExecutor.setTimeToOpenPosition(false);
         }
-
-        positionExecutor.setTimeToOpenPosition(false);
-
-
         return positionExecutor.getResults(getOutputFile(inputs, backTestingParameters.getName()), dataWriter,
                 positionStats);
     }
