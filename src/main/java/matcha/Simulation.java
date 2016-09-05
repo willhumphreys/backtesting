@@ -94,14 +94,14 @@ class Simulation {
                 final Position position = positions.get(0);
                 positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
                         backTestingParameters, decimalPointPlace);
+
                 if (position.isClosed()) {
                     positions.clear();
                 }
-            } else {
-                final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters
-                                .getExtraTicks(), backTestingParameters.getHighLowCheckPref(),
-                        backTestingParameters,
-                        positionStats);
+            } else if(positions.isEmpty()){
+                final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData,
+                        backTestingParameters.getExtraTicks(), backTestingParameters.getHighLowCheckPref(),
+                        backTestingParameters, positionStats);
 
 
                 if (positionOptional.isPresent()) {
