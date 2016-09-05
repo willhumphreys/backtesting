@@ -78,46 +78,50 @@ class Simulation {
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
 
-            //If this is the last tick then it is time to open our positionOptional if we have one.
-            if (tickDateTime.getHour() != nextTickDateTime.getHour()) {
+            if (isNextTickANewHour(tickDateTime, nextTickDateTime)) {
                 positionExecutor.setTimeToOpenPosition(true);
             }
-            hourCounter = syncTicks.updateHourCounterToMatchMinuteCounter(tickData, hourData, hourCounter, tickCounter, hourCandleHour, tickCandleHour);
+            hourCounter = syncTicks.updateHourCounterToMatchMinuteCounter(tickData, hourData, hourCounter, tickCounter,
+                    hourCandleHour, tickCandleHour);
 
-
-            if (hourCounter != 0) {
-
-                UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, tickCounter).invoke();
-
-                if (!positions.isEmpty() && positions.get(0).isFilled()) {
-                    final Position position = positions.get(0);
-                    positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
-                            backTestingParameters, decimalPointPlace);
-                    if (position.isClosed()) {
-                        positions.clear();
-                    }
-                } else {
-                    final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters
-                                    .getExtraTicks(), backTestingParameters.getHighLowCheckPref(),
-                            backTestingParameters,
-                            positionStats);
-
-
-
-                    if(positionOptional.isPresent()) {
-                        final Position position = positionOptional.get();
-                        positions.add(position);
-                        position.fill();
-                    }
-
-                }
+            if (hourCounter == 0) {
+                continue;
             }
 
-            positionExecutor.setTimeToOpenPosition(false);
+            UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, tickCounter).invoke();
+
+            if (!positions.isEmpty() && positions.get(0).isFilled()) {
+                final Position position = positions.get(0);
+                positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
+                        backTestingParameters, decimalPointPlace);
+                if (position.isClosed()) {
+                    positions.clear();
+                }
+            } else {
+                final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters
+                                .getExtraTicks(), backTestingParameters.getHighLowCheckPref(),
+                        backTestingParameters,
+                        positionStats);
+
+
+                if (positionOptional.isPresent()) {
+                    final Position position = positionOptional.get();
+                    positions.add(position);
+                    position.fill();
+                }
+
+            }
         }
+
+        positionExecutor.setTimeToOpenPosition(false);
+
 
         return positionExecutor.getResults(getOutputFile(inputs, backTestingParameters.getName()), dataWriter,
                 positionStats);
+    }
+
+    private boolean isNextTickANewHour(LocalDateTime tickDateTime, LocalDateTime nextTickDateTime) {
+        return tickDateTime.getHour() != nextTickDateTime.getHour();
     }
 
     private String getOutputFile(Inputs inputs, String executionName) {
