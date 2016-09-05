@@ -14,7 +14,6 @@ class PositionStats {
 
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
-    static final double NOT_ENOUGH_DATA_FOR_EDGE = -100.0;
     private int tickCounter;
     private int winners;
     private int shortTradeCount;
@@ -25,8 +24,6 @@ class PositionStats {
     private List<LocalDateTime> losingDates;
     private List<LocalDateTime> winningDates;
 
-    private double high = 0.0;
-    private double low = 0.0;
     private List<Boolean> last30WinnersList;
 
     PositionStats() {
