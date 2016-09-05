@@ -31,7 +31,6 @@ class Simulation {
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
             "could_of_been_better\n";
 
-
     Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;
@@ -98,11 +97,10 @@ class Simulation {
                 if (position.isClosed()) {
                     positions.clear();
                 }
-            } else if(positions.isEmpty()){
+            } else {
                 final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData,
                         backTestingParameters.getExtraTicks(), backTestingParameters.getHighLowCheckPref(),
                         backTestingParameters, positionStats);
-
 
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
