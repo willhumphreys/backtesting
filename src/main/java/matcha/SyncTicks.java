@@ -6,16 +6,17 @@ class SyncTicks {
 
     private static final int DATE = 0;
 
-    int updateHourCounterToMatchMinuteCounter(String[][] tickData, String[][] hourData, int hourCounter, int i, int hourCandleHour, int tickCandleHour) {
+    int updateHourCounterToMatchMinuteCounter(String[][] tickData, String[][] hourData, int hourCounter,
+                                              int tickCounter, int hourCandleHour, int tickCandleHour) {
         if (tickCandleHour != hourCandleHour) {
             hourCounter++;
 
-            if(!checkHourMatchesTick(tickData[i], hourData[hourCounter])) {
+            if(!checkHourMatchesTick(tickData[tickCounter], hourData[hourCounter])) {
                 hourCounter++;
             }
 
             final LocalDateTime currentHourTime2 = LocalDateTime.parse(hourData[hourCounter][DATE]);
-            final LocalDateTime currentMinuteTime2 = LocalDateTime.parse(tickData[i][DATE]);
+            final LocalDateTime currentMinuteTime2 = LocalDateTime.parse(tickData[tickCounter][DATE]);
 
             if (currentHourTime2.getHour() != currentMinuteTime2.getHour()) {
                 throw new IllegalStateException("minutes not matching hours.");
