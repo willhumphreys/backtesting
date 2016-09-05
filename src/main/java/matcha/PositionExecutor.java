@@ -46,21 +46,20 @@ class PositionExecutor {
         return outputDirectory;
     }
 
-    Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount, int highLowCheckPref,
+    Optional<Position> placePositions(UsefulTickData usefulTickData,
                                       BackTestingParameters backTestingParameters) {
 
         //1.094295
-        double extraTicks = extraTicksCount / 100000.0;
-
+        double extraTicks = backTestingParameters.getExtraTicks() / 100000.0;
 
         double targetMultiplier = backTestingParameters.getTargetMultiplier();
 
-        if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition) {
+        if (signals.isShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
 
             return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, targetMultiplier));
         }
 
-        if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition) {
+        if (signals.isLongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
 
             return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, targetMultiplier));
         }
