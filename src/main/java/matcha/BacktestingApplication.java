@@ -100,9 +100,9 @@ public class BacktestingApplication {
 
     private int getDecimalPointPlace(String inputLine) {
         if (inputLine.contains("jpy")) {
-            return 200;
+            return 100;
         } else {
-            return 2000;
+            return 10000;
         }
     }
 
