@@ -55,12 +55,10 @@ class PositionExecutor {
         double targetMultiplier = backTestingParameters.getTargetMultiplier();
 
         if (signals.isShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-
             return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, targetMultiplier));
         }
 
         if (signals.isLongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-
             return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, targetMultiplier));
         }
 
@@ -112,7 +110,6 @@ class PositionExecutor {
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry(), decimalPointPlace);
                 closePosition(profitLoss, position.getStop(), position,
                         STOPPED_LONG_CSV_TEMPLATE, dataWriter, stats);
-
 
                 stats.incrementLosers();
                 stats.addLoser(usefulTickData.getCandleDate());
