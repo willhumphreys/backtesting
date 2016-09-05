@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static java.lang.String.format;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -26,7 +27,6 @@ class PositionExecutor {
     private LocalDateTime entryDate;
     private LocalDateTime exitDate;
     private boolean timeToOpenPosition;
-    private boolean skipNextTrade;
 
     PositionExecutor(Signals signals, Utils utils) throws IOException {
         this.signals = signals;
@@ -165,11 +165,9 @@ class PositionExecutor {
 
         positionStats.addToTickCounter(profitLoss);
 
-        LOG.info("Closing Position from: " + entryDate + " to " + exitDate + " at " + stopOrTarget);
-        dataWriter.write(String.format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
+        LOG.info(format("Closing Position from: %s to %s at %s for profit of %s", entryDate, exitDate, stopOrTarget, profitLoss));
+        dataWriter.write(format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
                 profitLoss, position.getCouldOfBeenBetter()));
-
-        this.skipNextTrade = profitLoss > 0 && !skipNextTrade;
 
         position.close();
     }
