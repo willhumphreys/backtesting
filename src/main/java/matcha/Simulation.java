@@ -31,7 +31,7 @@ class Simulation {
             "could_of_been_better\n";
 
 
-    public Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader) {
+    Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;
         this.positions = newArrayList();
