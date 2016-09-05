@@ -48,29 +48,24 @@ class PositionExecutor {
 
     Optional<Position> placePositions(UsefulTickData usefulTickData,
                                       BackTestingParameters backTestingParameters) {
-
         //1.094295
         double extraTicks = backTestingParameters.getExtraTicks() / 100000.0;
 
-        double targetMultiplier = backTestingParameters.getTargetMultiplier();
-
         if (signals.isShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, targetMultiplier));
+            return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks));
         }
 
         if (signals.isLongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, targetMultiplier));
+            return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks));
         }
-
         return Optional.empty();
     }
 
-    private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks,
-                                                double targetMultiplier) {
+    private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks) {
         entryDate = usefulTickData.getCandleDate();
         double entry = usefulTickData.getCandleClose();
         double target = usefulTickData.getCandleClose() - ((usefulTickData.getCandleHigh() - usefulTickData
-                .getCandleClose() - extraTicks)) * targetMultiplier;
+                .getCandleClose() - extraTicks));
         double stop = usefulTickData.getCandleHigh() + extraTicks;
 
         LOG.info("Opening short position at " + entry + " stop " + stop + " target " + target);
@@ -78,13 +73,12 @@ class PositionExecutor {
         return new Position(entryDate, entry, target, stop);
     }
 
-    private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks,
-                                              double targetMultiplier) {
+    private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks) {
         entryDate = usefulTickData.getCandleDate();
 
         double entry = usefulTickData.getCandleClose();
         double target = usefulTickData.getCandleClose() + ((usefulTickData.getCandleClose() - usefulTickData
-                .getCandleLow() + extraTicks)) * targetMultiplier;
+                .getCandleLow() + extraTicks));
         double stop = usefulTickData.getCandleLow() - extraTicks;
 
         LOG.info("Opening long position at " + entry + " stop " + stop + " target " + target);

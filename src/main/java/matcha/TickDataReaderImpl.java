@@ -15,14 +15,13 @@ import java.util.ListIterator;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class TickDataReaderImpl implements TickDataReader {
+class TickDataReaderImpl implements TickDataReader {
 
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
     private DateTimeFormatter formatter;
 
-
-    public TickDataReaderImpl() {
+    TickDataReaderImpl() {
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
     }
 

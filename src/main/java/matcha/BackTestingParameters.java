@@ -1,19 +1,16 @@
 package matcha;
 
 class BackTestingParameters {
-    private String name;
-    private int extraTicks;
-    private int highLowCheckPref;
-    private double targetMultiplier;
+    private final String name;
+    private final int extraTicks;
+    private final int highLowCheckPref;
 
     private BackTestingParameters(String name,
                                   int extraTicks,
-                                  int highLowCheckPref,
-                                  double targetMultiplier) {
+                                  int highLowCheckPref) {
         this.name = name;
         this.extraTicks = extraTicks;
         this.highLowCheckPref = highLowCheckPref;
-        this.targetMultiplier = targetMultiplier;
     }
 
     String getName() {
@@ -28,15 +25,11 @@ class BackTestingParameters {
         return highLowCheckPref;
     }
 
-    double getTargetMultiplier() {
-        return targetMultiplier;
-    }
-
     static class Builder {
         private String name;
         private int extraTicks;
         private int highLowCheckPref;
-        private double targetMultiplier = 1;
+        private final double targetMultiplier = 1;
 
         Builder setName(String name) {
             this.name = name;
@@ -57,8 +50,8 @@ class BackTestingParameters {
             return new BackTestingParameters(
                     name,
                     extraTicks,
-                    highLowCheckPref,
-                    targetMultiplier);
+                    highLowCheckPref
+            );
         }
 
         Builder fadeTheBreakout() {
