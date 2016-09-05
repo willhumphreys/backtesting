@@ -52,7 +52,7 @@ public class PositionExecutorTest {
         );
         usefulTickData.invoke();
         int extraTicks = 0;
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(true));
@@ -87,7 +87,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -111,12 +111,12 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(true));
 
-        final Optional<Position> alreadyInAPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> alreadyInAPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(alreadyInAPosition.isPresent(), is(false));
@@ -147,7 +147,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -178,7 +178,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -206,7 +206,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -233,7 +233,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -257,7 +257,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -287,7 +287,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(true));
@@ -325,7 +325,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -355,7 +355,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -379,7 +379,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -403,7 +403,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -426,7 +426,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(false));
@@ -450,7 +450,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         final Position position = optionalPosition.get();
@@ -491,7 +491,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         final Position position = optionalPosition.get();
@@ -532,7 +532,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         final Position position = optionalPosition.get();
@@ -568,7 +568,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(true));
@@ -606,7 +606,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(true));
@@ -645,7 +645,7 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData = new UsefulTickData(data, 1, tickData,0
         );
         usefulTickData.invoke();
-        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters, new PositionStats()
+        final Optional<Position> optionalPosition = positionExecutor.placePositions(usefulTickData, extraTicks, 0, backTestingParameters
         );
 
         assertThat(optionalPosition.isPresent(), is(true));

@@ -56,7 +56,7 @@ class PositionExecutor {
     }
 
     Optional<Position> placePositions(UsefulTickData usefulTickData, int extraTicksCount, int highLowCheckPref,
-                                      BackTestingParameters backTestingParameters, PositionStats positionStats) {
+                                      BackTestingParameters backTestingParameters) {
 
         //1.094295
         double extraTicks = extraTicksCount / 100000.0;

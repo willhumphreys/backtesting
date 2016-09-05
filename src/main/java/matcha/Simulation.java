@@ -100,7 +100,7 @@ class Simulation {
             } else {
                 final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData,
                         backTestingParameters.getExtraTicks(), backTestingParameters.getHighLowCheckPref(),
-                        backTestingParameters, positionStats);
+                        backTestingParameters);
 
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
