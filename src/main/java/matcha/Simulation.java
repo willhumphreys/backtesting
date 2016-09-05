@@ -92,7 +92,7 @@ class Simulation {
             if (!positions.isEmpty()) {
                 final Position position = positions.get(0);
                 positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
-                        backTestingParameters, decimalPointPlace);
+                        decimalPointPlace);
 
                 if (position.isClosed()) {
                     positions.clear();

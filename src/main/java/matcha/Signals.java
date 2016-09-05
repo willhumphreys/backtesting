@@ -1,12 +1,6 @@
 package matcha;
 
-public class Signals {
-
-
-
-    public Signals() {
-
-    }
+class Signals {
 
     boolean isLongSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
         final boolean takeOutYesterdaysHigh = usefulTickData.isTakeOutYesterdaysHigh();

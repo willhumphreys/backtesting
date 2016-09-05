@@ -7,16 +7,15 @@ class Position {
     private final double entry;
     private final double target;
     private final double stop;
-    private boolean haveEdge;
     private boolean closed;
     private int couldOfBeenBetter;
 
-    Position(LocalDateTime entryDate, double entry, double target, double stop, boolean haveEdge) {
+    Position(LocalDateTime entryDate, double entry, double target, double stop) {
         this.entryDate = entryDate;
         this.entry = entry;
         this.target = target;
         this.stop = stop;
-        this.haveEdge = haveEdge;
+
     }
 
     LocalDateTime getEntryDate() {
@@ -41,10 +40,6 @@ class Position {
 
     void close() {
         this.closed = true;
-    }
-
-    boolean isHaveEdge() {
-        return haveEdge;
     }
 
     int getCouldOfBeenBetter() {

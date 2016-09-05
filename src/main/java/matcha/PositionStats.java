@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.ListIterator;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.invoke.MethodHandles.lookup;
@@ -17,7 +16,6 @@ class PositionStats {
     private int tickCounter;
     private int winners;
     private int shortTradeCount;
-
     private int losers;
     private int longTradeCount;
 
@@ -73,26 +71,6 @@ class PositionStats {
     void addLoser(LocalDateTime candleDate) {
         this.losingDates.add(candleDate);
         this.last30WinnersList.add(false);
-    }
-
-    private void cleanList(LocalDateTime candleDate, List<LocalDateTime> dateList, int movingAverageDayCount, int
-            movingAverageTradeCount) {
-        for (ListIterator<LocalDateTime> losingDatesIterator = dateList.listIterator(); losingDatesIterator.hasNext();){
-            final LocalDateTime next = losingDatesIterator.next();
-
-            if(next.isBefore(candleDate.minusDays(movingAverageDayCount))) {
-                losingDatesIterator.remove();
-            }
-        }
-
-        while(last30WinnersList.size() > movingAverageTradeCount) {
-            last30WinnersList.remove(0);
-        }
-    }
-
-    void cleanLists(LocalDateTime candleDate, int movingAverageDayCount, int movingAverageTradeCount) {
-        cleanList(candleDate, winningDates, movingAverageDayCount, movingAverageTradeCount);
-        cleanList(candleDate, losingDates, movingAverageDayCount, movingAverageTradeCount);
     }
 
     void addWinner(LocalDateTime candleDate) {
