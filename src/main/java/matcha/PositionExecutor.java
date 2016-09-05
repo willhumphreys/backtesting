@@ -61,11 +61,7 @@ class PositionExecutor {
         //1.094295
         double extraTicks = extraTicksCount / 100000.0;
 
-
-
         boolean haveEdge = configureInitialEdgeValue(backTestingParameters);
-
-
 
         double targetMultiplier = backTestingParameters.getTargetMultiplier();
 
@@ -79,8 +75,6 @@ class PositionExecutor {
                 !backTestingParameters.isLowsOnly()) {
 
                 return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, haveEdge, targetMultiplier));
-
-
         }
 
         return Optional.empty();
@@ -121,8 +115,6 @@ class PositionExecutor {
 
         return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
-
-
 
     void setTimeToOpenPosition(boolean timeToOpenPosition) {
         this.timeToOpenPosition = timeToOpenPosition;
@@ -223,7 +215,6 @@ class PositionExecutor {
 
         }
 
-
         this.skipNextTrade = profitLoss > 0 && !skipNextTrade;
 
         position.close();
@@ -233,5 +224,4 @@ class PositionExecutor {
         dataWriter.close();
         return new Results(outputFile, positionStats);
     }
-
 }
