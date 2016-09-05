@@ -64,7 +64,7 @@ class PositionExecutor {
                 .getCandleClose() - extraTicks));
         double stop = usefulTickData.getCandleHigh() + extraTicks;
 
-        LOG.info("Opening short position at " + entry + " stop " + stop + " target " + target);
+        LOG.info(format("Opening short position at %s stop %s target %.5f", entry, stop, target));
 
         return new Position(entryDate, entry, target, stop);
     }
@@ -77,7 +77,7 @@ class PositionExecutor {
                 .getCandleLow() + extraTicks));
         double stop = usefulTickData.getCandleLow() - extraTicks;
 
-        LOG.info("Opening long position at " + entry + " stop " + stop + " target " + target);
+        LOG.info(format("Opening long position at %s stop %s target %.5f", entry, stop, target));
 
         return new Position(entryDate, entry, target, stop);
     }
