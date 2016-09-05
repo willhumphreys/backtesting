@@ -25,8 +25,6 @@ class Simulation {
 
     private final TickDataReader tickDataReader;
 
-    private int tickRetracement = 0;
-
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
             "could_of_been_better\n";
 
@@ -122,6 +120,7 @@ class Simulation {
                             backTestingParameters,
                             positionStats);
 
+                    int tickRetracement = 0;
                     if(tickRetracement == 0 && this.positionOptional.isPresent()) {
                         this.positionOptional.get().fill();
                     }
