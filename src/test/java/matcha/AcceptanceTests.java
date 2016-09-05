@@ -60,4 +60,16 @@ public class AcceptanceTests {
         assertThat(results.getPositionStats().getLosers(), is(equalTo(1)));
     }
 
+    @Test
+    public void shouldGoLongALosingTradeAtLows() throws Exception {
+        final List<Results> allResults = backtestingApplication.run("FadeTheBreakoutNormalDaily",
+                "eurjpy_long_loser.csv", "acceptance_results");
+
+        assertThat(allResults.size(), is(equalTo(1)));
+        final Results results = allResults.get(0);
+
+        assertThat(results.getPositionStats().getWinners(), is(equalTo(0)));
+        assertThat(results.getPositionStats().getLosers(), is(equalTo(1)));
+    }
+
 }
