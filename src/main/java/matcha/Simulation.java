@@ -62,17 +62,17 @@ class Simulation {
         final PositionStats positionStats = new PositionStats();
 
         int hourCounter = 0;
-        for (int i = 1; i < tickData.length; i++) {
+        for (int tickCounter = 1; tickCounter < tickData.length; tickCounter++) {
 
             //If it the last tick skip trading.
-            if (i == tickData.length - 1) {
+            if (tickCounter == tickData.length - 1) {
                 continue;
             }
 
             //Get tick hour and the hour hour.
             LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE]);
-            LocalDateTime tickDateTime = LocalDateTime.parse(tickData[i][DATE]);
-            LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[i + 1][DATE]);
+            LocalDateTime tickDateTime = LocalDateTime.parse(tickData[tickCounter][DATE]);
+            LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[tickCounter + 1][DATE]);
 
 
             int hourCandleHour = hourDateTime.getHour();
@@ -82,12 +82,12 @@ class Simulation {
             if (tickDateTime.getHour() != nextTickDateTime.getHour()) {
                 positionExecutor.setTimeToOpenPosition(true);
             }
-            hourCounter = syncTicks.updateHourCounterToMatchMinuteCounter(tickData, hourData, hourCounter, i, hourCandleHour, tickCandleHour);
+            hourCounter = syncTicks.updateHourCounterToMatchMinuteCounter(tickData, hourData, hourCounter, tickCounter, hourCandleHour, tickCandleHour);
 
 
             if (hourCounter != 0) {
 
-                UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, i).invoke();
+                UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, tickCounter).invoke();
 
                 if (!positions.isEmpty() && positions.get(0).isFilled()) {
                     final Position position = positions.get(0);
