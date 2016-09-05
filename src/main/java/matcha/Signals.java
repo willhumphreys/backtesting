@@ -26,7 +26,7 @@ class Signals {
                 getLowCheck(usefulTickData, highLowCheckPref);
     }
 
-    boolean getLowCheck(UsefulTickData usefulTickData, int highLowCheckPref) {
+    private boolean getLowCheck(UsefulTickData usefulTickData, int highLowCheckPref) {
         boolean lowCheck;
         switch (highLowCheckPref) {
             case 0:
@@ -47,7 +47,7 @@ class Signals {
         return lowCheck;
     }
 
-    boolean getHighCheck(UsefulTickData usefulTickData, int highCheckPref) {
+    private boolean getHighCheck(UsefulTickData usefulTickData, int highCheckPref) {
         boolean highCheck;
         switch (highCheckPref) {
             case 0:
