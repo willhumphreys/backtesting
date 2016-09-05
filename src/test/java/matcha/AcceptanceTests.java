@@ -62,6 +62,8 @@ public class AcceptanceTests {
         assertThat(results.getPositionStats().getLosers(), is(equalTo(1)));
 
         assertThat(results.getPositionStats().getShortTradeCount(), is(equalTo(1)));
+
+        //assertThat(results.getPositionStats().getTicks(), is(equalTo(40)));
     }
 
     @Test

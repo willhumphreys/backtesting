@@ -139,14 +139,12 @@ public class BacktestingApplication {
         return allResults;
     }
 
-    private DecimalPointPlace getDecimalPointPlace(String inputLine) {
-        DecimalPointPlace decimalPointPlace;
+    private int getDecimalPointPlace(String inputLine) {
         if (inputLine.contains("jpy")) {
-            decimalPointPlace = DecimalPointPlace.JPY;
+            return 200;
         } else {
-            decimalPointPlace = DecimalPointPlace.NORMAL;
+            return 2000;
         }
-        return decimalPointPlace;
     }
 
     private Map<String, BackTestingParameters> createParametersMap(int extraTicks) {

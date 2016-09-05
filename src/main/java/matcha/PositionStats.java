@@ -28,6 +28,7 @@ class PositionStats {
     private double high = 0.0;
     private double low = 0.0;
     private List<Boolean> last30WinnersList;
+    private int ticks;
 
     PositionStats() {
         tickCounter = 0;
@@ -174,5 +175,9 @@ class PositionStats {
 
     void incrementLongTrades() {
         longTradeCount++;
+    }
+
+    int getTicks() {
+        return ticks;
     }
 }

@@ -2,14 +2,7 @@ package matcha;
 
 class Utils {
 
-    int convertTicksToInt(double doubleTicks, DecimalPointPlace decimalPointPlace) {
-        return Math.toIntExact(Math.round(doubleTicks * getDecimalPointMultiplier(decimalPointPlace)));
-    }
-
-    private int getDecimalPointMultiplier(DecimalPointPlace decimalPointPlace) {
-        if (decimalPointPlace == DecimalPointPlace.NORMAL) {
-            return 20000;
-        }
-        return 200;
+    int convertTicksToInt(double doubleTicks, int decimalPointPlace) {
+        return Math.toIntExact(Math.round(doubleTicks * decimalPointPlace));
     }
 }

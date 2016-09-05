@@ -40,7 +40,7 @@ class Simulation {
     }
 
     Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters,
-                    DecimalPointPlace decimalPointPlace) throws
+                    int decimalPointPlace) throws
             IOException {
 
         LOG.info("Starting: " + backTestingParameters.getName() + " " + inputs.getFile1() + " " + inputs

@@ -21,7 +21,7 @@ public class PositionExecutorTest {
     @Mock
     private BufferedWriter mockBufferedWriter;
     private BackTestingParameters backTestingParameters;
-    private DecimalPointPlace decimalPointPlace;
+    private int decimalPointPlace;
 
     @Before
     public void setUp() throws Exception {
@@ -30,7 +30,7 @@ public class PositionExecutorTest {
         backTestingParameters = new BackTestingParameters.Builder().setExtraTicks(10).setName("test")
                 .createBackTestingParameters();
 
-        decimalPointPlace = DecimalPointPlace.NORMAL;
+        decimalPointPlace = 2000;
     }
 
 
@@ -463,7 +463,6 @@ public class PositionExecutorTest {
         final UsefulTickData usefulTickData2 = new UsefulTickData(data, 2, tickData, 0);
         usefulTickData2.invoke();
         final PositionStats stats = new PositionStats();
-;
         positionExecutor.managePosition(usefulTickData2, position, mockBufferedWriter, stats, backTestingParameters,
                 decimalPointPlace);
 

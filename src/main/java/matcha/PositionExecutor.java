@@ -227,7 +227,7 @@ class PositionExecutor {
     }
 
     void managePosition(UsefulTickData usefulTickData, Position position, BufferedWriter dataWriter,
-                        PositionStats stats, BackTestingParameters backTestingParameters, DecimalPointPlace
+                        PositionStats stats, BackTestingParameters backTestingParameters, int
                                 decimalPointPlace) throws
             IOException {
 
