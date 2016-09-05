@@ -35,6 +35,8 @@ public class AcceptanceTests {
         assertThat(results.getPositionStats().getWinners(), is(equalTo(1)));
         assertThat(results.getPositionStats().getLosers(), is(equalTo(0)));
         assertThat(results.getPositionStats().getShortTradeCount(), is(equalTo(1)));
+
+        assertThat(results.getPositionStats().getTickCounter(), is(equalTo(55)));
     }
 
     @Test
@@ -48,6 +50,8 @@ public class AcceptanceTests {
         assertThat(results.getPositionStats().getWinners(), is(equalTo(1)));
         assertThat(results.getPositionStats().getLosers(), is(equalTo(0)));
         assertThat(results.getPositionStats().getLongTradeCount(), is(equalTo(1)));
+
+        assertThat(results.getPositionStats().getTickCounter(), is(equalTo(44)));
     }
 
     @Test
@@ -63,7 +67,7 @@ public class AcceptanceTests {
 
         assertThat(results.getPositionStats().getShortTradeCount(), is(equalTo(1)));
 
-        //assertThat(results.getPositionStats().getTicks(), is(equalTo(40)));
+        assertThat(results.getPositionStats().getTickCounter(), is(equalTo(-102)));
     }
 
     @Test
@@ -77,6 +81,8 @@ public class AcceptanceTests {
         assertThat(results.getPositionStats().getWinners(), is(equalTo(0)));
         assertThat(results.getPositionStats().getLosers(), is(equalTo(1)));
         assertThat(results.getPositionStats().getLongTradeCount(), is(equalTo(1)));
+
+        assertThat(results.getPositionStats().getTickCounter(), is(equalTo(-30)));
     }
 
 }
