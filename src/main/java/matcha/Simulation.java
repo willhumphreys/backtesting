@@ -60,6 +60,7 @@ class Simulation {
 
         final PositionStats positionStats = new PositionStats();
 
+        LOG.info("All data loaded");
         int hourCounter = 0;
         for (int tickCounter = 1; tickCounter < tickData.length; tickCounter++) {
 
