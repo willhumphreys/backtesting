@@ -165,7 +165,7 @@ class PositionExecutor {
 
         positionStats.addToTickCounter(profitLoss);
 
-        LOG.info(format("Closing Position from: %s to %s at %s for profit of %s", entryDate, exitDate, stopOrTarget, profitLoss));
+        LOG.info(format("Closing Position from: %s to %s at %.5f for profit of %d", entryDate, exitDate, stopOrTarget, profitLoss));
         dataWriter.write(format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
                 profitLoss, position.getCouldOfBeenBetter()));
 
