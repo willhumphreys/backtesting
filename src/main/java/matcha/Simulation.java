@@ -105,8 +105,6 @@ class Simulation {
 
                 UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, i).invoke();
 
-
-
                 if (positionOptional.isPresent() && positionOptional.get().isFilled()) {
                     final Position position = positionOptional.get();
                     positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
@@ -120,8 +118,7 @@ class Simulation {
                             backTestingParameters,
                             positionStats);
 
-                    int tickRetracement = 0;
-                    if(tickRetracement == 0 && this.positionOptional.isPresent()) {
+                    if(this.positionOptional.isPresent()) {
                         this.positionOptional.get().fill();
                     }
 
