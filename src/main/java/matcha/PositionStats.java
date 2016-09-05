@@ -10,24 +10,26 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class PositionStats {
+class PositionStats {
 
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
     static final double NOT_ENOUGH_DATA_FOR_EDGE = -100.0;
     private int tickCounter;
     private int winners;
+    private int shortTradeCount;
+
     private int losers;
+    private int longTradeCount;
 
     private List<LocalDateTime> losingDates;
     private List<LocalDateTime> winningDates;
 
     private double high = 0.0;
     private double low = 0.0;
-
     private List<Boolean> last30WinnersList;
 
-    public PositionStats() {
+    PositionStats() {
         tickCounter = 0;
         winners = 0;
         losers = 0;
@@ -37,28 +39,28 @@ public class PositionStats {
         last30WinnersList = newArrayList();
     }
 
-    public void addToTickCounter(int ticks) {
+    void addToTickCounter(int ticks) {
         tickCounter+= ticks;
     }
 
-    public void incrementWinners() {
+    void incrementWinners() {
         winners++;
     }
 
-    public void incrementLosers() {
+    void incrementLosers() {
         losers++;
     }
 
-    public int getTickCounter() {
+    int getTickCounter() {
         return tickCounter;
     }
 
 
-    public int getWinners() {
+    int getWinners() {
         return winners;
     }
 
-    public int getLosers() {
+    int getLosers() {
         return losers;
     }
 
@@ -156,5 +158,21 @@ public class PositionStats {
             newLow = true;
         }
         return new SmaResults(movingAverage, newHigh, newLow);
+    }
+
+    int getShortTradeCount() {
+        return shortTradeCount;
+    }
+
+    int getLongTradeCount() {
+        return longTradeCount;
+    }
+
+    void incrementShortTrades() {
+        shortTradeCount++;
+    }
+
+    void incrementLongTrades() {
+        longTradeCount++;
     }
 }

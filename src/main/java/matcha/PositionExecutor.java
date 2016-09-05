@@ -247,15 +247,17 @@ public class PositionExecutor {
 
 
             if (isLongStopTouched(usefulTickData, position)) {
+                stats.incrementLongTrades();
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry(), decimalPointPlace);
                 closePosition(profitLoss, STOPPED_LONG_TEMPLATE, position.getStop(), position,
                         STOPPED_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
 
-                stats.incrementLosers();
 
+                stats.incrementLosers();
                 stats.addLoser(usefulTickData.getCandleDate());
 
             } else if (isLongTargetExceeded(usefulTickData, position)) {
+                stats.incrementLongTrades();
                 final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry(), decimalPointPlace);
                 closePosition(profitLoss, TARGET_LONG_TEMPLATE, position.getTarget(), position,
                         TARGET_LONG_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
@@ -267,16 +269,18 @@ public class PositionExecutor {
             }
         } else {
 
+
             final int shortUnderWater = utils.convertTicksToInt(usefulTickData.getTickHigh() - position.getEntry(), decimalPointPlace);
 
-
             if (isShortStopTouched(usefulTickData, position)) {
+                stats.incrementShortTrades();
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop(), decimalPointPlace);
                 closePosition(profitLoss, STOPPED_SHORT_TEMPLATE, position.getStop(), position,
                         STOPPED_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);
                 stats.incrementLosers();
                 stats.addLoser(usefulTickData.getCandleDate());
             } else if (isShortTargetExceeded(usefulTickData, position)) {
+                stats.incrementShortTrades();
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget(), decimalPointPlace);
                 closePosition(profitLoss, TARGET_SHORT_TEMPLATE, position.getTarget(), position,
                         TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats, backTestingParameters);

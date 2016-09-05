@@ -132,8 +132,6 @@ class Simulation {
             }
 
             positionExecutor.setTimeToOpenPosition(false);
-
-
         }
 
         return positionExecutor.getResults(getOutputFile(inputs, backTestingParameters.getName()), dataWriter,
