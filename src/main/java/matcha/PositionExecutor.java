@@ -37,17 +37,13 @@ class PositionExecutor {
     private LocalDateTime entryDate;
     private LocalDateTime exitDate;
 
-    private boolean availableToTrade;
     private boolean timeToOpenPosition;
 
     private boolean skipNextTrade;
 
-    private boolean haveEdge;
-
     PositionExecutor(Signals signals, Utils utils) throws IOException {
         this.signals = signals;
         this.utils = utils;
-        availableToTrade = true;
     }
 
     Path createResultsDirectory(final Path outputDirectory) throws IOException {
@@ -65,97 +61,29 @@ class PositionExecutor {
         //1.094295
         double extraTicks = extraTicksCount / 100000.0;
 
-        if (backTestingParameters.isSkipIf4DownDays() && usefulTickData.isLast4DaysDown()) {
-            return Optional.empty();
-        }
 
-        if (backTestingParameters.isSkipIf4UpDays() && usefulTickData.isLast4DaysUp()) {
-            return Optional.empty();
-        }
-
-        if (backTestingParameters.isAfter4DaysOfPositiveCloses() && !usefulTickData.isLast4DaysUp()) {
-            return Optional.empty();
-        }
-
-        if (backTestingParameters.isAfter4DaysOfNegativeCloses() && !usefulTickData.isLast4DaysDown()) {
-            return Optional.empty();
-        }
 
         boolean haveEdge = configureInitialEdgeValue(backTestingParameters);
 
-        if (!haveEdge) {
-            haveEdge = toggleEdges(backTestingParameters, positionStats);
-        }
+
 
         double targetMultiplier = backTestingParameters.getTargetMultiplier();
 
         if (signals.isShortSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition &&
                 !backTestingParameters.isHighsOnly()) {
 
-
-            if (backTestingParameters.isFadeTheBreakout()) {
                 return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks, haveEdge, targetMultiplier));
-
-            } else {
-                return Optional.of(createShortPositionAtLows(usefulTickData, extraTicks, haveEdge));
-            }
-
-
         }
 
         if (signals.isLongSignal(usefulTickData, highLowCheckPref) && timeToOpenPosition &&
                 !backTestingParameters.isLowsOnly()) {
-            if (backTestingParameters.isFadeTheBreakout()) {
+
                 return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks, haveEdge, targetMultiplier));
 
-            } else {
-                return Optional.of(createLongPositionAtHighs(usefulTickData, extraTicks, haveEdge));
-            }
+
         }
 
         return Optional.empty();
-    }
-
-    private boolean toggleEdges(BackTestingParameters backTestingParameters,
-                                PositionStats positionStats) {
-        boolean haveEdge = false;
-        if (backTestingParameters.isWithEdge()) {
-            haveEdge = toggleEdgeWithTimeBasedSMA(backTestingParameters, positionStats);
-        } else if (backTestingParameters.isWithTradeCountEdge()) {
-            haveEdge = toggleEdgeWithTradeCountSMA(backTestingParameters, positionStats);
-        }
-        return haveEdge;
-    }
-
-    private boolean toggleEdgeWithTradeCountSMA(BackTestingParameters backTestingParameters, PositionStats
-            positionStats) {
-        //boolean haveEdge = false;
-        final double tradeCountSma30 = positionStats.getTradeCountSma(backTestingParameters
-                .getMovingAverageTradeCount()).getMovingAverage();
-
-        if (tradeCountSma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
-            haveEdge = false;
-        } else if (tradeCountSma30 < backTestingParameters.getEdgeLevelCount() * -1) {
-            haveEdge = true;
-        } else if (tradeCountSma30 > backTestingParameters.getEdgeLevelCount() +
-                backTestingParameters.getEdgeStopLevelCount()) {
-            haveEdge = false;
-        }
-        return haveEdge;
-    }
-
-    private boolean toggleEdgeWithTimeBasedSMA(BackTestingParameters backTestingParameters, PositionStats
-            positionStats) {
-        final double sma30 = positionStats.getSma30(backTestingParameters.getMovingAverageDayCount());
-        //boolean haveEdge = false;
-        if (sma30 == PositionStats.NOT_ENOUGH_DATA_FOR_EDGE) {
-            haveEdge = false;
-        } else if (sma30 < backTestingParameters.getEdgeLevel() * -1) {
-            haveEdge = true;
-        } else if (sma30 > backTestingParameters.getEdgeLevel()) {
-            haveEdge = false;
-        }
-        return haveEdge;
     }
 
     private boolean configureInitialEdgeValue(BackTestingParameters backTestingParameters) {
@@ -170,7 +98,6 @@ class PositionExecutor {
     private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge,
                                                 double targetMultiplier) {
         entryDate = usefulTickData.getCandleDate();
-        availableToTrade = false;
         double entry = usefulTickData.getCandleClose();
         double target = usefulTickData.getCandleClose() - ((usefulTickData.getCandleHigh() - usefulTickData
                 .getCandleClose() - extraTicks)) * targetMultiplier;
@@ -184,7 +111,6 @@ class PositionExecutor {
     private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge,
                                               double targetMultiplier) {
         entryDate = usefulTickData.getCandleDate();
-        availableToTrade = false;
 
         double entry = usefulTickData.getCandleClose();
         double target = usefulTickData.getCandleClose() + ((usefulTickData.getCandleClose() - usefulTickData
@@ -196,31 +122,7 @@ class PositionExecutor {
         return new Position(entryDate, entry, target, stop, haveEdge, false);
     }
 
-    private Position createLongPositionAtHighs(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge) {
-        double stop = usefulTickData.getCandleClose() - (usefulTickData.getCandleHigh() - usefulTickData
-                .getCandleClose() - extraTicks);
-        double target = usefulTickData.getCandleHigh() + extraTicks;
-        double entry = usefulTickData.getCandleClose();
-        entryDate = usefulTickData.getCandleDate();
-        availableToTrade = false;
-        LOG.info("Opening long position at " + entry + " stop " + stop + " target " + target);
 
-        return new Position(entryDate, entry, target, stop, haveEdge, false);
-    }
-
-    private Position createShortPositionAtLows(UsefulTickData usefulTickData, double extraTicks, boolean haveEdge) {
-        double stop = usefulTickData.getCandleClose() + (usefulTickData.getCandleClose() - usefulTickData
-                .getCandleLow() + extraTicks);
-        double target = usefulTickData.getCandleLow() - extraTicks;
-        double entry = usefulTickData.getCandleClose();
-        entryDate = usefulTickData.getCandleDate();
-
-        availableToTrade = false;
-
-        LOG.info("Opening short position at " + entry + " stop " + stop + " target " + target);
-
-        return new Position(entryDate, entry, target, stop, haveEdge, false);
-    }
 
     void setTimeToOpenPosition(boolean timeToOpenPosition) {
         this.timeToOpenPosition = timeToOpenPosition;
@@ -235,10 +137,6 @@ class PositionExecutor {
                 backTestingParameters.getMovingAverageDayCount(),
                 backTestingParameters.getMovingAverageTradeCount()
         );
-
-        if (availableToTrade) {
-            return;
-        }
 
         exitDate = usefulTickData.getCandleDate();
         if (isLongPosition(position)) {
@@ -324,7 +222,6 @@ class PositionExecutor {
             }
 
         }
-        availableToTrade = true;
 
 
         this.skipNextTrade = profitLoss > 0 && !skipNextTrade;
