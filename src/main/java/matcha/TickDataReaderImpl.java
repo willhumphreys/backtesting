@@ -30,7 +30,6 @@ class TickDataReaderImpl implements TickDataReader {
         CSVReader csvReader = new CSVReader(new FileReader(fileLocation.toFile()));
         List<String[]> list = csvReader.readAll();
 
-
         for(ListIterator<String[]> iter = list.listIterator(); iter.hasNext();){
 
             final String[] lineArray = iter.next();
