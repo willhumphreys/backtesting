@@ -2,7 +2,7 @@ package matcha;
 
 class Signals {
 
-    boolean isLongSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
+    boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
         final boolean takeOutYesterdaysHigh = usefulTickData.isTakeOutYesterdaysHigh();
         final boolean closeNegative = usefulTickData.isCloseNegative();
         final boolean closeBelowYesterdaysHigh = usefulTickData.isCloseBelowYesterdaysHigh();
@@ -15,7 +15,7 @@ class Signals {
                 highCheck;
     }
 
-    boolean isShortSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
+    boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
         final boolean takeOutYesterdaysLow = usefulTickData.isTakeOutYesterdaysLow();
         final boolean closePositive = usefulTickData.isClosePositive();
         final boolean closeAboveYesterdaysLow = usefulTickData.isCloseAboveYesterdaysLow();

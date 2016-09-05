@@ -47,11 +47,11 @@ class PositionExecutor {
         //1.094295
         double extraTicks = backTestingParameters.getExtraTicks() / 100000.0;
 
-        if (signals.isShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
+        if (signals.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
             return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks));
         }
 
-        if (signals.isLongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
+        if (signals.isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
             return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks));
         }
         return Optional.empty();
@@ -64,8 +64,7 @@ class PositionExecutor {
                 .getCandleClose() - extraTicks));
         double stop = usefulTickData.getCandleHigh() + extraTicks;
 
-        LOG.info(format("Opening short position at %s stop %s target %.5f", entry, stop, target));
-
+        LOG.info(format("Opening short position at %.5f stop %.5f target %.5f", entry, stop, target));
         return new Position(entryDate, entry, target, stop);
     }
 
@@ -77,7 +76,7 @@ class PositionExecutor {
                 .getCandleLow() + extraTicks));
         double stop = usefulTickData.getCandleLow() - extraTicks;
 
-        LOG.info(format("Opening long position at %s stop %s target %.5f", entry, stop, target));
+        LOG.info(format("Opening long position at %.5f stop %.5f target %.5f", entry, stop, target));
 
         return new Position(entryDate, entry, target, stop);
     }
@@ -154,7 +153,8 @@ class PositionExecutor {
 
         positionStats.addToTickCounter(profitLoss);
 
-        LOG.info(format("Closing Position from: %s to %s at %.5f for profit of %d", entryDate, exitDate, stopOrTarget, profitLoss));
+        LOG.info(format("Closing Position from: %s to %s at %.5f for profit of %d", entryDate, exitDate, stopOrTarget,
+                profitLoss));
         dataWriter.write(format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
                 profitLoss));
 
