@@ -24,12 +24,9 @@ class PositionExecutor {
 
     private final Utils utils;
     private final Signals signals;
-
     private LocalDateTime entryDate;
     private LocalDateTime exitDate;
-
     private boolean timeToOpenPosition;
-
     private boolean skipNextTrade;
 
     PositionExecutor(Signals signals, Utils utils) throws IOException {

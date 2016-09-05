@@ -29,7 +29,6 @@ class BackTestingParameters {
         private String name;
         private int extraTicks;
         private int highLowCheckPref;
-        private final double targetMultiplier = 1;
 
         Builder setName(String name) {
             this.name = name;
