@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Optional;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.invoke.MethodHandles.lookup;
 import static java.nio.file.Files.newBufferedWriter;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -21,7 +23,7 @@ class Simulation {
 
     private PositionExecutor positionExecutor;
 
-    private Optional<Position> positionOptional;
+    private List<Position> positions;
 
     private final TickDataReader tickDataReader;
 
@@ -32,7 +34,7 @@ class Simulation {
     public Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;
-        this.positionOptional = Optional.empty();
+        this.positions = newArrayList();
     }
 
     Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters,
@@ -105,21 +107,25 @@ class Simulation {
 
                 UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, i).invoke();
 
-                if (positionOptional.isPresent() && positionOptional.get().isFilled()) {
-                    final Position position = positionOptional.get();
+                if (!positions.isEmpty() && positions.get(0).isFilled()) {
+                    final Position position = positions.get(0);
                     positionExecutor.managePosition(usefulTickData, position, dataWriter, positionStats,
                             backTestingParameters, decimalPointPlace);
                     if (position.isClosed()) {
-                        this.positionOptional = Optional.empty();
+                        positions.clear();
                     }
                 } else {
-                    this.positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters
+                    final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData, backTestingParameters
                                     .getExtraTicks(), backTestingParameters.getHighLowCheckPref(),
                             backTestingParameters,
                             positionStats);
 
-                    if(this.positionOptional.isPresent()) {
-                        this.positionOptional.get().fill();
+
+
+                    if(positionOptional.isPresent()) {
+                        final Position position = positionOptional.get();
+                        positions.add(position);
+                        position.fill();
                     }
 
                 }
