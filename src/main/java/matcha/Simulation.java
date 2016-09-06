@@ -44,8 +44,8 @@ class Simulation {
         LOG.info("Starting: " + backTestingParameters.getName() + " " + inputs.getFile1() + " " + inputs
                 .getFile2());
 
-        String[][] tickData;
-        String[][] hourData;
+        List<DataRecord> tickData;
+        List<DataRecord> hourData;
         try {
             tickData = tickDataReader.read(inputs.getFile1());
             hourData = tickDataReader.read(inputs.getFile2());
@@ -61,10 +61,10 @@ class Simulation {
 
         LOG.info("All data loaded");
         int hourCounter = 0;
-        for (int tickCounter = 1; tickCounter < tickData.length; tickCounter++) {
+        for (int tickCounter = 1; tickCounter < tickData.size(); tickCounter++) {
 
             //If it the last tick skip trading.
-            if (tickCounter == tickData.length - 1) {
+            if (tickCounter == tickData.size() - 1) {
                 continue;
             }
 
@@ -73,9 +73,9 @@ class Simulation {
 //            }
 
             //Get tick hour and the hour hour.
-            LocalDateTime hourDateTime = LocalDateTime.parse(hourData[hourCounter][DATE]);
-            LocalDateTime tickDateTime = LocalDateTime.parse(tickData[tickCounter][DATE]);
-            LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData[tickCounter + 1][DATE]);
+            LocalDateTime hourDateTime = LocalDateTime.parse(hourData.get(hourCounter).getDateTime());
+            LocalDateTime tickDateTime = LocalDateTime.parse(tickData.get(tickCounter).getDateTime());
+            LocalDateTime nextTickDateTime = LocalDateTime.parse(tickData.get(tickCounter + 1).getDateTime());
 
 
             int hourCandleHour = hourDateTime.getHour();

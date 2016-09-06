@@ -1,26 +1,16 @@
 package matcha;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static java.lang.Double.parseDouble;
 
 class UsefulTickData {
 
-    private static final int DATE = 0;
-    private static final int OPEN = 1;
-    private static final int LOW = 2;
-    private static final int HIGH = 3;
-    private static final int CLOSE = 4;
-    private static final int YESTERDAYS_DAILY_LOW = 5;
-    private static final int YESTERDAYS_DAILY_HIGH = 6;
-    private static final int TODAYS_LOW = 7;
-    private static final int TODAYS_HIGH = 8;
-    private static final int LAST_4_DAYS_DOWN = 9;
-    private static final int LAST_4_DAYS_UP = 10;
     private final int tickCounter;
-    private final String[][] tickData;
+    private final List<DataRecord> tickData;
 
-    private String[][] hourData;
+    private List<DataRecord> hourData;
     private int hourCounter;
     private String candleDate;
     private double candleClose;
@@ -47,7 +37,7 @@ class UsefulTickData {
     private double tickLow;
     private double tickHigh;
 
-    UsefulTickData(String[][] hourData, int hourCounter, String[][] tickData, int tickCounter) {
+    UsefulTickData(List<DataRecord> hourData, int hourCounter, List<DataRecord> tickData, int tickCounter) {
         this.hourData = hourData;
         this.hourCounter = hourCounter;
         this.tickData = tickData;
@@ -128,28 +118,28 @@ class UsefulTickData {
     UsefulTickData invoke() {
 
         try {
-            candleDate = hourData[hourCounter][DATE];
+            candleDate = hourData.get(hourCounter).getDateTime();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        candleClose = parseDouble(hourData[hourCounter][CLOSE]);
-        double candleOpen = parseDouble(hourData[hourCounter][OPEN]);
-        candleLow = parseDouble(hourData[hourCounter][LOW]);
-        tickLow = parseDouble(tickData[tickCounter][LOW]);
-        tickHigh = parseDouble(tickData[tickCounter][HIGH]);
-        previousCandleLow = parseDouble(hourData[hourCounter - 1][LOW]);
-        candleHigh = parseDouble(hourData[hourCounter][HIGH]);
-        previousCandleHigh = parseDouble(hourData[hourCounter - 1][HIGH]);
-        double yesterdaysLow = parseDouble(hourData[hourCounter][YESTERDAYS_DAILY_LOW]);
-        double yesterdaysHigh = parseDouble(hourData[hourCounter][YESTERDAYS_DAILY_HIGH]);
-        todaysLow = parseDouble(hourData[hourCounter][TODAYS_LOW]);
-        todaysHigh = parseDouble(hourData[hourCounter][TODAYS_HIGH]);
-        lowOfYesterday = parseDouble(hourData[hourCounter - 1][TODAYS_LOW]);
-        highOfYesterday = parseDouble(hourData[hourCounter - 1][TODAYS_HIGH]);
+        candleClose = parseDouble(hourData.get(hourCounter).getClose());
+        double candleOpen = parseDouble(hourData.get(hourCounter).getOpen());
+        candleLow = parseDouble(hourData.get(hourCounter).getLow());
+        tickLow = parseDouble(tickData.get(tickCounter).getLow());
+        tickHigh = parseDouble(tickData.get(tickCounter).getHigh());
+        previousCandleLow = parseDouble(hourData.get(hourCounter - 1).getLow());
+        candleHigh = parseDouble(hourData.get(hourCounter).getHigh());
+        previousCandleHigh = parseDouble(hourData.get(hourCounter - 1).getHigh());
+        double yesterdaysLow = parseDouble(hourData.get(hourCounter).getYesterdaysDailyLow());
+        double yesterdaysHigh = parseDouble(hourData.get(hourCounter).getYesterdaysDailyHigh());
+        todaysLow = parseDouble(hourData.get(hourCounter).getTodaysLow());
+        todaysHigh = parseDouble(hourData.get(hourCounter).getTodaysHigh());
+        lowOfYesterday = parseDouble(hourData.get(hourCounter - 1).getTodaysLow());
+        highOfYesterday = parseDouble(hourData.get(hourCounter - 1).getTodaysHigh());
 
-        //TODO Put back last 4 days down.
-        last4DaysDown = parseDouble(hourData[hourCounter][LAST_4_DAYS_DOWN]) > 0;
-        last4DaysUp = parseDouble(hourData[hourCounter][LAST_4_DAYS_UP]) > 0;
+//        //TODO Put back last 4 days down.
+//        last4DaysDown = parseDouble(hourData.get(hourCounter).get][LAST_4_DAYS_DOWN]) > 0;
+//        last4DaysUp = parseDouble(hourData.get(hourCounter][LAST_4_DAYS_UP]) > 0;
 
         takeOutYesterdaysLow = candleLow < yesterdaysLow;
         closePositive = candleClose > candleOpen;

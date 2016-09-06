@@ -1,16 +1,18 @@
 package matcha;
 
-import com.opencsv.CSVReader;
+import com.google.common.collect.Lists;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.ListIterator;
 
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -26,30 +28,46 @@ class TickDataReaderImpl implements TickDataReader {
     }
 
     @Override
-    public String[][] read(Path fileLocation) throws IOException {
-        CSVReader csvReader = new CSVReader(new FileReader(fileLocation.toFile()));
-        List<String[]> list = csvReader.readAll();
+    public List<DataRecord> read(Path fileLocation) throws IOException {
 
+        Reader in = new FileReader(fileLocation.toFile());
+        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withHeader().parse(in);
         LOG.info("Loaded data from " + fileLocation);
-        for(ListIterator<String[]> iter = list.listIterator(); iter.hasNext();){
+        List<DataRecord> dataRecords = Lists.newArrayList();
+        for (CSVRecord record : records) {
 
-            final String[] lineArray = iter.next();
-            if(lineArray[0].trim().length() == 0 || lineArray[0].equals("date.time")) {
-                iter.remove();
-                continue;
-            }
+            String dateTime = record.get("date.time");
+            String open = record.get("open");
+            String low = record.get("low");
+            String high = record.get("high");
+            String close = record.get("close");
+            String yesterdaysDailyLow = record.get("yesterdays.daily.low");
+            String yesterdaysDailyHigh = record.get("yesterdays.daily.high");
+            String todaysLow = record.get("todays.low");
+            String todaysHigh = record.get("todays.high");
+
+//            final String[] lineArray = iter.next();
+//            if(lineArray[0].trim().length() == 0 || lineArray[0].equals("date.time")) {
+//                iter.remove();
+//                continue;
+//            }
 
             LocalDateTime hourDateTime;
             try {
-                hourDateTime = LocalDateTime.parse(lineArray[0], formatter);
+                hourDateTime = LocalDateTime.parse(dateTime, formatter);
             } catch (DateTimeParseException e) {
-                LOG.info("Failed to parse '" + lineArray[0] + "'");
+                LOG.info("Failed to parse '" + dateTime + "'");
                 throw e;
             }
-            lineArray[0] =  hourDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
+            dateTime = hourDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
+
+            DataRecord dataRecord = new DataRecordBuilder().setDateTime(dateTime).setOpen(open).setLow(low).setHigh(high).setClose(close).setYesterdaysDailyLow(yesterdaysDailyLow).setYesterdaysDailyHigh(yesterdaysDailyHigh).setTodaysLow(todaysLow).setTodaysHigh(todaysHigh).createDataRecord();
+            dataRecords.add(dataRecord);
+            LOG.info(dataRecord.getDateTime());
         }
 
-        String[][] dataArr = new String[list.size()][];
-        return list.toArray(dataArr);
+
+        LOG.info("Finished parsing " + fileLocation);
+        return dataRecords;
     }
 }
