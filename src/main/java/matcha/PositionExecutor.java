@@ -48,11 +48,11 @@ class PositionExecutor {
         double extraTicks = backTestingParameters.getExtraTicks() / 100000.0;
 
         if (signals.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            return Optional.of(createLongPositionAtLows(usefulTickData, extraTicks));
+            return Optional.of(createLongPositionAtLows(usefulTickData, 0));
         }
 
         if (signals.isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            return Optional.of(createShortPositionAtHighs(usefulTickData, extraTicks));
+            return Optional.of(createShortPositionAtHighs(usefulTickData, 0));
         }
         return Optional.empty();
     }
