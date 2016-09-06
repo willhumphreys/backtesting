@@ -28,19 +28,12 @@ public class BacktestingApplication {
     private static final int EXTRA_TICKS = 10;
 
     public static void main(String[] args) throws Exception {
-
-
-        Injector injector = Guice.createInjector((Module) binder -> {
-
-        });
-
+        Injector injector = Guice.createInjector((Module) binder -> { });
         final BacktestingApplication instance = injector.getInstance(BacktestingApplication.class);
-
         instance.run(args);
     }
 
     List<Results> run(String... args) throws Exception {
-
         Options options = new Options();
         options.addOption("scenario", true, "The scenario to use.");
         options.addOption("input", true, "The input file to use.");
