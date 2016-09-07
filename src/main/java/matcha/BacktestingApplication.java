@@ -18,6 +18,10 @@ import static com.google.common.collect.Maps.newHashMap;
 import static java.nio.file.Files.readAllLines;
 import static org.slf4j.LoggerFactory.getLogger;
 
+/**
+ * Typical program arguments
+ * -scenario FadeTheBreakoutNormalDaily -output results -input inputFileList.csv
+ */
 public class BacktestingApplication {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
