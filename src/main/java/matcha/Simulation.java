@@ -99,7 +99,7 @@ class Simulation {
                 }
             } else {
                 final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData,
-                        backTestingParameters);
+                        backTestingParameters, decimalPointPlace);
 
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();

@@ -43,12 +43,12 @@ class PositionExecutor {
     }
 
     Optional<Position> placePositions(UsefulTickData usefulTickData,
-                                      BackTestingParameters backTestingParameters) {
+                                      BackTestingParameters backTestingParameters, int decimalPointPlace) {
         //1.094295
         double extraTicks = backTestingParameters.getExtraTicks() / 100000.0;
 
         if (signals.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            return Optional.of(createLongPositionAtLows(usefulTickData, 0));
+            return Optional.of(createLongPositionAtLows(usefulTickData, 0, decimalPointPlace));
         }
 
         if (signals.isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
@@ -60,23 +60,27 @@ class PositionExecutor {
     private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks) {
         entryDate = usefulTickData.getCandleDate();
         double entry = usefulTickData.getCandleClose();
-        double target = entry - ((usefulTickData.getCandleHigh() - usefulTickData
-                .getCandleClose() - extraTicks));
+        double target = entry - ((usefulTickData.getCandleHigh() - usefulTickData.getCandleClose() - extraTicks));
         double stop = usefulTickData.getCandleHigh() + extraTicks;
 
         LOG.info(format("Opening short position at %.5f stop %.5f target %.5f", entry, stop, target));
         return new Position(entryDate, entry, target, stop);
     }
 
-    private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks) {
+    private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks, int decimalPointPlace) {
         entryDate = usefulTickData.getCandleDate();
 
         double entry = usefulTickData.getCandleClose();
-        double target = entry + ((usefulTickData.getCandleClose() - usefulTickData
-                .getCandleLow() + extraTicks));
+        final int ticksToTarget = utils.convertTicksToInt(usefulTickData.getCandleClose() -
+                usefulTickData.getCandleLow() + extraTicks, decimalPointPlace);
+        double target = entry + ticksToTarget;
         double stop = usefulTickData.getCandleLow() - extraTicks;
+        final int ticksToStop = utils.convertTicksToInt(entry - stop, decimalPointPlace);
 
-        LOG.info(format("Opening long position at %.5f stop %.5f target %.5f", entry, stop, target));
+
+
+        LOG.info(format("Opening long position at %.5f stop %.5f target %.5f ticks to target %d ticks to stop %d",
+                entry, stop, target, ticksToTarget, ticksToStop));
 
         return new Position(entryDate, entry, target, stop);
     }
