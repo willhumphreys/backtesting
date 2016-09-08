@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.String.format;
 import static java.lang.invoke.MethodHandles.lookup;
 import static java.nio.file.Files.newBufferedWriter;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -19,14 +20,10 @@ class Simulation {
 
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
-    private static final int DATE = 0;
-
-    private PositionExecutor positionExecutor;
-
-    private List<Position> positions;
-
+    private final PositionExecutor positionExecutor;
+    private final List<Position> positions;
     private final TickDataReader tickDataReader;
-    private SyncTicks syncTicks;
+    private final SyncTicks syncTicks;
 
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks\n";
 
@@ -121,8 +118,8 @@ class Simulation {
 
     private String getOutputFile(Inputs inputs, String executionName) {
         final Path file2 = inputs.getFile2();
-        final String fileName = file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0].split("_")[0] + "_" + executionName +
-                ".csv";
+        final String fileName = format("%s_%s.csv",
+                file2.getName(file2.getNameCount() - 1).toString().split("\\.")[0].split("_")[0], executionName);
         LOG.info(fileName);
         return fileName;
     }
