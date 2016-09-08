@@ -4,10 +4,7 @@ package matcha;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
+import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 
 import java.lang.invoke.MethodHandles;
@@ -34,20 +31,9 @@ public class BacktestingApplication {
     }
 
     List<Results> run(String... args) throws Exception {
-        Options options = new Options();
-        options.addOption("scenario", true, "The scenario to use.");
-        options.addOption("input", true, "The input file to use.");
-        options.addOption("output", true, "Where to output the results.");
-
-        CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = parser.parse(options, args);
-
-        List<Results> allResults = newArrayList();
+        CommandLine cmd = getCmdLineOptions(args);
 
         Map<String, BackTestingParameters> parametersMap = createParametersMap(EXTRA_TICKS);
-
-        Path outputDirectory = Paths.get(cmd.getOptionValue("output"));
-        LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
         final String backTestingParametersName = cmd.getOptionValue("scenario");
 
@@ -55,17 +41,12 @@ public class BacktestingApplication {
         LOG.info(String.format("Using input file '%s'", inputPath));
         final List<String> inputLines = readAllLines(inputPath);
 
-        List<BackTestingParameters> backTestingParametersList = newArrayList();
+        Path outputDirectory = Paths.get(cmd.getOptionValue("output"));
+        LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
-        final BackTestingParameters backTestingParameters2 = parametersMap.get(backTestingParametersName);
-        backTestingParametersList.add(backTestingParameters2);
+        List<Results> allResults = newArrayList();
 
-        if (backTestingParametersList.isEmpty()) {
-            throw new IllegalArgumentException("Couldn't find the backTestingParameters for " +
-                    backTestingParametersName);
-        }
-
-        for (BackTestingParameters backTestingParameters : backTestingParametersList) {
+        for (BackTestingParameters backTestingParameters : getBackTestingParameters(parametersMap, backTestingParametersName)) {
             LOG.info("Executing " + backTestingParameters.getName());
             final Simulation simulation = new Simulation(new PositionExecutor(new Signals(), new Utils()), new TickDataReaderImpl(), new SyncTicks());
 
@@ -89,6 +70,28 @@ public class BacktestingApplication {
         }
 
         return allResults;
+    }
+
+    private List<BackTestingParameters> getBackTestingParameters(Map<String, BackTestingParameters> parametersMap, String backTestingParametersName) {
+        List<BackTestingParameters> backTestingParametersList = newArrayList();
+
+        backTestingParametersList.add(parametersMap.get(backTestingParametersName));
+
+        if (backTestingParametersList.isEmpty()) {
+            throw new IllegalArgumentException("Couldn't find the backTestingParameters for " +
+                    backTestingParametersName);
+        }
+        return backTestingParametersList;
+    }
+
+    private CommandLine getCmdLineOptions(String[] args) throws ParseException {
+        Options options = new Options();
+        options.addOption("scenario", true, "The scenario to use.");
+        options.addOption("input", true, "The input file to use.");
+        options.addOption("output", true, "Where to output the results.");
+
+        CommandLineParser parser = new DefaultParser();
+        return parser.parse(options, args);
     }
 
     private int getDecimalPointPlace(String inputLine) {
