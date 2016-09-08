@@ -60,7 +60,7 @@ class PositionExecutor {
     private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks) {
         entryDate = usefulTickData.getCandleDate();
         double entry = usefulTickData.getCandleClose();
-        double target = usefulTickData.getCandleClose() - ((usefulTickData.getCandleHigh() - usefulTickData
+        double target = entry - ((usefulTickData.getCandleHigh() - usefulTickData
                 .getCandleClose() - extraTicks));
         double stop = usefulTickData.getCandleHigh() + extraTicks;
 
@@ -72,7 +72,7 @@ class PositionExecutor {
         entryDate = usefulTickData.getCandleDate();
 
         double entry = usefulTickData.getCandleClose();
-        double target = usefulTickData.getCandleClose() + ((usefulTickData.getCandleClose() - usefulTickData
+        double target = entry + ((usefulTickData.getCandleClose() - usefulTickData
                 .getCandleLow() + extraTicks));
         double stop = usefulTickData.getCandleLow() - extraTicks;
 
