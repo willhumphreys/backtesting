@@ -37,8 +37,8 @@ class Simulation {
     Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters,
                     int decimalPointPlace) throws IOException {
 
-        LOG.info("Starting: " + backTestingParameters.getName() + " " + inputs.getFile1() + " " + inputs
-                .getFile2());
+        LOG.info(format("Starting: %s %s %s", backTestingParameters.getName(),
+                inputs.getFile1(), inputs.getFile2()));
 
         List<DataRecord> tickData;
         List<DataRecord> hourData;
