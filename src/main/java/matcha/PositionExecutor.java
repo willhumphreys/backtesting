@@ -73,11 +73,10 @@ class PositionExecutor {
         double entry = usefulTickData.getCandleClose();
         final int ticksToTarget = utils.convertTicksToInt(usefulTickData.getCandleClose() -
                 usefulTickData.getCandleLow() + extraTicks, decimalPointPlace);
-        double target = entry + ticksToTarget;
+        double target = entry + ((usefulTickData.getCandleClose() - usefulTickData
+                .getCandleLow() + extraTicks));
         double stop = usefulTickData.getCandleLow() - extraTicks;
         final int ticksToStop = utils.convertTicksToInt(entry - stop, decimalPointPlace);
-
-
 
         LOG.info(format("Opening long position at %.5f stop %.5f target %.5f ticks to target %d ticks to stop %d",
                 entry, stop, target, ticksToTarget, ticksToStop));
