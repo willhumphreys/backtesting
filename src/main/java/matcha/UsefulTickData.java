@@ -7,11 +7,6 @@ import static java.lang.Double.parseDouble;
 
 class UsefulTickData {
 
-    private final int tickCounter;
-    private final List<DataRecord> tickData;
-
-    private List<DataRecord> hourData;
-    private int hourCounter;
     private String candleDate;
     private double candleClose;
     private double candleLow;
@@ -36,10 +31,6 @@ class UsefulTickData {
     private double tickHigh;
 
     UsefulTickData(List<DataRecord> hourData, int hourCounter, List<DataRecord> tickData, int tickCounter) {
-        this.hourData = hourData;
-        this.hourCounter = hourCounter;
-        this.tickData = tickData;
-        this.tickCounter = tickCounter;
 
         try {
             candleDate = hourData.get(hourCounter).getDateTime();
