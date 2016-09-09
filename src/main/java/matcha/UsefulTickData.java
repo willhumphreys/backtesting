@@ -32,12 +32,7 @@ class UsefulTickData {
 
     UsefulTickData(List<DataRecord> hourData, int hourCounter, List<DataRecord> tickData, int tickCounter) {
 
-        try {
-            candleDate = hourData.get(hourCounter).getDateTime();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        candleDate = hourData.get(hourCounter).getDateTime();
         candleClose = parseDouble(hourData.get(hourCounter).getClose());
         double candleOpen = parseDouble(hourData.get(hourCounter).getOpen());
         candleLow = parseDouble(hourData.get(hourCounter).getLow());
@@ -67,30 +62,39 @@ class UsefulTickData {
     LocalDateTime getCandleDate() {
         return LocalDateTime.parse(candleDate);
     }
+
     double getCandleClose() {
         return candleClose;
     }
+
     double getCandleLow() {
         return candleLow;
     }
+
     double getPreviousCandleLow() {
         return previousCandleLow;
     }
+
     double getCandleHigh() {
         return candleHigh;
     }
+
     double getPreviousCandleHigh() {
         return previousCandleHigh;
     }
+
     double getTodaysLow() {
         return todaysLow;
     }
+
     double getTodaysHigh() {
         return todaysHigh;
     }
+
     double getLowOfDayForPreviousHour() {
         return lowOfDayForPreviousHour;
     }
+
     double getHighOfDayForPreviousHour() {
         return highOfDayForPreviousHour;
     }
@@ -98,24 +102,31 @@ class UsefulTickData {
     boolean isTakeOutYesterdaysLow() {
         return takeOutYesterdaysLow;
     }
+
     boolean isClosePositive() {
         return closePositive;
     }
+
     boolean isCloseAboveYesterdaysLow() {
         return closeAboveYesterdaysLow;
     }
+
     boolean isOpenAboveYesterdaysLow() {
         return openAboveYesterdaysLow;
     }
+
     boolean isTakeOutYesterdaysHigh() {
         return takeOutYesterdaysHigh;
     }
+
     boolean isCloseNegative() {
         return closeNegative;
     }
+
     boolean isCloseBelowYesterdaysHigh() {
         return closeBelowYesterdaysHigh;
     }
+
     boolean isOpenBelowYesterdaysHigh() {
         return openBelowYesterdaysHigh;
     }
@@ -123,6 +134,7 @@ class UsefulTickData {
     double getTickHigh() {
         return tickHigh;
     }
+
     double getTickLow() {
         return tickLow;
     }
