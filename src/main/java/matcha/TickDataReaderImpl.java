@@ -63,9 +63,7 @@ class TickDataReaderImpl implements TickDataReader {
 
             DataRecord dataRecord = new DataRecordBuilder().setDateTime(dateTime).setOpen(open).setLow(low).setHigh(high).setClose(close).setYesterdaysDailyLow(yesterdaysDailyLow).setYesterdaysDailyHigh(yesterdaysDailyHigh).setTodaysLow(todaysLow).setTodaysHigh(todaysHigh).createDataRecord();
             dataRecords.add(dataRecord);
-            LOG.info(dataRecord.getDateTime());
         }
-
 
         LOG.info("Finished parsing " + fileLocation);
         return dataRecords;
