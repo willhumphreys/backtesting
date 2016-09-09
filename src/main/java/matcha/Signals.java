@@ -1,6 +1,13 @@
 package matcha;
 
+import org.slf4j.Logger;
+
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
+
 class Signals {
+
+    private static final Logger LOG = getLogger(lookup().lookupClass());
 
     boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
         final boolean takeOutYesterdaysHigh = usefulTickData.isTakeOutYesterdaysHigh();
@@ -35,11 +42,14 @@ class Signals {
                 break;
             case 1:
                 //New low for the day is put in.
-                lowCheck = usefulTickData.getTodaysLow() < usefulTickData.getLowOfYesterday();
+                lowCheck = usefulTickData.getTodaysLow() < usefulTickData.getLowOfDayForPreviousHour();
                 break;
             case 2:
                 //We don't put in a new low.
-                lowCheck = usefulTickData.getTodaysLow() >= usefulTickData.getLowOfYesterday();
+                lowCheck = usefulTickData.getTodaysLow() >= usefulTickData.getLowOfDayForPreviousHour();
+                if (lowCheck) {
+                    LOG.info("New Daily Low");
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Invalid lowCheck value");
@@ -54,11 +64,14 @@ class Signals {
                 highCheck = usefulTickData.getCandleHigh() > usefulTickData.getPreviousCandleHigh();
                 break;
             case 1:
-                highCheck = usefulTickData.getTodaysHigh() > usefulTickData.getHighOfYesterday();
+                highCheck = usefulTickData.getTodaysHigh() > usefulTickData.getHighOfDayForPreviousHour();
+                if (highCheck) {
+                    LOG.info("New Daily High");
+                }
                 break;
             case 2:
                 //We don't put in a new high.
-                highCheck = usefulTickData.getTodaysHigh() <= usefulTickData.getHighOfYesterday();
+                highCheck = usefulTickData.getTodaysHigh() <= usefulTickData.getHighOfDayForPreviousHour();
                 break;
             default:
                 throw new IllegalArgumentException("Invalid highCheck value");

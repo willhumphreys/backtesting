@@ -19,7 +19,6 @@ public class AcceptanceTests {
     @Before
     public void beforeEachTest() throws Exception {
         Injector injector = Guice.createInjector((Module) binder -> {
-
         });
         backtestingApplication = injector.getInstance(BacktestingApplication.class);
     }

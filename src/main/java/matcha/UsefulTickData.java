@@ -29,8 +29,8 @@ class UsefulTickData {
     private double todaysLow;
     private double todaysHigh;
 
-    private double lowOfYesterday;
-    private double highOfYesterday;
+    private double lowOfDayForPreviousHour;
+    private double highOfDayForPreviousHour;
 
     private double tickLow;
     private double tickHigh;
@@ -66,11 +66,11 @@ class UsefulTickData {
     double getTodaysHigh() {
         return todaysHigh;
     }
-    double getLowOfYesterday() {
-        return lowOfYesterday;
+    double getLowOfDayForPreviousHour() {
+        return lowOfDayForPreviousHour;
     }
-    double getHighOfYesterday() {
-        return highOfYesterday;
+    double getHighOfDayForPreviousHour() {
+        return highOfDayForPreviousHour;
     }
 
     boolean isTakeOutYesterdaysLow() {
@@ -124,8 +124,8 @@ class UsefulTickData {
         double yesterdaysHigh = parseDouble(hourData.get(hourCounter).getYesterdaysDailyHigh());
         todaysLow = parseDouble(hourData.get(hourCounter).getTodaysLow());
         todaysHigh = parseDouble(hourData.get(hourCounter).getTodaysHigh());
-        lowOfYesterday = parseDouble(hourData.get(hourCounter - 1).getTodaysLow());
-        highOfYesterday = parseDouble(hourData.get(hourCounter - 1).getTodaysHigh());
+        lowOfDayForPreviousHour = parseDouble(hourData.get(hourCounter - 1).getTodaysLow());
+        highOfDayForPreviousHour = parseDouble(hourData.get(hourCounter - 1).getTodaysHigh());
 
         takeOutYesterdaysLow = candleLow < yesterdaysLow;
         closePositive = candleClose > candleOpen;
