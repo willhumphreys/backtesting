@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -24,6 +25,8 @@ class Simulation {
     private final List<Position> positions;
     private final TickDataReader tickDataReader;
     private final SyncTicks syncTicks;
+    private LocalDate lastTradeDate;
+
 
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks\n";
 
@@ -32,6 +35,8 @@ class Simulation {
         this.tickDataReader = tickDataReader;
         this.syncTicks = syncTicks;
         this.positions = newArrayList();
+
+        lastTradeDate = LocalDate.of(1900,1,1);
     }
 
     Results execute(Inputs inputs, final Path outputDirectory, BackTestingParameters backTestingParameters,
@@ -57,7 +62,7 @@ class Simulation {
 
         LOG.info("All data loaded");
         int hourCounter = 0;
-        for (int tickCounter = 1; tickCounter < tickData.size(); tickCounter++) {
+        for (int tickCounter = 0; tickCounter < tickData.size(); tickCounter++) {
 
             //If it the last tick skip trading.
             if (tickCounter == tickData.size() - 1) {
@@ -103,7 +108,13 @@ class Simulation {
 
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
-                    positions.add(position);
+                    final LocalDate tradeDate = position.getEntryDate().toLocalDate();
+                    if(lastTradeDate.equals(tradeDate)) {
+                        LOG.info("Trying to trade twice " + tradeDate);
+                    } else {
+                        lastTradeDate = tradeDate;
+                        positions.add(position);
+                    }
                 }
             }
             positionExecutor.setTimeToOpenPosition(false);
