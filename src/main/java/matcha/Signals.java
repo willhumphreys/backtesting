@@ -47,9 +47,6 @@ class Signals {
             case 2:
                 //We don't put in a new low.
                 lowCheck = usefulTickData.getTodaysLow() >= usefulTickData.getLowOfDayForPreviousHour();
-                if (lowCheck) {
-                    LOG.info("New Daily Low");
-                }
                 break;
             default:
                 throw new IllegalArgumentException("Invalid lowCheck value");
@@ -65,9 +62,6 @@ class Signals {
                 break;
             case 1:
                 highCheck = usefulTickData.getTodaysHigh() > usefulTickData.getHighOfDayForPreviousHour();
-                if (highCheck) {
-                    LOG.info("New Daily High");
-                }
                 break;
             case 2:
                 //We don't put in a new high.
