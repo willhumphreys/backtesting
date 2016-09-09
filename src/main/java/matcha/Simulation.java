@@ -87,7 +87,7 @@ class Simulation {
                 continue;
             }
 
-            UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, tickCounter).invoke();
+            UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, tickCounter);
 
             if (!positions.isEmpty()) {
                 final Position position = positions.get(0);

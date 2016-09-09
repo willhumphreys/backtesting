@@ -40,6 +40,37 @@ class UsefulTickData {
         this.hourCounter = hourCounter;
         this.tickData = tickData;
         this.tickCounter = tickCounter;
+
+        try {
+            candleDate = hourData.get(hourCounter).getDateTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        candleClose = parseDouble(hourData.get(hourCounter).getClose());
+        double candleOpen = parseDouble(hourData.get(hourCounter).getOpen());
+        candleLow = parseDouble(hourData.get(hourCounter).getLow());
+        tickLow = parseDouble(tickData.get(tickCounter).getLow());
+        tickHigh = parseDouble(tickData.get(tickCounter).getHigh());
+        previousCandleLow = parseDouble(hourData.get(hourCounter - 1).getLow());
+        candleHigh = parseDouble(hourData.get(hourCounter).getHigh());
+        previousCandleHigh = parseDouble(hourData.get(hourCounter - 1).getHigh());
+        double yesterdaysLow = parseDouble(hourData.get(hourCounter).getYesterdaysDailyLow());
+        double yesterdaysHigh = parseDouble(hourData.get(hourCounter).getYesterdaysDailyHigh());
+        todaysLow = parseDouble(hourData.get(hourCounter).getTodaysLow());
+        todaysHigh = parseDouble(hourData.get(hourCounter).getTodaysHigh());
+        lowOfDayForPreviousHour = parseDouble(hourData.get(hourCounter - 1).getTodaysLow());
+        highOfDayForPreviousHour = parseDouble(hourData.get(hourCounter - 1).getTodaysHigh());
+
+        takeOutYesterdaysLow = candleLow < yesterdaysLow;
+        closePositive = candleClose > candleOpen;
+        closeAboveYesterdaysLow = candleClose > yesterdaysLow;
+        openAboveYesterdaysLow = candleOpen > yesterdaysLow;
+
+        takeOutYesterdaysHigh = candleHigh > yesterdaysHigh;
+        closeNegative = candleClose < candleOpen;
+        closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
+        openBelowYesterdaysHigh = candleOpen < yesterdaysHigh;
     }
 
     LocalDateTime getCandleDate() {
@@ -103,39 +134,5 @@ class UsefulTickData {
     }
     double getTickLow() {
         return tickLow;
-    }
-
-    UsefulTickData invoke() {
-
-        try {
-            candleDate = hourData.get(hourCounter).getDateTime();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        candleClose = parseDouble(hourData.get(hourCounter).getClose());
-        double candleOpen = parseDouble(hourData.get(hourCounter).getOpen());
-        candleLow = parseDouble(hourData.get(hourCounter).getLow());
-        tickLow = parseDouble(tickData.get(tickCounter).getLow());
-        tickHigh = parseDouble(tickData.get(tickCounter).getHigh());
-        previousCandleLow = parseDouble(hourData.get(hourCounter - 1).getLow());
-        candleHigh = parseDouble(hourData.get(hourCounter).getHigh());
-        previousCandleHigh = parseDouble(hourData.get(hourCounter - 1).getHigh());
-        double yesterdaysLow = parseDouble(hourData.get(hourCounter).getYesterdaysDailyLow());
-        double yesterdaysHigh = parseDouble(hourData.get(hourCounter).getYesterdaysDailyHigh());
-        todaysLow = parseDouble(hourData.get(hourCounter).getTodaysLow());
-        todaysHigh = parseDouble(hourData.get(hourCounter).getTodaysHigh());
-        lowOfDayForPreviousHour = parseDouble(hourData.get(hourCounter - 1).getTodaysLow());
-        highOfDayForPreviousHour = parseDouble(hourData.get(hourCounter - 1).getTodaysHigh());
-
-        takeOutYesterdaysLow = candleLow < yesterdaysLow;
-        closePositive = candleClose > candleOpen;
-        closeAboveYesterdaysLow = candleClose > yesterdaysLow;
-        openAboveYesterdaysLow = candleOpen > yesterdaysLow;
-
-        takeOutYesterdaysHigh = candleHigh > yesterdaysHigh;
-        closeNegative = candleClose < candleOpen;
-        closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
-        openBelowYesterdaysHigh = candleOpen < yesterdaysHigh;
-        return this;
     }
 }
