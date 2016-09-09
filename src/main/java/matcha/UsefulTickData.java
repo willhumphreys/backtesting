@@ -32,8 +32,6 @@ class UsefulTickData {
     private double lowOfYesterday;
     private double highOfYesterday;
 
-    private boolean last4DaysDown;
-    private boolean last4DaysUp;
     private double tickLow;
     private double tickHigh;
 
@@ -100,17 +98,9 @@ class UsefulTickData {
         return openBelowYesterdaysHigh;
     }
 
-    boolean isLast4DaysDown() {
-        return last4DaysDown;
-    }
-    boolean isLast4DaysUp() {
-        return last4DaysUp;
-    }
-
     double getTickHigh() {
         return tickHigh;
     }
-
     double getTickLow() {
         return tickLow;
     }
@@ -136,10 +126,6 @@ class UsefulTickData {
         todaysHigh = parseDouble(hourData.get(hourCounter).getTodaysHigh());
         lowOfYesterday = parseDouble(hourData.get(hourCounter - 1).getTodaysLow());
         highOfYesterday = parseDouble(hourData.get(hourCounter - 1).getTodaysHigh());
-
-//        //TODO Put back last 4 days down.
-//        last4DaysDown = parseDouble(hourData.get(hourCounter).get][LAST_4_DAYS_DOWN]) > 0;
-//        last4DaysUp = parseDouble(hourData.get(hourCounter][LAST_4_DAYS_UP]) > 0;
 
         takeOutYesterdaysLow = candleLow < yesterdaysLow;
         closePositive = candleClose > candleOpen;
