@@ -93,4 +93,18 @@ public class AcceptanceTests {
         assertThat(results.getPositionStats().getTickCounter(), is(equalTo(7)));
     }
 
+    @Test
+    public void shouldGoLongALosingTradeAtLowsAndThenShortALosingTradeAtLows() throws Exception {
+        final List<Results> allResults = backtestingApplication.run("-scenario", "FadeTheBreakoutNormalDaily",
+                "-input", "acceptance_data/eurjpy_long_loser_then_short_loser.csv", "-output", "acceptance_results");
+
+        assertThat(allResults.size(), is(equalTo(1)));
+        final Results results = allResults.get(0);
+
+        assertThat(results.getPositionStats().getWinners(), is(equalTo(0)));
+        assertThat(results.getPositionStats().getLosers(), is(equalTo(2)));
+        assertThat(results.getPositionStats().getLongTradeCount(), is(equalTo(1)));
+        assertThat(results.getPositionStats().getShortTradeCount(), is(equalTo(1)));
+        assertThat(results.getPositionStats().getTickCounter(), is(equalTo(-147)));
+    }
 }
