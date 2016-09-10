@@ -45,12 +45,12 @@ class PositionExecutor {
                                       BackTestingParameters backTestingParameters, int decimalPointPlace) {
 
         if (signals.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            final Position longPositionAtLows = positionPlacer.createLongPositionAtLows(usefulTickData, decimalPointPlace);
+            final Position longPositionAtLows = positionPlacer.createLong(usefulTickData, decimalPointPlace);
             return Optional.of(longPositionAtLows);
         }
 
         if (signals.isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            final Position shortPositionAtHighs = positionPlacer.createShortPositionAtHighs(usefulTickData, decimalPointPlace);
+            final Position shortPositionAtHighs = positionPlacer.createShort(usefulTickData, decimalPointPlace);
             return Optional.of(shortPositionAtHighs);
         }
         return Optional.empty();
