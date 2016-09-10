@@ -32,6 +32,11 @@ class UsefulTickData {
 
     UsefulTickData(List<DataRecord> hourData, int hourCounter, List<DataRecord> tickData, int tickCounter) {
 
+        if(hourCounter < 1) {
+            throw new IllegalStateException("Hour counter is: " + hourCounter + ". " +
+                    "The hour counter must be at least one so we can get the previous hour.");
+        }
+
         candleDate = hourData.get(hourCounter).getDateTime();
         candleClose = parseDouble(hourData.get(hourCounter).getClose());
         double candleOpen = parseDouble(hourData.get(hourCounter).getOpen());
