@@ -25,7 +25,6 @@ class PositionExecutor {
     private final Utils utils;
     private PositionPlacer positionPlacer;
     private final Signals signals;
-  //  private LocalDateTime exitDate;
     private boolean timeToOpenPosition;
 
     PositionExecutor(Signals signals, Utils utils, PositionPlacer positionPlacer) throws IOException {
