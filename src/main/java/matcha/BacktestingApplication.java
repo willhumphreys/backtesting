@@ -52,7 +52,7 @@ public class BacktestingApplication {
 
         for (BackTestingParameters backTestingParameters : getBackTestingParameters(parametersMap, backTestingParametersName)) {
             LOG.info("Executing " + backTestingParameters.getName());
-            final Simulation simulation = new Simulation(new PositionExecutor(new Signals(), new Utils(),
+            final Simulation simulation = new Simulation(new PositionExecutor(new Utils(),
                     new FadeTheExtremesPositionPlacer(new Utils())), new TickDataReaderImpl(), new SyncTicks());
 
             for (String inputLine : inputLines) {

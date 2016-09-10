@@ -24,11 +24,9 @@ class PositionExecutor {
 
     private final Utils utils;
     private PositionPlacer positionPlacer;
-    private final Signals signals;
     private boolean timeToOpenPosition;
 
-    PositionExecutor(Signals signals, Utils utils, PositionPlacer positionPlacer) throws IOException {
-        this.signals = signals;
+    PositionExecutor(Utils utils, PositionPlacer positionPlacer) throws IOException {
         this.utils = utils;
         this.positionPlacer = positionPlacer;
     }
@@ -37,19 +35,18 @@ class PositionExecutor {
         if (!Files.exists(outputDirectory)) {
             Files.createDirectory(outputDirectory);
         }
-
         return outputDirectory;
     }
 
     Optional<Position> placePositions(UsefulTickData usefulTickData,
                                       BackTestingParameters backTestingParameters, int decimalPointPlace) {
 
-        if (signals.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
+        if (positionPlacer.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
             final Position longPositionAtLows = positionPlacer.createLong(usefulTickData, decimalPointPlace);
             return Optional.of(longPositionAtLows);
         }
 
-        if (signals.isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
+        if (positionPlacer.isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
             final Position shortPositionAtHighs = positionPlacer.createShort(usefulTickData, decimalPointPlace);
             return Optional.of(shortPositionAtHighs);
         }

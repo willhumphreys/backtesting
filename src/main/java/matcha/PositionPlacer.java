@@ -6,4 +6,7 @@ public interface PositionPlacer {
 
     Position createLong(UsefulTickData usefulTickData, int decimalPointPlace);
 
+    boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref);
+
+    boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref);
 }
