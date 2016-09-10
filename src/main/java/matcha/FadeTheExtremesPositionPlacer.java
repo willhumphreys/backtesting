@@ -27,7 +27,7 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
         double stop = usefulTickData.getCandleHigh();
         final int ticksToStop = utils.convertTicksToInt(stop - entry, decimalPointPlace);
 
-        FadeTheExtremesPositionPlacer.LOG.info(format("Opening short position at: %.5f stop: %.5f target: %.5f ticks " +
+        LOG.info(format("Opening short position at: %.5f stop: %.5f target: %.5f ticks " +
                         "to target: %d ticks to stop: %d",
                 entry, stop, target, ticksToTarget, ticksToStop));
         return new Position(entryDate, entry, target, stop);
@@ -43,7 +43,7 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
         double stop = usefulTickData.getCandleLow();
         final int ticksToStop = utils.convertTicksToInt(entry - stop, decimalPointPlace);
 
-        FadeTheExtremesPositionPlacer.LOG.info(format("Opening long position at: %.5f stop: %.5f target: %.5f ticks " +
+        LOG.info(format("Opening long position at: %.5f stop: %.5f target: %.5f ticks " +
                         "to target: %d ticks to stop: %d",
                 entry, stop, target, ticksToTarget, ticksToStop));
 
