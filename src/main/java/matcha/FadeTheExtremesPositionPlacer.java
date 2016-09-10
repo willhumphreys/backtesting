@@ -9,17 +9,17 @@ import static java.lang.String.format;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class FadeTheExtremesPositionPlacer implements PositionPlacer {
+class FadeTheExtremesPositionPlacer implements PositionPlacer {
 
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
     private final Utils utils;
 
-    public FadeTheExtremesPositionPlacer(Utils utils) {
+    FadeTheExtremesPositionPlacer(Utils utils) {
         this.utils = utils;
     }
 
-    public Position createShort(UsefulTickData usefulTickData, int decimalPointPlace) {
+    private Position createShort(UsefulTickData usefulTickData, int decimalPointPlace) {
         LocalDateTime entryDate = usefulTickData.getCandleDate();
         double entry = usefulTickData.getCandleClose();
         final double distanceToTarget = usefulTickData.getCandleHigh() - usefulTickData.getCandleClose();
@@ -34,7 +34,7 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
         return new Position(entryDate, entry, target, stop);
     }
 
-    public Position createLong(UsefulTickData usefulTickData, int decimalPointPlace) {
+    private Position createLong(UsefulTickData usefulTickData, int decimalPointPlace) {
         LocalDateTime entryDate = usefulTickData.getCandleDate();
 
         double entry = usefulTickData.getCandleClose();
@@ -51,7 +51,7 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
         return new Position(entryDate, entry, target, stop);
     }
 
-    boolean getLowCheck(UsefulTickData usefulTickData, int highLowCheckPref) {
+    private boolean getLowCheck(UsefulTickData usefulTickData, int highLowCheckPref) {
         boolean lowCheck;
         switch (highLowCheckPref) {
             case 0:
@@ -72,7 +72,7 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
         return lowCheck;
     }
 
-    boolean getHighCheck(UsefulTickData usefulTickData, int highCheckPref) {
+    private boolean getHighCheck(UsefulTickData usefulTickData, int highCheckPref) {
         boolean highCheck;
         switch (highCheckPref) {
             case 0:
@@ -91,7 +91,7 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
         return highCheck;
     }
 
-    public boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
+    private boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
         final boolean takeOutYesterdaysHigh = usefulTickData.isTakeOutYesterdaysHigh();
         final boolean closeNegative = usefulTickData.isCloseNegative();
         final boolean closeBelowYesterdaysHigh = usefulTickData.isCloseBelowYesterdaysHigh();
@@ -104,7 +104,7 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
                 highCheck;
     }
 
-    public boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
+    private boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
         final boolean takeOutYesterdaysLow = usefulTickData.isTakeOutYesterdaysLow();
         final boolean closePositive = usefulTickData.isClosePositive();
         final boolean closeAboveYesterdaysLow = usefulTickData.isCloseAboveYesterdaysLow();
@@ -117,8 +117,8 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
 
     @Override
     public Optional<Position> placePositions(UsefulTickData usefulTickData,
-                                              BackTestingParameters backTestingParameters, int decimalPointPlace,
-                                              boolean timeToOpenPosition) {
+                                             BackTestingParameters backTestingParameters, int decimalPointPlace,
+                                             boolean timeToOpenPosition) {
 
         if (isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
             final Position longPositionAtLows = createLong(usefulTickData, decimalPointPlace);
