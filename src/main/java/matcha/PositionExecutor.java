@@ -23,14 +23,15 @@ class PositionExecutor {
     private static final String TARGET_SHORT_CSV_TEMPLATE = "%s,short,%.5f,target,%s,%.5f,%d%n";
 
     private final Utils utils;
+    private PositionPlacer positionPlacer;
     private final Signals signals;
-    private LocalDateTime entryDate;
-    private LocalDateTime exitDate;
+  //  private LocalDateTime exitDate;
     private boolean timeToOpenPosition;
 
-    PositionExecutor(Signals signals, Utils utils) throws IOException {
+    PositionExecutor(Signals signals, Utils utils, PositionPlacer positionPlacer) throws IOException {
         this.signals = signals;
         this.utils = utils;
+        this.positionPlacer = positionPlacer;
     }
 
     Path createResultsDirectory(final Path outputDirectory) throws IOException {
@@ -45,43 +46,15 @@ class PositionExecutor {
                                       BackTestingParameters backTestingParameters, int decimalPointPlace) {
 
         if (signals.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            return Optional.of(createLongPositionAtLows(usefulTickData, decimalPointPlace));
+            final Position longPositionAtLows = positionPlacer.createLongPositionAtLows(usefulTickData, decimalPointPlace);
+            return Optional.of(longPositionAtLows);
         }
 
         if (signals.isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            return Optional.of(createShortPositionAtHighs(usefulTickData, decimalPointPlace));
+            final Position shortPositionAtHighs = positionPlacer.createShortPositionAtHighs(usefulTickData, decimalPointPlace);
+            return Optional.of(shortPositionAtHighs);
         }
         return Optional.empty();
-    }
-
-    private Position createShortPositionAtHighs(UsefulTickData usefulTickData, int decimalPointPlace) {
-        entryDate = usefulTickData.getCandleDate();
-        double entry = usefulTickData.getCandleClose();
-        final double distanceToTarget = usefulTickData.getCandleHigh() - usefulTickData.getCandleClose();
-        final int ticksToTarget = utils.convertTicksToInt(distanceToTarget, decimalPointPlace);
-        double target = entry - distanceToTarget;
-        double stop = usefulTickData.getCandleHigh();
-        final int ticksToStop = utils.convertTicksToInt(stop - entry, decimalPointPlace);
-
-        LOG.info(format("Opening short position at: %.5f stop: %.5f target: %.5f ticks to target: %d ticks to stop: %d",
-                entry, stop, target, ticksToTarget, ticksToStop));
-        return new Position(entryDate, entry, target, stop);
-    }
-
-    private Position createLongPositionAtLows(UsefulTickData usefulTickData, int decimalPointPlace) {
-        entryDate = usefulTickData.getCandleDate();
-
-        double entry = usefulTickData.getCandleClose();
-        final double distanceToTarget = usefulTickData.getCandleClose() - usefulTickData.getCandleLow();
-        final int ticksToTarget = utils.convertTicksToInt(distanceToTarget, decimalPointPlace);
-        double target = entry + distanceToTarget;
-        double stop = usefulTickData.getCandleLow();
-        final int ticksToStop = utils.convertTicksToInt(entry - stop, decimalPointPlace);
-
-        LOG.info(format("Opening long position at: %.5f stop: %.5f target: %.5f ticks to target: %d ticks to stop: %d",
-                entry, stop, target, ticksToTarget, ticksToStop));
-
-        return new Position(entryDate, entry, target, stop);
     }
 
     void setTimeToOpenPosition(boolean timeToOpenPosition) {
@@ -91,14 +64,14 @@ class PositionExecutor {
     void managePosition(UsefulTickData usefulTickData, Position position, BufferedWriter dataWriter,
                         PositionStats stats, int decimalPointPlace) throws IOException {
 
-        exitDate = usefulTickData.getCandleDate();
+        LocalDateTime exitDate = usefulTickData.getCandleDate();
         if (isLongPosition(position)) {
 
             if (isLongStopTouched(usefulTickData, position)) {
                 stats.incrementLongTrades();
                 int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry(), decimalPointPlace);
                 closePosition(profitLoss, position.getStop(), position,
-                        STOPPED_LONG_CSV_TEMPLATE, dataWriter, stats);
+                        STOPPED_LONG_CSV_TEMPLATE, dataWriter, stats, exitDate);
 
                 stats.incrementLosers();
                 stats.addLoser(usefulTickData.getCandleDate());
@@ -107,7 +80,7 @@ class PositionExecutor {
                 stats.incrementLongTrades();
                 final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry(), decimalPointPlace);
                 closePosition(profitLoss, position.getTarget(), position,
-                        TARGET_LONG_CSV_TEMPLATE, dataWriter, stats);
+                        TARGET_LONG_CSV_TEMPLATE, dataWriter, stats, exitDate);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
             }
@@ -117,14 +90,14 @@ class PositionExecutor {
                 stats.incrementShortTrades();
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop(), decimalPointPlace);
                 closePosition(profitLoss, position.getStop(), position,
-                        STOPPED_SHORT_CSV_TEMPLATE, dataWriter, stats);
+                        STOPPED_SHORT_CSV_TEMPLATE, dataWriter, stats, exitDate);
                 stats.incrementLosers();
                 stats.addLoser(usefulTickData.getCandleDate());
             } else if (isShortTargetExceeded(usefulTickData, position)) {
                 stats.incrementShortTrades();
                 final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget(), decimalPointPlace);
                 closePosition(profitLoss, position.getTarget(), position,
-                        TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats);
+                        TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats, exitDate);
                 stats.incrementWinners();
                 stats.addWinner(usefulTickData.getCandleDate());
             }
@@ -152,13 +125,13 @@ class PositionExecutor {
     }
 
     private void closePosition(int profitLoss, final double stopOrTarget, Position position, String
-            csvTemplate, BufferedWriter dataWriter, PositionStats positionStats) throws IOException {
+            csvTemplate, BufferedWriter dataWriter, PositionStats positionStats, LocalDateTime exitDate) throws IOException {
 
         positionStats.addToTickCounter(profitLoss);
 
-        LOG.info(format("Closing Position from: %s to %s at %.5f for profit of %d", entryDate, exitDate, stopOrTarget,
+        LOG.info(format("Closing Position from: %s to %s at %.5f for profit of %d", position.getEntryDate(), exitDate, stopOrTarget,
                 profitLoss));
-        dataWriter.write(format(csvTemplate, entryDate, position.getEntry(), exitDate, stopOrTarget,
+        dataWriter.write(format(csvTemplate, position.getEntryDate(), position.getEntry(), exitDate, stopOrTarget,
                 profitLoss));
 
         position.close();
