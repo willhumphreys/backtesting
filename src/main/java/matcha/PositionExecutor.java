@@ -34,7 +34,6 @@ class PositionExecutor {
     }
 
     Path createResultsDirectory(final Path outputDirectory) throws IOException {
-
         if (!Files.exists(outputDirectory)) {
             Files.createDirectory(outputDirectory);
         }
@@ -46,22 +45,22 @@ class PositionExecutor {
                                       BackTestingParameters backTestingParameters, int decimalPointPlace) {
 
         if (signals.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            return Optional.of(createLongPositionAtLows(usefulTickData, 0, decimalPointPlace));
+            return Optional.of(createLongPositionAtLows(usefulTickData, decimalPointPlace));
         }
 
         if (signals.isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            return Optional.of(createShortPositionAtHighs(usefulTickData, 0, decimalPointPlace));
+            return Optional.of(createShortPositionAtHighs(usefulTickData, decimalPointPlace));
         }
         return Optional.empty();
     }
 
-    private Position createShortPositionAtHighs(UsefulTickData usefulTickData, double extraTicks, int decimalPointPlace) {
+    private Position createShortPositionAtHighs(UsefulTickData usefulTickData, int decimalPointPlace) {
         entryDate = usefulTickData.getCandleDate();
         double entry = usefulTickData.getCandleClose();
-        final double distanceToTarget = usefulTickData.getCandleHigh() - usefulTickData.getCandleClose() - extraTicks;
+        final double distanceToTarget = usefulTickData.getCandleHigh() - usefulTickData.getCandleClose();
         final int ticksToTarget = utils.convertTicksToInt(distanceToTarget, decimalPointPlace);
         double target = entry - distanceToTarget;
-        double stop = usefulTickData.getCandleHigh() + extraTicks;
+        double stop = usefulTickData.getCandleHigh();
         final int ticksToStop = utils.convertTicksToInt(stop - entry, decimalPointPlace);
 
         LOG.info(format("Opening short position at: %.5f stop: %.5f target: %.5f ticks to target: %d ticks to stop: %d",
@@ -69,14 +68,14 @@ class PositionExecutor {
         return new Position(entryDate, entry, target, stop);
     }
 
-    private Position createLongPositionAtLows(UsefulTickData usefulTickData, double extraTicks, int decimalPointPlace) {
+    private Position createLongPositionAtLows(UsefulTickData usefulTickData, int decimalPointPlace) {
         entryDate = usefulTickData.getCandleDate();
 
         double entry = usefulTickData.getCandleClose();
-        final double distanceToTarget = usefulTickData.getCandleClose() - usefulTickData.getCandleLow() + extraTicks;
+        final double distanceToTarget = usefulTickData.getCandleClose() - usefulTickData.getCandleLow();
         final int ticksToTarget = utils.convertTicksToInt(distanceToTarget, decimalPointPlace);
         double target = entry + distanceToTarget;
-        double stop = usefulTickData.getCandleLow() - extraTicks;
+        double stop = usefulTickData.getCandleLow();
         final int ticksToStop = utils.convertTicksToInt(entry - stop, decimalPointPlace);
 
         LOG.info(format("Opening long position at: %.5f stop: %.5f target: %.5f ticks to target: %d ticks to stop: %d",
