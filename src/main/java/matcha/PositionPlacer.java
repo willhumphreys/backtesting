@@ -1,12 +1,11 @@
 package matcha;
 
+import java.util.Optional;
+
 public interface PositionPlacer {
 
-    Position createShort(UsefulTickData usefulTickData, int decimalPointPlacer);
-
-    Position createLong(UsefulTickData usefulTickData, int decimalPointPlace);
-
-    boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref);
-
-    boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref);
+    Optional<Position> placePositions(UsefulTickData usefulTickData,
+                                      BackTestingParameters backTestingParameters,
+                                      int decimalPointPlace,
+                                      boolean timeToOpenPosition);
 }

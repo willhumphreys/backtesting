@@ -3,6 +3,7 @@ package matcha;
 import org.slf4j.Logger;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static java.lang.String.format;
 import static java.lang.invoke.MethodHandles.lookup;
@@ -90,7 +91,6 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
         return highCheck;
     }
 
-    @Override
     public boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
         final boolean takeOutYesterdaysHigh = usefulTickData.isTakeOutYesterdaysHigh();
         final boolean closeNegative = usefulTickData.isCloseNegative();
@@ -104,7 +104,6 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
                 highCheck;
     }
 
-    @Override
     public boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
         final boolean takeOutYesterdaysLow = usefulTickData.isTakeOutYesterdaysLow();
         final boolean closePositive = usefulTickData.isClosePositive();
@@ -114,5 +113,22 @@ public class FadeTheExtremesPositionPlacer implements PositionPlacer {
                 closeAboveYesterdaysLow &&
                 usefulTickData.isOpenAboveYesterdaysLow() &&
                 getLowCheck(usefulTickData, highLowCheckPref);
+    }
+
+    @Override
+    public Optional<Position> placePositions(UsefulTickData usefulTickData,
+                                              BackTestingParameters backTestingParameters, int decimalPointPlace,
+                                              boolean timeToOpenPosition) {
+
+        if (isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
+            final Position longPositionAtLows = createLong(usefulTickData, decimalPointPlace);
+            return Optional.of(longPositionAtLows);
+        }
+
+        if (isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
+            final Position shortPositionAtHighs = createShort(usefulTickData, decimalPointPlace);
+            return Optional.of(shortPositionAtHighs);
+        }
+        return Optional.empty();
     }
 }

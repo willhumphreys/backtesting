@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static java.lang.String.format;
 import static java.lang.invoke.MethodHandles.lookup;
@@ -23,11 +22,9 @@ class PositionExecutor {
     private static final String TARGET_SHORT_CSV_TEMPLATE = "%s,short,%.5f,target,%s,%.5f,%d%n";
 
     private final Utils utils;
-    private PositionPlacer positionPlacer;
 
-    PositionExecutor(Utils utils, PositionPlacer positionPlacer) throws IOException {
+    PositionExecutor(Utils utils) throws IOException {
         this.utils = utils;
-        this.positionPlacer = positionPlacer;
     }
 
     Path createResultsDirectory(final Path outputDirectory) throws IOException {
@@ -36,23 +33,6 @@ class PositionExecutor {
         }
         return outputDirectory;
     }
-
-    Optional<Position> placePositions(UsefulTickData usefulTickData,
-                                      BackTestingParameters backTestingParameters, int decimalPointPlace, boolean
-                                              timeToOpenPosition) {
-
-        if (positionPlacer.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            final Position longPositionAtLows = positionPlacer.createLong(usefulTickData, decimalPointPlace);
-            return Optional.of(longPositionAtLows);
-        }
-
-        if (positionPlacer.isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
-            final Position shortPositionAtHighs = positionPlacer.createShort(usefulTickData, decimalPointPlace);
-            return Optional.of(shortPositionAtHighs);
-        }
-        return Optional.empty();
-    }
-
 
     void managePosition(UsefulTickData usefulTickData, Position position, BufferedWriter dataWriter,
                         PositionStats stats, int decimalPointPlace) throws IOException {

@@ -27,13 +27,16 @@ class Simulation {
     private final SyncTicks syncTicks;
     private LocalDate lastTradeDate;
     private boolean timeToOpenPosition;
+    private PositionPlacer positionPlacer;
 
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks\n";
 
-    Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks) {
+    Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks,
+               PositionPlacer positionPlacer) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;
         this.syncTicks = syncTicks;
+        this.positionPlacer = positionPlacer;
         this.positions = newArrayList();
 
         lastTradeDate = LocalDate.of(1900,1,1);
@@ -83,7 +86,7 @@ class Simulation {
             final int tickCandleHour = tickDateTime.getHour();
 
             if (isNextTickANewHour(tickDateTime, nextTickDateTime)) {
-                setTimeToOpenPosition(true);
+                this.timeToOpenPosition = true;
             }
             hourCounter = syncTicks.updateHourCounterToMatchMinuteCounter(tickData, hourData, hourCounter, tickCounter,
                     hourCandleHour, tickCandleHour);
@@ -103,7 +106,7 @@ class Simulation {
                     positions.clear();
                 }
             } else {
-                final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData,
+                final Optional<Position> positionOptional = positionPlacer.placePositions(usefulTickData,
                         backTestingParameters, decimalPointPlace, timeToOpenPosition);
 
                 if (positionOptional.isPresent()) {
@@ -117,16 +120,11 @@ class Simulation {
                     }
                 }
             }
-            setTimeToOpenPosition(false);
+            this.timeToOpenPosition = false;
         }
         return positionExecutor.getResults(getOutputFile(inputs, backTestingParameters.getName()), dataWriter,
                 positionStats);
     }
-
-    void setTimeToOpenPosition(boolean timeToOpenPosition) {
-        this.timeToOpenPosition = timeToOpenPosition;
-    }
-
 
     private boolean isNextTickANewHour(LocalDateTime tickDateTime, LocalDateTime nextTickDateTime) {
         return tickDateTime.getHour() != nextTickDateTime.getHour();
