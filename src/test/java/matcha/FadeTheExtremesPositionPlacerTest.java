@@ -26,7 +26,9 @@ public class FadeTheExtremesPositionPlacerTest {
     public void shouldCreateAShortPosition() throws Exception {
 
         List<DataRecord> tickDataRecords = Lists.newArrayList(new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"));
-        List<DataRecord> hourDataRecords = Lists.newArrayList(new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"));
+        List<DataRecord> hourDataRecords = Lists.newArrayList(
+                new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"),
+                new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"));
 
         final UsefulTickData usefulTickData = new UsefulTickData
                 (hourDataRecords, 1, tickDataRecords, 0);
