@@ -121,13 +121,11 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
                                              int decimalPointPlace) {
 
         if (isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref())) {
-            final Position longPositionAtLows = createLong(usefulTickData, decimalPointPlace);
-            return Optional.of(longPositionAtLows);
+            return Optional.of(createLong(usefulTickData, decimalPointPlace));
         }
 
         if (isAShortSignal(usefulTickData, backTestingParameters.getHighLowCheckPref())) {
-            final Position shortPositionAtHighs = createShort(usefulTickData, decimalPointPlace);
-            return Optional.of(shortPositionAtHighs);
+            return Optional.of(createShort(usefulTickData, decimalPointPlace));
         }
         return Optional.empty();
     }
