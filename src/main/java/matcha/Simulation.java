@@ -106,17 +106,19 @@ class Simulation {
                     positions.clear();
                 }
             } else {
-                final Optional<Position> positionOptional = positionPlacer.placePositions(usefulTickData,
-                        backTestingParameters, decimalPointPlace, timeToOpenPosition);
+                if (timeToOpenPosition) {
+                    final Optional<Position> positionOptional = positionPlacer.placePositions(usefulTickData,
+                            backTestingParameters, decimalPointPlace);
 
-                if (positionOptional.isPresent()) {
-                    final Position position = positionOptional.get();
-                    final LocalDate tradeDate = position.getEntryDate().toLocalDate();
-                    if(lastTradeDate.equals(tradeDate)) {
-                        LOG.info("Trying to trade twice " + tradeDate);
-                    } else {
-                        lastTradeDate = tradeDate;
-                        positions.add(position);
+                    if (positionOptional.isPresent()) {
+                        final Position position = positionOptional.get();
+                        final LocalDate tradeDate = position.getEntryDate().toLocalDate();
+                        if (lastTradeDate.equals(tradeDate)) {
+                            LOG.info("Trying to trade twice " + tradeDate);
+                        } else {
+                            lastTradeDate = tradeDate;
+                            positions.add(position);
+                        }
                     }
                 }
             }

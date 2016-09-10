@@ -6,6 +6,5 @@ public interface PositionPlacer {
 
     Optional<Position> placePositions(UsefulTickData usefulTickData,
                                       BackTestingParameters backTestingParameters,
-                                      int decimalPointPlace,
-                                      boolean timeToOpenPosition);
+                                      int decimalPointPlace);
 }
