@@ -44,8 +44,6 @@ class PositionExecutor {
 
     Optional<Position> placePositions(UsefulTickData usefulTickData,
                                       BackTestingParameters backTestingParameters, int decimalPointPlace) {
-        //1.094295
-        double extraTicks = backTestingParameters.getExtraTicks() / 100000.0;
 
         if (signals.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
             return Optional.of(createLongPositionAtLows(usefulTickData, 0, decimalPointPlace));
