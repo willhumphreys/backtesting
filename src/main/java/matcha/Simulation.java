@@ -26,7 +26,7 @@ class Simulation {
     private final TickDataReader tickDataReader;
     private final SyncTicks syncTicks;
     private LocalDate lastTradeDate;
-
+    private boolean timeToOpenPosition;
 
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks\n";
 
@@ -83,7 +83,7 @@ class Simulation {
             final int tickCandleHour = tickDateTime.getHour();
 
             if (isNextTickANewHour(tickDateTime, nextTickDateTime)) {
-                positionExecutor.setTimeToOpenPosition(true);
+                setTimeToOpenPosition(true);
             }
             hourCounter = syncTicks.updateHourCounterToMatchMinuteCounter(tickData, hourData, hourCounter, tickCounter,
                     hourCandleHour, tickCandleHour);
@@ -104,7 +104,7 @@ class Simulation {
                 }
             } else {
                 final Optional<Position> positionOptional = positionExecutor.placePositions(usefulTickData,
-                        backTestingParameters, decimalPointPlace);
+                        backTestingParameters, decimalPointPlace, timeToOpenPosition);
 
                 if (positionOptional.isPresent()) {
                     final Position position = positionOptional.get();
@@ -117,11 +117,16 @@ class Simulation {
                     }
                 }
             }
-            positionExecutor.setTimeToOpenPosition(false);
+            setTimeToOpenPosition(false);
         }
         return positionExecutor.getResults(getOutputFile(inputs, backTestingParameters.getName()), dataWriter,
                 positionStats);
     }
+
+    void setTimeToOpenPosition(boolean timeToOpenPosition) {
+        this.timeToOpenPosition = timeToOpenPosition;
+    }
+
 
     private boolean isNextTickANewHour(LocalDateTime tickDateTime, LocalDateTime nextTickDateTime) {
         return tickDateTime.getHour() != nextTickDateTime.getHour();

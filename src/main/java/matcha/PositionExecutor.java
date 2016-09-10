@@ -24,7 +24,6 @@ class PositionExecutor {
 
     private final Utils utils;
     private PositionPlacer positionPlacer;
-    private boolean timeToOpenPosition;
 
     PositionExecutor(Utils utils, PositionPlacer positionPlacer) throws IOException {
         this.utils = utils;
@@ -39,7 +38,8 @@ class PositionExecutor {
     }
 
     Optional<Position> placePositions(UsefulTickData usefulTickData,
-                                      BackTestingParameters backTestingParameters, int decimalPointPlace) {
+                                      BackTestingParameters backTestingParameters, int decimalPointPlace, boolean
+                                              timeToOpenPosition) {
 
         if (positionPlacer.isALongSignal(usefulTickData, backTestingParameters.getHighLowCheckPref()) && timeToOpenPosition) {
             final Position longPositionAtLows = positionPlacer.createLong(usefulTickData, decimalPointPlace);
@@ -53,9 +53,6 @@ class PositionExecutor {
         return Optional.empty();
     }
 
-    void setTimeToOpenPosition(boolean timeToOpenPosition) {
-        this.timeToOpenPosition = timeToOpenPosition;
-    }
 
     void managePosition(UsefulTickData usefulTickData, Position position, BufferedWriter dataWriter,
                         PositionStats stats, int decimalPointPlace) throws IOException {
