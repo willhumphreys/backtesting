@@ -11,7 +11,8 @@ class DataRecord {
     private final String todaysLow;
     private final String todaysHigh;
 
-    DataRecord(String dateTime, String open, String low, String high, String close, String yesterdaysDailyLow, String yesterdaysDailyHigh, String todaysLow, String todaysHigh) {
+    DataRecord(String dateTime, String open, String low, String high, String close, String yesterdaysDailyLow,
+               String yesterdaysDailyHigh, String todaysLow, String todaysHigh) {
 
         this.dateTime = dateTime;
         this.open = open;
@@ -117,7 +118,8 @@ class DataRecord {
         }
 
         public DataRecord createDataRecord() {
-            return new DataRecord(dateTime, open, low, high, close, yesterdaysDailyLow, yesterdaysDailyHigh, todaysLow, todaysHigh);
+            return new DataRecord(dateTime, open, low, high, close, yesterdaysDailyLow, yesterdaysDailyHigh, todaysLow,
+                    todaysHigh);
         }
     }
 }
