@@ -26,10 +26,42 @@ public class FadeTheExtremesPositionPlacerTest {
     public void shouldCreateAShortPosition() throws Exception {
 
         List<DataRecord> tickDataRecords = Lists.newArrayList(
-                new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"));
+                new DataRecord.Builder()
+                        .setDateTime("2007-12-13T18:19:00")
+                        .setOpen("0")
+                        .setLow("0")
+                        .setHigh("0")
+                        .setClose("0")
+                        .setYesterdaysDailyLow("0")
+                        .setYesterdaysDailyHigh("0")
+                        .setTodaysLow("0")
+                        .setTodaysHigh("0")
+                        .createDataRecord()
+        );
         List<DataRecord> hourDataRecords = Lists.newArrayList(
-                new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"),
-                new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"));
+                new DataRecord.Builder()
+                        .setDateTime("2007-12-13T18:19:00")
+                        .setOpen("0")
+                        .setLow("0")
+                        .setHigh("0")
+                        .setClose("0")
+                        .setYesterdaysDailyLow("0")
+                        .setYesterdaysDailyHigh("0")
+                        .setTodaysLow("0")
+                        .setTodaysHigh("0")
+                        .createDataRecord(),
+                new DataRecord.Builder()
+                        .setDateTime("2007-12-13T18:19:00")
+                        .setOpen("0")
+                        .setLow("0")
+                        .setHigh("0")
+                        .setClose("0")
+                        .setYesterdaysDailyLow("0")
+                        .setYesterdaysDailyHigh("0")
+                        .setTodaysLow("0")
+                        .setTodaysHigh("0")
+                        .createDataRecord()
+        );
 
         final UsefulTickData usefulTickData = new UsefulTickData
                 (hourDataRecords, 1, tickDataRecords, 0);

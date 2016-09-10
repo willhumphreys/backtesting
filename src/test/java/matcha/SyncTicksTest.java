@@ -14,8 +14,31 @@ public class SyncTicksTest {
     @Test()
     public void shouldReturnSameHourIfTickMatchesHour() throws Exception {
 
-        List<DataRecord> tickDataRecords = Lists.newArrayList(new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"));
-        List<DataRecord> hourDataRecords = Lists.newArrayList(new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"));
+        List<DataRecord> tickDataRecords = Lists.newArrayList(
+                new DataRecord.Builder()
+                        .setDateTime("2007-12-13T18:19:00")
+                        .setOpen("0")
+                        .setLow("0")
+                        .setHigh("0")
+                        .setClose("0")
+                        .setYesterdaysDailyLow("0")
+                        .setYesterdaysDailyHigh("0")
+                        .setTodaysLow("0")
+                        .setTodaysHigh("0")
+                        .createDataRecord()
+        );
+        List<DataRecord> hourDataRecords = Lists.newArrayList(
+                new DataRecord.Builder()
+                        .setDateTime("2007-12-13T18:19:00")
+                        .setOpen("0")
+                        .setLow("0")
+                        .setHigh("0")
+                        .setClose("0")
+                        .setYesterdaysDailyLow("0")
+                        .setYesterdaysDailyHigh("0")
+                        .setTodaysLow("0")
+                        .setTodaysHigh("0")
+                        .createDataRecord());
 
         final SyncTicks syncTicks = new SyncTicks();
 
@@ -33,11 +56,14 @@ public class SyncTicksTest {
     public void shouldUpdateHourIfTickDoNotMatchTick() throws Exception {
 
         List<DataRecord> tickDataRecords = Lists.newArrayList(
-                new DataRecord("2007-12-13T19:19:00", "0", "0","0", "0", "0", "0", "0", "0")
+                new DataRecord.Builder().setDateTime("2007-12-13T19:19:00").setOpen("0").setLow("0").setHigh("0")
+                        .setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0").setTodaysHigh("0").createDataRecord()
         );
         List<DataRecord> hourDataRecords = Lists.newArrayList(
-                new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"),
-                new DataRecord("2007-12-13T19:19:00", "0", "0","0", "0", "0", "0", "0", "0")
+                new DataRecord.Builder().setDateTime("2007-12-13T18:19:00").setOpen("0").setLow("0").setHigh("0")
+                        .setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0")
+                        .setTodaysHigh("0").createDataRecord(),
+                new DataRecord.Builder().setDateTime("2007-12-13T19:19:00").setOpen("0").setLow("0").setHigh("0").setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0").setTodaysHigh("0").createDataRecord()
         );
 
         final SyncTicks syncTicks = new SyncTicks();
@@ -56,12 +82,15 @@ public class SyncTicksTest {
     public void shouldUpdateHourTwiceIfTicksDoNotMatchOnFirstTry() throws Exception {
 
         List<DataRecord> tickDataRecords = Lists.newArrayList(
-                new DataRecord("2007-12-13T20:19:00", "0", "0","0", "0", "0", "0", "0", "0")
+                new DataRecord.Builder().setDateTime("2007-12-13T20:19:00").setOpen("0").setLow("0").setHigh("0").setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0").setTodaysHigh("0").createDataRecord()
         );
         List<DataRecord> hourDataRecords = Lists.newArrayList(
-                new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"),
-                new DataRecord("2007-12-13T19:19:00", "0", "0","0", "0", "0", "0", "0", "0"),
-                new DataRecord("2007-12-13T20:19:00", "0", "0","0", "0", "0", "0", "0", "0")
+                new DataRecord.Builder().setDateTime("2007-12-13T18:19:00").setOpen("0").setLow("0").setHigh("0")
+                        .setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0").setTodaysHigh("0").createDataRecord(),
+                new DataRecord.Builder().setDateTime("2007-12-13T19:19:00").setOpen("0").setLow("0").setHigh("0")
+                        .setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0")
+                        .setTodaysHigh("0").createDataRecord(),
+                new DataRecord.Builder().setDateTime("2007-12-13T20:19:00").setOpen("0").setLow("0").setHigh("0").setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0").setTodaysHigh("0").createDataRecord()
         );
 
         final SyncTicks syncTicks = new SyncTicks();
@@ -80,12 +109,16 @@ public class SyncTicksTest {
     public void shouldThrowExceptionIfHourDoesNotMatchTickAfterTwoIncrements() throws Exception {
 
         List<DataRecord> tickDataRecords = Lists.newArrayList(
-                new DataRecord("2007-12-13T20:19:00", "0", "0","0", "0", "0", "0", "0", "0")
+                new DataRecord.Builder().setDateTime("2007-12-13T20:19:00").setOpen("0").setLow("0").setHigh("0")
+                        .setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0").setTodaysHigh("0").createDataRecord()
         );
         List<DataRecord> hourDataRecords = Lists.newArrayList(
-                new DataRecord("2007-12-13T17:19:00", "0", "0","0", "0", "0", "0", "0", "0"),
-                new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"),
-                new DataRecord("2007-12-13T19:19:00", "0", "0","0", "0", "0", "0", "0", "0")
+                new DataRecord.Builder().setDateTime("2007-12-13T17:19:00").setOpen("0").setLow("0").setHigh("0")
+                        .setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0")
+                        .setTodaysHigh("0").createDataRecord(),
+                new DataRecord.Builder().setDateTime("2007-12-13T18:19:00").setOpen("0").setLow("0").setHigh("0")
+                        .setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0").setTodaysHigh("0").createDataRecord(),
+                new DataRecord.Builder().setDateTime("2007-12-13T19:19:00").setOpen("0").setLow("0").setHigh("0").setClose("0").setYesterdaysDailyLow("0").setYesterdaysDailyHigh("0").setTodaysLow("0").setTodaysHigh("0").createDataRecord()
         );
 
         final SyncTicks syncTicks = new SyncTicks();
