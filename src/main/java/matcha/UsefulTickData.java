@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.lang.Double.parseDouble;
+import static java.lang.String.format;
 
 class UsefulTickData {
 
@@ -33,8 +34,13 @@ class UsefulTickData {
     UsefulTickData(List<DataRecord> hourData, int hourCounter, List<DataRecord> tickData, int tickCounter) {
 
         if(hourCounter < 1) {
-            throw new IllegalStateException("Hour counter is: " + hourCounter + ". " +
-                    "The hour counter must be at least one so we can get the previous hour.");
+            throw new IllegalStateException(format("Hour counter is: %d. The hour counter must be at least one" +
+                    " so we can get the previous hour.", hourCounter));
+        }
+
+        if(hourCounter >= hourData.size()) {
+            throw new IllegalStateException(format("The hour counter references hourData that does not exist. " +
+                    "hourCounter: %d hourData size: %d", hourCounter, hourData.size()));
         }
 
         candleDate = hourData.get(hourCounter).getDateTime();

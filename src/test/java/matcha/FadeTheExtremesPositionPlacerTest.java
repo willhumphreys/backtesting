@@ -29,7 +29,7 @@ public class FadeTheExtremesPositionPlacerTest {
         List<DataRecord> hourDataRecords = Lists.newArrayList(new DataRecord("2007-12-13T18:19:00", "0", "0","0", "0", "0", "0", "0", "0"));
 
         final UsefulTickData usefulTickData = new UsefulTickData
-                (hourDataRecords, 0, tickDataRecords, 0);
+                (hourDataRecords, 1, tickDataRecords, 0);
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5, 1);
 
         assertThat(position.isPresent(), is(true));
