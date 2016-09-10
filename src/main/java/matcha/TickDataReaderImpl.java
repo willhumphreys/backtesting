@@ -61,7 +61,7 @@ class TickDataReaderImpl implements TickDataReader {
             }
             dateTime = hourDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
 
-            DataRecord dataRecord = new DataRecordBuilder().setDateTime(dateTime).setOpen(open).setLow(low).setHigh(high).setClose(close).setYesterdaysDailyLow(yesterdaysDailyLow).setYesterdaysDailyHigh(yesterdaysDailyHigh).setTodaysLow(todaysLow).setTodaysHigh(todaysHigh).createDataRecord();
+            DataRecord dataRecord = new DataRecord.Builder().setDateTime(dateTime).setOpen(open).setLow(low).setHigh(high).setClose(close).setYesterdaysDailyLow(yesterdaysDailyLow).setYesterdaysDailyHigh(yesterdaysDailyHigh).setTodaysLow(todaysLow).setTodaysHigh(todaysHigh).createDataRecord();
             dataRecords.add(dataRecord);
         }
 

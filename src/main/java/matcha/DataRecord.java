@@ -59,4 +59,65 @@ class DataRecord {
     public String getTodaysHigh() {
         return todaysHigh;
     }
+
+    public static class Builder {
+        private String dateTime;
+        private String open;
+        private String low;
+        private String high;
+        private String close;
+        private String yesterdaysDailyLow;
+        private String yesterdaysDailyHigh;
+        private String todaysLow;
+        private String todaysHigh;
+
+        public Builder setDateTime(String dateTime) {
+            this.dateTime = dateTime;
+            return this;
+        }
+
+        public Builder setOpen(String open) {
+            this.open = open;
+            return this;
+        }
+
+        public Builder setLow(String low) {
+            this.low = low;
+            return this;
+        }
+
+        public Builder setHigh(String high) {
+            this.high = high;
+            return this;
+        }
+
+        public Builder setClose(String close) {
+            this.close = close;
+            return this;
+        }
+
+        public Builder setYesterdaysDailyLow(String yesterdaysDailyLow) {
+            this.yesterdaysDailyLow = yesterdaysDailyLow;
+            return this;
+        }
+
+        public Builder setYesterdaysDailyHigh(String yesterdaysDailyHigh) {
+            this.yesterdaysDailyHigh = yesterdaysDailyHigh;
+            return this;
+        }
+
+        public Builder setTodaysLow(String todaysLow) {
+            this.todaysLow = todaysLow;
+            return this;
+        }
+
+        public Builder setTodaysHigh(String todaysHigh) {
+            this.todaysHigh = todaysHigh;
+            return this;
+        }
+
+        public DataRecord createDataRecord() {
+            return new DataRecord(dateTime, open, low, high, close, yesterdaysDailyLow, yesterdaysDailyHigh, todaysLow, todaysHigh);
+        }
+    }
 }
