@@ -25,23 +25,23 @@ public class FadeTheExtremesPositionPlacerTest {
 
         final UsefulTickData usefulTickData = new UsefulTickDataBuilder()
                 .setCandleDate("2007-12-13T18:19:00")
-                .setCandleClose(0)
+                .setCandleClose(7)
                 .setCandleLow(0)
                 .setPreviousCandleLow(0)
-                .setCandleHigh(0)
+                .setCandleHigh(9)
                 .setPreviousCandleHigh(0)
                 .setTakeOutYesterdaysLow(false)
                 .setClosePositive(false)
                 .setCloseAboveYesterdaysLow(false)
                 .setOpenAboveYesterdaysLow(false)
-                .setTakeOutYesterdaysHigh(false)
-                .setCloseNegative(false)
-                .setCloseBelowYesterdaysHigh(false)
-                .setOpenBelowYesterdaysHigh(false)
+                .setTakeOutYesterdaysHigh(true)
+                .setCloseNegative(true)
+                .setCloseBelowYesterdaysHigh(true)
+                .setOpenBelowYesterdaysHigh(true)
                 .setTodaysLow(0)
-                .setTodaysHigh(0)
+                .setTodaysHigh(1)
                 .setLowOfDayForPreviousHour(0)
-                .setHighOfDayForPreviousHour(0)
+                .setHighOfDayForPreviousHour(0.5)
                 .setTickLow(0)
                 .setTickHigh(0)
                 .createUsefulTickData();
@@ -49,9 +49,9 @@ public class FadeTheExtremesPositionPlacerTest {
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5, 1);
 
         assertThat(position.isPresent(), is(true));
-        assertThat(position.get().getEntry(), is(equalTo(5)));
+        assertThat(position.get().getEntry(), is(equalTo(7.0)));
         assertThat(position.get().getEntryDate(), is(equalTo(LocalDateTime.parse("2007-12-13T18:19:00"))));
-        assertThat(position.get().getStop(), is(equalTo(3343)));
-        assertThat(position.get().getTarget(), is(equalTo(3422)));
+        assertThat(position.get().getStop(), is(equalTo(9.0)));
+        assertThat(position.get().getTarget(), is(equalTo(5.0)));
     }
 }
