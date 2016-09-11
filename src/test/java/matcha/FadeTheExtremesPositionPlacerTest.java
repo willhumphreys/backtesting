@@ -1,11 +1,9 @@
 package matcha;
 
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -25,46 +23,29 @@ public class FadeTheExtremesPositionPlacerTest {
     @Test
     public void shouldCreateAShortPosition() throws Exception {
 
-        List<DataRecord> tickDataRecords = Lists.newArrayList(
-                new DataRecord.Builder()
-                        .setDateTime("2007-12-13T18:19:00")
-                        .setOpen("0")
-                        .setLow("0")
-                        .setHigh("0")
-                        .setClose("0")
-                        .setYesterdaysDailyLow("0")
-                        .setYesterdaysDailyHigh("0")
-                        .setTodaysLow("0")
-                        .setTodaysHigh("0")
-                        .createDataRecord()
-        );
-        List<DataRecord> hourDataRecords = Lists.newArrayList(
-                new DataRecord.Builder()
-                        .setDateTime("2007-12-13T18:19:00")
-                        .setOpen("0")
-                        .setLow("0")
-                        .setHigh("0")
-                        .setClose("0")
-                        .setYesterdaysDailyLow("0")
-                        .setYesterdaysDailyHigh("0")
-                        .setTodaysLow("0")
-                        .setTodaysHigh("0")
-                        .createDataRecord(),
-                new DataRecord.Builder()
-                        .setDateTime("2007-12-13T18:19:00")
-                        .setOpen("0")
-                        .setLow("0")
-                        .setHigh("0")
-                        .setClose("0")
-                        .setYesterdaysDailyLow("0")
-                        .setYesterdaysDailyHigh("0")
-                        .setTodaysLow("0")
-                        .setTodaysHigh("0")
-                        .createDataRecord()
-        );
+        final UsefulTickData usefulTickData = new UsefulTickDataBuilder()
+                .setCandleDate("2007-12-13T18:19:00")
+                .setCandleClose(0)
+                .setCandleLow(0)
+                .setPreviousCandleLow(0)
+                .setCandleHigh(0)
+                .setPreviousCandleHigh(0)
+                .setTakeOutYesterdaysLow(false)
+                .setClosePositive(false)
+                .setCloseAboveYesterdaysLow(false)
+                .setOpenAboveYesterdaysLow(false)
+                .setTakeOutYesterdaysHigh(false)
+                .setCloseNegative(false)
+                .setCloseBelowYesterdaysHigh(false)
+                .setOpenBelowYesterdaysHigh(false)
+                .setTodaysLow(0)
+                .setTodaysHigh(0)
+                .setLowOfDayForPreviousHour(0)
+                .setHighOfDayForPreviousHour(0)
+                .setTickLow(0)
+                .setTickHigh(0)
+                .createUsefulTickData();
 
-        final UsefulTickData usefulTickData = new UsefulTickData
-                (hourDataRecords, 1, tickDataRecords, 0);
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5, 1);
 
         assertThat(position.isPresent(), is(true));

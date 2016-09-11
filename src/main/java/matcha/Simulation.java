@@ -30,13 +30,15 @@ class Simulation {
     private PositionPlacer positionPlacer;
 
     private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks\n";
+    private TickDataFactory tickDataFactory;
 
     Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks,
-               PositionPlacer positionPlacer) {
+               PositionPlacer positionPlacer, TickDataFactory tickDataFactory) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;
         this.syncTicks = syncTicks;
         this.positionPlacer = positionPlacer;
+        this.tickDataFactory = tickDataFactory;
         this.positions = newArrayList();
 
         lastTradeDate = LocalDate.of(1900,1,1);
@@ -95,7 +97,8 @@ class Simulation {
                 continue;
             }
 
-            UsefulTickData usefulTickData = new UsefulTickData(hourData, hourCounter, tickData, tickCounter);
+            final UsefulTickData usefulTickData = tickDataFactory.buildTickData(hourData, hourCounter,
+                    tickData, tickCounter);
 
             if (!positions.isEmpty()) {
                 final Position position = positions.get(0);
