@@ -47,7 +47,7 @@ public class BacktestingApplication {
 
         List<Results> allResults = newArrayList();
 
-            final RealSimulation simulation = new RealSimulation(new PositionExecutor(utils), new TickDataReaderImpl(),
+            final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
                     new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, 1), new TickDataFactory());
 
             for (String inputLine : inputLines) {
