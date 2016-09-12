@@ -1,9 +1,6 @@
 package matcha;
 
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 
@@ -25,12 +22,8 @@ class BacktestingApplication {
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
 
     public static void main(String[] args) throws Exception {
-
-
-        Injector injector = Guice.createInjector((Module) binder -> {
-        });
-        final BacktestingApplication instance = injector.getInstance(BacktestingApplication.class);
-        instance.run(args);
+        BacktestingApplication backtestingApplication = new BacktestingApplication();
+        backtestingApplication.run(args);
     }
 
     List<Results> run(String... args) throws Exception {
@@ -47,26 +40,26 @@ class BacktestingApplication {
 
         List<Results> allResults = newArrayList();
 
-            final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
-                    new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, 1), new TickDataFactory());
+        final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
+                new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, 1), new TickDataFactory());
 
-            for (String inputLine : inputLines) {
-                if (inputLine.trim().length() == 0) {
-                    continue;
-                }
-
-                String[] lineParts = inputLine.split(",");
-                final Path oneMinutePath = Paths.get(lineParts[0]);
-                final Path sixtyMinutePath = Paths.get(lineParts[1]);
-                Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
-
-                final Results results = simulation.execute(input, outputDirectory,
-                        getDecimalPointPlace(inputLine));
-
-                allResults.add(results);
-
-                LOG.info(results.toString());
+        for (String inputLine : inputLines) {
+            if (inputLine.trim().length() == 0) {
+                continue;
             }
+
+            String[] lineParts = inputLine.split(",");
+            final Path oneMinutePath = Paths.get(lineParts[0]);
+            final Path sixtyMinutePath = Paths.get(lineParts[1]);
+            Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
+
+            final Results results = simulation.execute(input, outputDirectory,
+                    getDecimalPointPlace(inputLine));
+
+            allResults.add(results);
+
+            LOG.info(results.toString());
+        }
 
 
         return allResults;
