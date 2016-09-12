@@ -1,5 +1,6 @@
 package matcha;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -8,17 +9,18 @@ class DataRecord {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
 
     private final LocalDateTime dateTime;
-    private final double open;
-    private final double low;
-    private final double high;
-    private final double close;
-    private final double yesterdaysDailyLow;
-    private final double yesterdaysDailyHigh;
-    private final double todaysLow;
-    private final double todaysHigh;
+    private final BigDecimal open;
+    private final BigDecimal low;
+    private final BigDecimal high;
+    private final BigDecimal close;
+    private final BigDecimal yesterdaysDailyLow;
+    private final BigDecimal yesterdaysDailyHigh;
+    private final BigDecimal todaysLow;
+    private final BigDecimal todaysHigh;
 
-    private DataRecord(LocalDateTime dateTime, double open, double low, double high, double close,
-                       double yesterdaysDailyLow, double yesterdaysDailyHigh, double todaysLow, double todaysHigh) {
+    private DataRecord(LocalDateTime dateTime, BigDecimal open, BigDecimal low, BigDecimal high, BigDecimal close,
+                       BigDecimal yesterdaysDailyLow, BigDecimal yesterdaysDailyHigh, BigDecimal todaysLow,
+                       BigDecimal todaysHigh) {
 
         this.dateTime = dateTime;
         this.open = open;
@@ -35,48 +37,48 @@ class DataRecord {
         return dateTime;
     }
 
-    double getOpen() {
+    BigDecimal getOpen() {
         return open;
     }
 
-    double getLow() {
+    BigDecimal getLow() {
         return low;
     }
 
-    double getHigh() {
+    BigDecimal getHigh() {
         return high;
     }
 
-    double getClose() {
+    BigDecimal getClose() {
         return close;
     }
 
-    double getYesterdaysDailyLow() {
+    BigDecimal getYesterdaysDailyLow() {
         return yesterdaysDailyLow;
     }
 
-    double getYesterdaysDailyHigh() {
+    BigDecimal getYesterdaysDailyHigh() {
         return yesterdaysDailyHigh;
     }
 
-    double getTodaysLow() {
+    BigDecimal getTodaysLow() {
         return todaysLow;
     }
 
-    double getTodaysHigh() {
+    BigDecimal getTodaysHigh() {
         return todaysHigh;
     }
 
     static class Builder {
         private LocalDateTime dateTime;
-        private double open;
-        private double low;
-        private double high;
-        private double close;
-        private double yesterdaysDailyLow;
-        private double yesterdaysDailyHigh;
-        private double todaysLow;
-        private double todaysHigh;
+        private BigDecimal open;
+        private BigDecimal low;
+        private BigDecimal high;
+        private BigDecimal close;
+        private BigDecimal yesterdaysDailyLow;
+        private BigDecimal yesterdaysDailyHigh;
+        private BigDecimal todaysLow;
+        private BigDecimal todaysHigh;
 
         Builder setDateTime(LocalDateTime dateTime) {
             this.dateTime = dateTime;
@@ -87,42 +89,42 @@ class DataRecord {
             return setDateTime(LocalDateTime.parse(dateTime, formatter));
         }
 
-        Builder setOpen(double open) {
+        Builder setOpen(BigDecimal open) {
             this.open = open;
             return this;
         }
 
-        Builder setLow(double low) {
+        Builder setLow(BigDecimal low) {
             this.low = low;
             return this;
         }
 
-        Builder setHigh(double high) {
+        Builder setHigh(BigDecimal high) {
             this.high = high;
             return this;
         }
 
-        Builder setClose(double close) {
+        Builder setClose(BigDecimal close) {
             this.close = close;
             return this;
         }
 
-        Builder setYesterdaysDailyLow(double yesterdaysDailyLow) {
+        Builder setYesterdaysDailyLow(BigDecimal yesterdaysDailyLow) {
             this.yesterdaysDailyLow = yesterdaysDailyLow;
             return this;
         }
 
-        Builder setYesterdaysDailyHigh(double yesterdaysDailyHigh) {
+        Builder setYesterdaysDailyHigh(BigDecimal yesterdaysDailyHigh) {
             this.yesterdaysDailyHigh = yesterdaysDailyHigh;
             return this;
         }
 
-        Builder setTodaysLow(double todaysLow) {
+        Builder setTodaysLow(BigDecimal todaysLow) {
             this.todaysLow = todaysLow;
             return this;
         }
 
-        Builder setTodaysHigh(double todaysHigh) {
+        Builder setTodaysHigh(BigDecimal todaysHigh) {
             this.todaysHigh = todaysHigh;
             return this;
         }

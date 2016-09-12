@@ -3,6 +3,7 @@ package matcha;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -25,11 +26,11 @@ public class FadeTheExtremesPositionPlacerTest {
 
         final UsefulTickData usefulTickData = new UsefulTickData.Builder()
                 .setCandleDate("2007-12-13T18:19:00")
-                .setCandleClose(7)
-                .setCandleLow(0)
-                .setPreviousCandleLow(0)
-                .setCandleHigh(9)
-                .setPreviousCandleHigh(0)
+                .setCandleClose(BigDecimal.valueOf(7))
+                .setCandleLow(BigDecimal.valueOf(0))
+                .setPreviousCandleLow(BigDecimal.valueOf(0))
+                .setCandleHigh(BigDecimal.valueOf(9))
+                .setPreviousCandleHigh(BigDecimal.valueOf(0))
                 .setTakeOutYesterdaysLow(false)
                 .setClosePositive(false)
                 .setCloseAboveYesterdaysLow(false)
@@ -38,33 +39,33 @@ public class FadeTheExtremesPositionPlacerTest {
                 .setCloseNegative(true)
                 .setCloseBelowYesterdaysHigh(true)
                 .setOpenBelowYesterdaysHigh(true)
-                .setTodaysLow(0)
-                .setTodaysHigh(1)
-                .setLowOfDayForPreviousHour(0)
-                .setHighOfDayForPreviousHour(0.5)
-                .setTickLow(0)
-                .setTickHigh(0)
+                .setTodaysLow(BigDecimal.valueOf(0))
+                .setTodaysHigh(BigDecimal.valueOf(1))
+                .setLowOfDayForPreviousHour(BigDecimal.valueOf(0))
+                .setHighOfDayForPreviousHour(BigDecimal.valueOf(0.5))
+                .setTickLow(BigDecimal.valueOf(0))
+                .setTickHigh(BigDecimal.valueOf(0))
                 .createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5, 1);
 
         assertThat(position.isPresent(), is(true));
-        assertThat(position.get().getEntry(), is(equalTo(7.0)));
+        assertThat(position.get().getEntry(), is(equalTo(BigDecimal.valueOf(7))));
         assertThat(position.get().getEntryDate(), is(equalTo(LocalDateTime.parse("2007-12-13T18:19:00"))));
-        assertThat(position.get().getStop() > position.get().getTarget(), is(true));
-        assertThat(position.get().getStop(), is(equalTo(9.0)));
-        assertThat(position.get().getTarget(), is(equalTo(5.0)));
+        assertThat(position.get().getStop().compareTo(position.get().getTarget()) > 0, is(true));
+        assertThat(position.get().getStop(), is(equalTo(BigDecimal.valueOf(9))));
+        assertThat(position.get().getTarget(), is(equalTo(BigDecimal.valueOf(5))));
     }
 
     @Test
     public void shouldCreateALongPosition() throws Exception {
         final UsefulTickData usefulTickData = new UsefulTickData.Builder()
                 .setCandleDate("2007-12-13T18:19:00")
-                .setCandleClose(7)
-                .setCandleLow(2)
-                .setPreviousCandleLow(0)
-                .setCandleHigh(9)
-                .setPreviousCandleHigh(0)
+                .setCandleClose(BigDecimal.valueOf(7))
+                .setCandleLow(BigDecimal.valueOf(2))
+                .setPreviousCandleLow(BigDecimal.valueOf(0))
+                .setCandleHigh(BigDecimal.valueOf(9))
+                .setPreviousCandleHigh(BigDecimal.valueOf(0))
                 .setTakeOutYesterdaysLow(true)
                 .setClosePositive(true)
                 .setCloseAboveYesterdaysLow(true)
@@ -73,21 +74,21 @@ public class FadeTheExtremesPositionPlacerTest {
                 .setCloseNegative(false)
                 .setCloseBelowYesterdaysHigh(false)
                 .setOpenBelowYesterdaysHigh(false)
-                .setTodaysLow(0)
-                .setTodaysHigh(1)
-                .setLowOfDayForPreviousHour(4)
-                .setHighOfDayForPreviousHour(0.5)
-                .setTickLow(0)
-                .setTickHigh(0)
+                .setTodaysLow(BigDecimal.valueOf(0))
+                .setTodaysHigh(BigDecimal.valueOf(1))
+                .setLowOfDayForPreviousHour(BigDecimal.valueOf(4))
+                .setHighOfDayForPreviousHour(BigDecimal.valueOf(0.5))
+                .setTickLow(BigDecimal.valueOf(0))
+                .setTickHigh(BigDecimal.valueOf(0))
                 .createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5, 1);
 
         assertThat(position.isPresent(), is(true));
-        assertThat(position.get().getStop() > position.get().getTarget(), is(false));
-        assertThat(position.get().getEntry(), is(equalTo(7.0)));
+        assertThat(position.get().getStop().compareTo(position.get().getTarget()) > 0, is(false));
+        assertThat(position.get().getEntry(), is(equalTo(BigDecimal.valueOf(7))));
         assertThat(position.get().getEntryDate(), is(equalTo(LocalDateTime.parse("2007-12-13T18:19:00"))));
-        assertThat(position.get().getStop(), is(equalTo(2.0)));
-        assertThat(position.get().getTarget(), is(equalTo(12.0)));
+        assertThat(position.get().getStop(), is(equalTo(BigDecimal.valueOf(2))));
+        assertThat(position.get().getTarget(), is(equalTo(BigDecimal.valueOf(12))));
     }
 }

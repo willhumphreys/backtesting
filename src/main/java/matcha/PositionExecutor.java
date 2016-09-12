@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -42,7 +43,7 @@ class PositionExecutor {
 
             if (isLongStopTouched(usefulTickData, position)) {
                 stats.incrementLongTrades();
-                int profitLoss = utils.convertTicksToInt(position.getStop() - position.getEntry(), decimalPointPlace);
+                int profitLoss = utils.convertTicksToInt(position.getStop().subtract(position.getEntry()), decimalPointPlace);
                 closePosition(profitLoss, position.getStop(), position,
                         STOPPED_LONG_CSV_TEMPLATE, dataWriter, stats, exitDate);
 
@@ -51,7 +52,7 @@ class PositionExecutor {
 
             } else if (isLongTargetExceeded(usefulTickData, position)) {
                 stats.incrementLongTrades();
-                final int profitLoss = utils.convertTicksToInt(position.getTarget() - position.getEntry(), decimalPointPlace);
+                final int profitLoss = utils.convertTicksToInt(position.getTarget().subtract(position.getEntry()), decimalPointPlace);
                 closePosition(profitLoss, position.getTarget(), position,
                         TARGET_LONG_CSV_TEMPLATE, dataWriter, stats, exitDate);
                 stats.incrementWinners();
@@ -61,14 +62,14 @@ class PositionExecutor {
 
             if (isShortStopTouched(usefulTickData, position)) {
                 stats.incrementShortTrades();
-                final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getStop(), decimalPointPlace);
+                final int profitLoss = utils.convertTicksToInt(position.getEntry().subtract(position.getStop()), decimalPointPlace);
                 closePosition(profitLoss, position.getStop(), position,
                         STOPPED_SHORT_CSV_TEMPLATE, dataWriter, stats, exitDate);
                 stats.incrementLosers();
                 stats.addLoser(usefulTickData.getCandleDate());
             } else if (isShortTargetExceeded(usefulTickData, position)) {
                 stats.incrementShortTrades();
-                final int profitLoss = utils.convertTicksToInt(position.getEntry() - position.getTarget(), decimalPointPlace);
+                final int profitLoss = utils.convertTicksToInt(position.getEntry().subtract(position.getTarget()), decimalPointPlace);
                 closePosition(profitLoss, position.getTarget(), position,
                         TARGET_SHORT_CSV_TEMPLATE, dataWriter, stats, exitDate);
                 stats.incrementWinners();
@@ -78,26 +79,26 @@ class PositionExecutor {
     }
 
     private boolean isShortTargetExceeded(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getTickLow() < position.getTarget();
+        return usefulTickData.getTickLow().compareTo(position.getTarget()) < 0;
     }
 
     private boolean isShortStopTouched(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getTickHigh() >= position.getStop();
+        return usefulTickData.getTickHigh().compareTo(position.getStop()) >= 0;
     }
 
     private boolean isLongTargetExceeded(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getTickHigh() > position.getTarget();
+        return usefulTickData.getTickHigh().compareTo(position.getTarget()) > 0;
     }
 
     private boolean isLongStopTouched(UsefulTickData usefulTickData, Position position) {
-        return usefulTickData.getTickLow() <= position.getStop();
+        return usefulTickData.getTickLow().compareTo(position.getStop()) <= 0;
     }
 
     private boolean isLongPosition(Position position) {
-        return position.getTarget() > position.getStop();
+        return position.getTarget().compareTo(position.getStop()) > 0;
     }
 
-    private void closePosition(int profitLoss, final double stopOrTarget, Position position, String
+    private void closePosition(int profitLoss, final BigDecimal stopOrTarget, Position position, String
             csvTemplate, BufferedWriter dataWriter, PositionStats positionStats, LocalDateTime exitDate) throws IOException {
 
         positionStats.addToTickCounter(profitLoss);

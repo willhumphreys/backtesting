@@ -1,16 +1,17 @@
 package matcha;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 class UsefulTickData {
 
     private LocalDateTime candleDate;
-    private double candleClose;
-    private double candleLow;
-    private double previousCandleLow;
-    private double candleHigh;
-    private double previousCandleHigh;
+    private BigDecimal candleClose;
+    private BigDecimal candleLow;
+    private BigDecimal previousCandleLow;
+    private BigDecimal candleHigh;
+    private BigDecimal previousCandleHigh;
     private boolean takeOutYesterdaysLow;
     private boolean closePositive;
     private boolean closeAboveYesterdaysLow;
@@ -19,20 +20,20 @@ class UsefulTickData {
     private boolean closeNegative;
     private boolean closeBelowYesterdaysHigh;
     private boolean openBelowYesterdaysHigh;
-    private double todaysLow;
-    private double todaysHigh;
-    private double lowOfDayForPreviousHour;
-    private double highOfDayForPreviousHour;
-    private double tickLow;
-    private double tickHigh;
+    private BigDecimal todaysLow;
+    private BigDecimal todaysHigh;
+    private BigDecimal lowOfDayForPreviousHour;
+    private BigDecimal highOfDayForPreviousHour;
+    private BigDecimal tickLow;
+    private BigDecimal tickHigh;
 
-    private UsefulTickData(LocalDateTime candleDate, double candleClose, double candleLow, double previousCandleLow,
-                           double candleHigh, double previousCandleHigh, boolean takeOutYesterdaysLow,
+    private UsefulTickData(LocalDateTime candleDate, BigDecimal candleClose, BigDecimal candleLow, BigDecimal previousCandleLow,
+                           BigDecimal candleHigh, BigDecimal previousCandleHigh, boolean takeOutYesterdaysLow,
                            boolean closePositive, boolean closeAboveYesterdaysLow, boolean openAboveYesterdaysLow,
                            boolean takeOutYesterdaysHigh, boolean closeNegative, boolean closeBelowYesterdaysHigh,
-                           boolean openBelowYesterdaysHigh, double todaysLow, double todaysHigh,
-                           double lowOfDayForPreviousHour, double highOfDayForPreviousHour, double tickLow,
-                           double tickHigh) {
+                           boolean openBelowYesterdaysHigh, BigDecimal todaysLow, BigDecimal todaysHigh,
+                           BigDecimal lowOfDayForPreviousHour, BigDecimal highOfDayForPreviousHour, BigDecimal tickLow,
+                           BigDecimal tickHigh) {
         this.candleDate = candleDate;
         this.candleClose = candleClose;
         this.candleLow = candleLow;
@@ -59,39 +60,39 @@ class UsefulTickData {
         return candleDate;
     }
 
-    double getCandleClose() {
+    BigDecimal getCandleClose() {
         return candleClose;
     }
 
-    double getCandleLow() {
+    BigDecimal getCandleLow() {
         return candleLow;
     }
 
-    double getPreviousCandleLow() {
+    BigDecimal getPreviousCandleLow() {
         return previousCandleLow;
     }
 
-    double getCandleHigh() {
+    BigDecimal getCandleHigh() {
         return candleHigh;
     }
 
-    double getPreviousCandleHigh() {
+    BigDecimal getPreviousCandleHigh() {
         return previousCandleHigh;
     }
 
-    double getTodaysLow() {
+    BigDecimal getTodaysLow() {
         return todaysLow;
     }
 
-    double getTodaysHigh() {
+    BigDecimal getTodaysHigh() {
         return todaysHigh;
     }
 
-    double getLowOfDayForPreviousHour() {
+    BigDecimal getLowOfDayForPreviousHour() {
         return lowOfDayForPreviousHour;
     }
 
-    double getHighOfDayForPreviousHour() {
+    BigDecimal getHighOfDayForPreviousHour() {
         return highOfDayForPreviousHour;
     }
 
@@ -127,11 +128,11 @@ class UsefulTickData {
         return openBelowYesterdaysHigh;
     }
 
-    double getTickHigh() {
+    BigDecimal getTickHigh() {
         return tickHigh;
     }
 
-    double getTickLow() {
+    BigDecimal getTickLow() {
         return tickLow;
     }
 
@@ -140,11 +141,11 @@ class UsefulTickData {
         private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
 
         private LocalDateTime candleDate;
-        private double candleClose;
-        private double candleLow;
-        private double previousCandleLow;
-        private double candleHigh;
-        private double previousCandleHigh;
+        private BigDecimal candleClose;
+        private BigDecimal candleLow;
+        private BigDecimal previousCandleLow;
+        private BigDecimal candleHigh;
+        private BigDecimal previousCandleHigh;
         private boolean takeOutYesterdaysLow;
         private boolean closePositive;
         private boolean closeAboveYesterdaysLow;
@@ -153,12 +154,12 @@ class UsefulTickData {
         private boolean closeNegative;
         private boolean closeBelowYesterdaysHigh;
         private boolean openBelowYesterdaysHigh;
-        private double todaysLow;
-        private double todaysHigh;
-        private double lowOfDayForPreviousHour;
-        private double highOfDayForPreviousHour;
-        private double tickLow;
-        private double tickHigh;
+        private BigDecimal todaysLow;
+        private BigDecimal todaysHigh;
+        private BigDecimal lowOfDayForPreviousHour;
+        private BigDecimal highOfDayForPreviousHour;
+        private BigDecimal tickLow;
+        private BigDecimal tickHigh;
 
         Builder setCandleDate(LocalDateTime candleDate) {
             this.candleDate = candleDate;
@@ -169,27 +170,27 @@ class UsefulTickData {
             return setCandleDate(LocalDateTime.parse(candleDate, formatter));
         }
 
-        Builder setCandleClose(double candleClose) {
+        Builder setCandleClose(BigDecimal candleClose) {
             this.candleClose = candleClose;
             return this;
         }
 
-        Builder setCandleLow(double candleLow) {
+        Builder setCandleLow(BigDecimal candleLow) {
             this.candleLow = candleLow;
             return this;
         }
 
-        Builder setPreviousCandleLow(double previousCandleLow) {
+        Builder setPreviousCandleLow(BigDecimal previousCandleLow) {
             this.previousCandleLow = previousCandleLow;
             return this;
         }
 
-        Builder setCandleHigh(double candleHigh) {
+        Builder setCandleHigh(BigDecimal candleHigh) {
             this.candleHigh = candleHigh;
             return this;
         }
 
-        Builder setPreviousCandleHigh(double previousCandleHigh) {
+        Builder setPreviousCandleHigh(BigDecimal previousCandleHigh) {
             this.previousCandleHigh = previousCandleHigh;
             return this;
         }
@@ -234,32 +235,32 @@ class UsefulTickData {
             return this;
         }
 
-        Builder setTodaysLow(double todaysLow) {
+        Builder setTodaysLow(BigDecimal todaysLow) {
             this.todaysLow = todaysLow;
             return this;
         }
 
-        Builder setTodaysHigh(double todaysHigh) {
+        Builder setTodaysHigh(BigDecimal todaysHigh) {
             this.todaysHigh = todaysHigh;
             return this;
         }
 
-        Builder setLowOfDayForPreviousHour(double lowOfDayForPreviousHour) {
+        Builder setLowOfDayForPreviousHour(BigDecimal lowOfDayForPreviousHour) {
             this.lowOfDayForPreviousHour = lowOfDayForPreviousHour;
             return this;
         }
 
-        Builder setHighOfDayForPreviousHour(double highOfDayForPreviousHour) {
+        Builder setHighOfDayForPreviousHour(BigDecimal highOfDayForPreviousHour) {
             this.highOfDayForPreviousHour = highOfDayForPreviousHour;
             return this;
         }
 
-        Builder setTickLow(double tickLow) {
+        Builder setTickLow(BigDecimal tickLow) {
             this.tickLow = tickLow;
             return this;
         }
 
-        Builder setTickHigh(double tickHigh) {
+        Builder setTickHigh(BigDecimal tickHigh) {
             this.tickHigh = tickHigh;
             return this;
         }

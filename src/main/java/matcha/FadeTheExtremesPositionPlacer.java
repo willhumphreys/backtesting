@@ -2,6 +2,7 @@ package matcha;
 
 import org.slf4j.Logger;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -21,12 +22,12 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
 
     private Position createShort(UsefulTickData usefulTickData, int decimalPointPlace) {
         LocalDateTime entryDate = usefulTickData.getCandleDate();
-        double entry = usefulTickData.getCandleClose();
-        final double distanceToTarget = usefulTickData.getCandleHigh() - usefulTickData.getCandleClose();
+        BigDecimal entry = usefulTickData.getCandleClose();
+        final BigDecimal distanceToTarget = usefulTickData.getCandleHigh().subtract(usefulTickData.getCandleClose());
         final int ticksToTarget = utils.convertTicksToInt(distanceToTarget, decimalPointPlace);
-        double target = entry - distanceToTarget;
-        double stop = usefulTickData.getCandleHigh();
-        final int ticksToStop = utils.convertTicksToInt(stop - entry, decimalPointPlace);
+        BigDecimal target = entry.subtract(distanceToTarget);
+        BigDecimal stop = usefulTickData.getCandleHigh();
+        final int ticksToStop = utils.convertTicksToInt(stop.subtract(entry), decimalPointPlace);
 
         LOG.info(format("Opening short position at: %.5f stop: %.5f target: %.5f ticks " +
                         "to target: %d ticks to stop: %d",
@@ -37,12 +38,12 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
     private Position createLong(UsefulTickData usefulTickData, int decimalPointPlace) {
         LocalDateTime entryDate = usefulTickData.getCandleDate();
 
-        double entry = usefulTickData.getCandleClose();
-        final double distanceToTarget = usefulTickData.getCandleClose() - usefulTickData.getCandleLow();
+        BigDecimal entry = usefulTickData.getCandleClose();
+        final BigDecimal distanceToTarget = usefulTickData.getCandleClose().subtract(usefulTickData.getCandleLow());
         final int ticksToTarget = utils.convertTicksToInt(distanceToTarget, decimalPointPlace);
-        double target = entry + distanceToTarget;
-        double stop = usefulTickData.getCandleLow();
-        final int ticksToStop = utils.convertTicksToInt(entry - stop, decimalPointPlace);
+        BigDecimal target = entry.add(distanceToTarget);
+        BigDecimal stop = usefulTickData.getCandleLow();
+        final int ticksToStop = utils.convertTicksToInt(entry.subtract(stop), decimalPointPlace);
 
         LOG.info(format("Opening long position at: %.5f stop: %.5f target: %.5f ticks " +
                         "to target: %d ticks to stop: %d",
@@ -56,15 +57,15 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
         switch (highLowCheckPref) {
             case 0:
                 //Current Candle is below last candle.
-                lowCheck = usefulTickData.getCandleLow() < usefulTickData.getPreviousCandleLow();
+                lowCheck = usefulTickData.getCandleLow().compareTo(usefulTickData.getPreviousCandleLow()) < 0;
                 break;
             case 1:
                 //New low for the day is put in.
-                lowCheck = usefulTickData.getTodaysLow() < usefulTickData.getLowOfDayForPreviousHour();
+                lowCheck = usefulTickData.getTodaysLow().compareTo(usefulTickData.getLowOfDayForPreviousHour()) < 0;
                 break;
             case 2:
                 //We don't put in a new low.
-                lowCheck = usefulTickData.getTodaysLow() >= usefulTickData.getLowOfDayForPreviousHour();
+                lowCheck = usefulTickData.getTodaysLow().compareTo(usefulTickData.getLowOfDayForPreviousHour()) >= 0;
                 break;
             default:
                 throw new IllegalArgumentException("Invalid lowCheck value");
@@ -76,14 +77,14 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
         boolean highCheck;
         switch (highCheckPref) {
             case 0:
-                highCheck = usefulTickData.getCandleHigh() > usefulTickData.getPreviousCandleHigh();
+                highCheck = usefulTickData.getCandleHigh().compareTo(usefulTickData.getPreviousCandleHigh()) > 0;
                 break;
             case 1:
-                highCheck = usefulTickData.getTodaysHigh() > usefulTickData.getHighOfDayForPreviousHour();
+                highCheck = usefulTickData.getTodaysHigh().compareTo(usefulTickData.getHighOfDayForPreviousHour()) > 0;
                 break;
             case 2:
                 //We don't put in a new high.
-                highCheck = usefulTickData.getTodaysHigh() <= usefulTickData.getHighOfDayForPreviousHour();
+                highCheck = usefulTickData.getTodaysHigh().compareTo(usefulTickData.getHighOfDayForPreviousHour()) <= 0;
                 break;
             default:
                 throw new IllegalArgumentException("Invalid highCheck value");

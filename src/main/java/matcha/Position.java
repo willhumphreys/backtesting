@@ -1,15 +1,16 @@
 package matcha;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 class Position {
     private final LocalDateTime entryDate;
-    private final double entry;
-    private final double target;
-    private final double stop;
+    private final BigDecimal entry;
+    private final BigDecimal target;
+    private final BigDecimal stop;
     private boolean closed;
 
-    Position(LocalDateTime entryDate, double entry, double target, double stop) {
+    Position(LocalDateTime entryDate, BigDecimal entry, BigDecimal target, BigDecimal stop) {
         this.entryDate = entryDate;
         this.entry = entry;
         this.target = target;
@@ -21,15 +22,15 @@ class Position {
         return entryDate;
     }
 
-    double getEntry() {
+    BigDecimal getEntry() {
         return entry;
     }
 
-    double getTarget() {
+    BigDecimal getTarget() {
         return target;
     }
 
-    double getStop() {
+    BigDecimal getStop() {
         return stop;
     }
 

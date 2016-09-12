@@ -3,6 +3,7 @@ package matcha;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -18,14 +19,14 @@ public class SyncTicksTest {
     public void setUp() throws Exception {
         dataRecordBuilder = new DataRecord.Builder()
                 .setDateTime("2007-12-13T18:19:00")
-                .setOpen(0)
-                .setLow(0)
-                .setHigh(0)
-                .setClose(0)
-                .setYesterdaysDailyLow(0)
-                .setYesterdaysDailyHigh(0)
-                .setTodaysLow(0)
-                .setTodaysHigh(0);
+                .setOpen(BigDecimal.ZERO)
+                .setLow(BigDecimal.ZERO)
+                .setHigh(BigDecimal.ZERO)
+                .setClose(BigDecimal.ZERO)
+                .setYesterdaysDailyLow(BigDecimal.ZERO)
+                .setYesterdaysDailyHigh(BigDecimal.ZERO)
+                .setTodaysLow(BigDecimal.ZERO)
+                .setTodaysHigh(BigDecimal.ZERO);
     }
 
     @Test()

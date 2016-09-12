@@ -8,13 +8,13 @@ import org.slf4j.Logger;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
-import static java.lang.Double.parseDouble;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -38,14 +38,14 @@ class TickDataReaderImpl implements TickDataReader {
         for (CSVRecord record : records) {
 
             String dateTimeStr = record.get("date.time");
-            double open = parseDouble(record.get("open"));
-            double low = parseDouble(record.get("low"));
-            double high = parseDouble(record.get("high"));
-            double close = parseDouble(record.get("close"));
-            double yesterdaysDailyLow = parseDouble(record.get("yesterdays.daily.low"));
-            double yesterdaysDailyHigh = parseDouble(record.get("yesterdays.daily.high"));
-            double todaysLow = parseDouble(record.get("todays.low"));
-            double todaysHigh = parseDouble(record.get("todays.high"));
+            BigDecimal open = new BigDecimal(record.get("open"));
+            BigDecimal low = new BigDecimal(record.get("low"));
+            BigDecimal high = new BigDecimal(record.get("high"));
+            BigDecimal close = new BigDecimal(record.get("close"));
+            BigDecimal yesterdaysDailyLow = new BigDecimal(record.get("yesterdays.daily.low"));
+            BigDecimal yesterdaysDailyHigh = new BigDecimal(record.get("yesterdays.daily.high"));
+            BigDecimal todaysLow = new BigDecimal(record.get("todays.low"));
+            BigDecimal todaysHigh = new BigDecimal(record.get("todays.high"));
 
             LocalDateTime dateTime;
             try {

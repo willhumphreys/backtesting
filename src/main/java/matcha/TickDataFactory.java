@@ -1,5 +1,6 @@
 package matcha;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,33 +19,33 @@ public class TickDataFactory {
         }
 
         LocalDateTime candleDate = hourData.get(hourCounter).getDateTime();
-        double candleClose = hourData.get(hourCounter).getClose();
-        double candleOpen = hourData.get(hourCounter).getOpen();
+        BigDecimal candleClose = hourData.get(hourCounter).getClose();
+        BigDecimal candleOpen = hourData.get(hourCounter).getOpen();
 
-        double candleLow = hourData.get(hourCounter).getLow();
+        BigDecimal candleLow = hourData.get(hourCounter).getLow();
 
-        double tickLow = tickData.get(tickCounter).getLow();
-        double tickHigh = tickData.get(tickCounter).getHigh();
-        double previousCandleLow = hourData.get(hourCounter - 1).getLow();
-        double candleHigh = hourData.get(hourCounter).getHigh();
+        BigDecimal tickLow = tickData.get(tickCounter).getLow();
+        BigDecimal tickHigh = tickData.get(tickCounter).getHigh();
+        BigDecimal previousCandleLow = hourData.get(hourCounter - 1).getLow();
+        BigDecimal candleHigh = hourData.get(hourCounter).getHigh();
 
-        double previousCandleHigh = hourData.get(hourCounter - 1).getHigh();
-        double yesterdaysLow = hourData.get(hourCounter).getYesterdaysDailyLow();
-        double yesterdaysHigh = hourData.get(hourCounter).getYesterdaysDailyHigh();
-        double todaysLow = hourData.get(hourCounter).getTodaysLow();
-        double todaysHigh = hourData.get(hourCounter).getTodaysHigh();
-        double lowOfDayForPreviousHour = hourData.get(hourCounter - 1).getTodaysLow();
-        double highOfDayForPreviousHour = hourData.get(hourCounter - 1).getTodaysHigh();
+        BigDecimal previousCandleHigh = hourData.get(hourCounter - 1).getHigh();
+        BigDecimal yesterdaysLow = hourData.get(hourCounter).getYesterdaysDailyLow();
+        BigDecimal yesterdaysHigh = hourData.get(hourCounter).getYesterdaysDailyHigh();
+        BigDecimal todaysLow = hourData.get(hourCounter).getTodaysLow();
+        BigDecimal todaysHigh = hourData.get(hourCounter).getTodaysHigh();
+        BigDecimal lowOfDayForPreviousHour = hourData.get(hourCounter - 1).getTodaysLow();
+        BigDecimal highOfDayForPreviousHour = hourData.get(hourCounter - 1).getTodaysHigh();
 
-        boolean takeOutYesterdaysLow = candleLow < yesterdaysLow;
-        boolean closePositive = candleClose > candleOpen;
-        boolean closeAboveYesterdaysLow = candleClose > yesterdaysLow;
-        boolean openAboveYesterdaysLow = candleOpen > yesterdaysLow;
+        boolean takeOutYesterdaysLow = candleLow.compareTo(yesterdaysLow) < 0;
+        boolean closePositive = candleClose.compareTo(candleOpen) > 0;
+        boolean closeAboveYesterdaysLow = candleClose.compareTo(yesterdaysLow) > 0;
+        boolean openAboveYesterdaysLow = candleOpen.compareTo(yesterdaysLow) > 0;
 
-        boolean takeOutYesterdaysHigh = candleHigh > yesterdaysHigh;
-        boolean closeNegative = candleClose < candleOpen;
-        boolean closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
-        boolean openBelowYesterdaysHigh = candleOpen < yesterdaysHigh;
+        boolean takeOutYesterdaysHigh = candleHigh.compareTo(yesterdaysHigh) > 0;
+        boolean closeNegative = candleClose.compareTo(candleOpen) < 0;
+        boolean closeBelowYesterdaysHigh = candleClose.compareTo(yesterdaysHigh) < 0;
+        boolean openBelowYesterdaysHigh = candleOpen.compareTo(yesterdaysHigh) < 0;
 
         return new UsefulTickData.Builder()
                 .setCandleDate(candleDate)

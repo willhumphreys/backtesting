@@ -1,8 +1,10 @@
 package matcha;
 
+import java.math.BigDecimal;
+
 class Utils {
 
-    int convertTicksToInt(double doubleTicks, int decimalPointPlace) {
-        return Math.toIntExact(Math.round(doubleTicks * decimalPointPlace));
+    int convertTicksToInt(BigDecimal doubleTicks, int decimalPointPlace) {
+        return doubleTicks.multiply(BigDecimal.valueOf(decimalPointPlace)).intValueExact();
     }
 }
