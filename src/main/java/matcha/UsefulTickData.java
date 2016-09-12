@@ -27,14 +27,12 @@ class UsefulTickData {
     private double tickHigh;
 
     private UsefulTickData(LocalDateTime candleDate, double candleClose, double candleLow, double previousCandleLow,
-                           double candleHigh, double previousCandleHigh, boolean takeOutYesterdaysLow, boolean
-                                   closePositive,
-                           boolean closeAboveYesterdaysLow, boolean openAboveYesterdaysLow, boolean
-                                   takeOutYesterdaysHigh,
-                           boolean closeNegative, boolean closeBelowYesterdaysHigh, boolean openBelowYesterdaysHigh,
-                           double todaysLow, double todaysHigh, double lowOfDayForPreviousHour, double
-                                   highOfDayForPreviousHour,
-                           double tickLow, double tickHigh) {
+                           double candleHigh, double previousCandleHigh, boolean takeOutYesterdaysLow,
+                           boolean closePositive, boolean closeAboveYesterdaysLow, boolean openAboveYesterdaysLow,
+                           boolean takeOutYesterdaysHigh, boolean closeNegative, boolean closeBelowYesterdaysHigh,
+                           boolean openBelowYesterdaysHigh, double todaysLow, double todaysHigh,
+                           double lowOfDayForPreviousHour, double highOfDayForPreviousHour, double tickLow,
+                           double tickHigh) {
         this.candleDate = candleDate;
         this.candleClose = candleClose;
         this.candleLow = candleLow;
