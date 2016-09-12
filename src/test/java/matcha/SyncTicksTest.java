@@ -18,14 +18,14 @@ public class SyncTicksTest {
     public void setUp() throws Exception {
         dataRecordBuilder = new DataRecord.Builder()
                 .setDateTime("2007-12-13T18:19:00")
-                .setOpen("0")
-                .setLow("0")
-                .setHigh("0")
-                .setClose("0")
-                .setYesterdaysDailyLow("0")
-                .setYesterdaysDailyHigh("0")
-                .setTodaysLow("0")
-                .setTodaysHigh("0");
+                .setOpen(0)
+                .setLow(0)
+                .setHigh(0)
+                .setClose(0)
+                .setYesterdaysDailyLow(0)
+                .setYesterdaysDailyHigh(0)
+                .setTodaysLow(0)
+                .setTodaysHigh(0);
     }
 
     @Test()

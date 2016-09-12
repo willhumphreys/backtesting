@@ -14,8 +14,8 @@ class SyncTicks {
                 hourCounter++;
             }
 
-            final LocalDateTime currentHourTime2 = LocalDateTime.parse(hourData.get(hourCounter).getDateTime());
-            final LocalDateTime currentMinuteTime2 = LocalDateTime.parse(tickData.get(tickCounter).getDateTime());
+            final LocalDateTime currentHourTime2 = hourData.get(hourCounter).getDateTime();
+            final LocalDateTime currentMinuteTime2 = tickData.get(tickCounter).getDateTime();
 
             if (currentHourTime2.getHour() != currentMinuteTime2.getHour()) {
                 throw new IllegalStateException("minutes not matching hours.");
@@ -25,8 +25,8 @@ class SyncTicks {
     }
 
     private boolean checkHourMatchesTick(DataRecord tickData, DataRecord hourData) {
-        final LocalDateTime currentHourTime = LocalDateTime.parse(hourData.getDateTime());
-        final LocalDateTime currentMinuteTime = LocalDateTime.parse(tickData.getDateTime());
+        final LocalDateTime currentHourTime = hourData.getDateTime();
+        final LocalDateTime currentMinuteTime = tickData.getDateTime();
 
         return currentHourTime.getHour() == currentMinuteTime.getHour();
 

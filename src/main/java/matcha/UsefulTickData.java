@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 class UsefulTickData {
 
-    private String candleDate;
+    private LocalDateTime candleDate;
     private double candleClose;
     private double candleLow;
     private double previousCandleLow;
@@ -25,7 +25,7 @@ class UsefulTickData {
     private double tickLow;
     private double tickHigh;
 
-    UsefulTickData(String candleDate, double candleClose, double candleLow, double previousCandleLow,
+    UsefulTickData(LocalDateTime candleDate, double candleClose, double candleLow, double previousCandleLow,
                    double candleHigh, double previousCandleHigh, boolean takeOutYesterdaysLow, boolean closePositive,
                    boolean closeAboveYesterdaysLow, boolean openAboveYesterdaysLow, boolean takeOutYesterdaysHigh,
                    boolean closeNegative, boolean closeBelowYesterdaysHigh, boolean openBelowYesterdaysHigh,
@@ -54,7 +54,7 @@ class UsefulTickData {
     }
 
     LocalDateTime getCandleDate() {
-        return LocalDateTime.parse(candleDate);
+        return candleDate;
     }
 
     double getCandleClose() {

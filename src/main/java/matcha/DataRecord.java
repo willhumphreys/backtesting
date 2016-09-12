@@ -1,18 +1,24 @@
 package matcha;
 
-class DataRecord {
-    private final String dateTime;
-    private final String open;
-    private final String low;
-    private final String high;
-    private final String close;
-    private final String yesterdaysDailyLow;
-    private final String yesterdaysDailyHigh;
-    private final String todaysLow;
-    private final String todaysHigh;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    DataRecord(String dateTime, String open, String low, String high, String close, String yesterdaysDailyLow,
-               String yesterdaysDailyHigh, String todaysLow, String todaysHigh) {
+class DataRecord {
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
+
+    private final LocalDateTime dateTime;
+    private final double open;
+    private final double low;
+    private final double high;
+    private final double close;
+    private final double yesterdaysDailyLow;
+    private final double yesterdaysDailyHigh;
+    private final double todaysLow;
+    private final double todaysHigh;
+
+    DataRecord(LocalDateTime dateTime, double open, double low, double high, double close, double yesterdaysDailyLow,
+               double yesterdaysDailyHigh, double todaysLow, double todaysHigh) {
 
         this.dateTime = dateTime;
         this.open = open;
@@ -25,94 +31,98 @@ class DataRecord {
         this.todaysHigh = todaysHigh;
     }
 
-    public String getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public String getOpen() {
+    public double getOpen() {
         return open;
     }
 
-    public String getLow() {
+    public double getLow() {
         return low;
     }
 
-    public String getHigh() {
+    public double getHigh() {
         return high;
     }
 
-    public String getClose() {
+    public double getClose() {
         return close;
     }
 
-    public String getYesterdaysDailyLow() {
+    public double getYesterdaysDailyLow() {
         return yesterdaysDailyLow;
     }
 
-    public String getYesterdaysDailyHigh() {
+    public double getYesterdaysDailyHigh() {
         return yesterdaysDailyHigh;
     }
 
-    public String getTodaysLow() {
+    public double getTodaysLow() {
         return todaysLow;
     }
 
-    public String getTodaysHigh() {
+    public double getTodaysHigh() {
         return todaysHigh;
     }
 
     public static class Builder {
-        private String dateTime;
-        private String open;
-        private String low;
-        private String high;
-        private String close;
-        private String yesterdaysDailyLow;
-        private String yesterdaysDailyHigh;
-        private String todaysLow;
-        private String todaysHigh;
+        private LocalDateTime dateTime;
+        private double open;
+        private double low;
+        private double high;
+        private double close;
+        private double yesterdaysDailyLow;
+        private double yesterdaysDailyHigh;
+        private double todaysLow;
+        private double todaysHigh;
 
-        public Builder setDateTime(String dateTime) {
+        public Builder setDateTime(LocalDateTime dateTime) {
             this.dateTime = dateTime;
             return this;
         }
 
-        public Builder setOpen(String open) {
+        public Builder setDateTime(String dateTime) {
+            return setDateTime(LocalDateTime.parse(dateTime, formatter));
+        }
+
+        public Builder setOpen(double open) {
             this.open = open;
             return this;
         }
 
-        public Builder setLow(String low) {
+        public Builder setLow(double low) {
             this.low = low;
             return this;
         }
 
-        public Builder setHigh(String high) {
+        public Builder setHigh(double high) {
             this.high = high;
             return this;
         }
 
-        public Builder setClose(String close) {
+        public Builder setClose(double close) {
             this.close = close;
             return this;
         }
 
-        public Builder setYesterdaysDailyLow(String yesterdaysDailyLow) {
+        public Builder setYesterdaysDailyLow(double yesterdaysDailyLow) {
             this.yesterdaysDailyLow = yesterdaysDailyLow;
             return this;
         }
 
-        public Builder setYesterdaysDailyHigh(String yesterdaysDailyHigh) {
+        public Builder setYesterdaysDailyHigh(double yesterdaysDailyHigh) {
             this.yesterdaysDailyHigh = yesterdaysDailyHigh;
             return this;
         }
 
-        public Builder setTodaysLow(String todaysLow) {
+        public Builder setTodaysLow(double todaysLow) {
             this.todaysLow = todaysLow;
             return this;
         }
 
-        public Builder setTodaysHigh(String todaysHigh) {
+        public Builder setTodaysHigh(double todaysHigh) {
             this.todaysHigh = todaysHigh;
             return this;
         }

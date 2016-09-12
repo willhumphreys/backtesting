@@ -1,7 +1,13 @@
 package matcha;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class UsefulTickDataBuilder {
-    private String candleDate;
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
+
+    private LocalDateTime candleDate;
     private double candleClose;
     private double candleLow;
     private double previousCandleLow;
@@ -22,9 +28,13 @@ public class UsefulTickDataBuilder {
     private double tickLow;
     private double tickHigh;
 
-    public UsefulTickDataBuilder setCandleDate(String candleDate) {
+    public UsefulTickDataBuilder setCandleDate(LocalDateTime candleDate) {
         this.candleDate = candleDate;
         return this;
+    }
+
+    public UsefulTickDataBuilder setCandleDate(String candleDate) {
+        return setCandleDate(LocalDateTime.parse(candleDate, formatter));
     }
 
     public UsefulTickDataBuilder setCandleClose(double candleClose) {

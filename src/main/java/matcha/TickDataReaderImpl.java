@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import static java.lang.Double.parseDouble;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -36,30 +37,23 @@ class TickDataReaderImpl implements TickDataReader {
         List<DataRecord> dataRecords = Lists.newArrayList();
         for (CSVRecord record : records) {
 
-            String dateTime = record.get("date.time");
-            String open = record.get("open");
-            String low = record.get("low");
-            String high = record.get("high");
-            String close = record.get("close");
-            String yesterdaysDailyLow = record.get("yesterdays.daily.low");
-            String yesterdaysDailyHigh = record.get("yesterdays.daily.high");
-            String todaysLow = record.get("todays.low");
-            String todaysHigh = record.get("todays.high");
+            String dateTimeStr = record.get("date.time");
+            double open = parseDouble(record.get("open"));
+            double low = parseDouble(record.get("low"));
+            double high = parseDouble(record.get("high"));
+            double close = parseDouble(record.get("close"));
+            double yesterdaysDailyLow = parseDouble(record.get("yesterdays.daily.low"));
+            double yesterdaysDailyHigh = parseDouble(record.get("yesterdays.daily.high"));
+            double todaysLow = parseDouble(record.get("todays.low"));
+            double todaysHigh = parseDouble(record.get("todays.high"));
 
-//            final String[] lineArray = iter.next();
-//            if(lineArray[0].trim().length() == 0 || lineArray[0].equals("date.time")) {
-//                iter.remove();
-//                continue;
-//            }
-
-            LocalDateTime hourDateTime;
+            LocalDateTime dateTime;
             try {
-                hourDateTime = LocalDateTime.parse(dateTime, formatter);
+                dateTime = LocalDateTime.parse(dateTimeStr, formatter);
             } catch (DateTimeParseException e) {
-                LOG.info("Failed to parse '" + dateTime + "'");
+                LOG.info("Failed to parse '" + dateTimeStr + "'");
                 throw e;
             }
-            dateTime = hourDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
 
             DataRecord dataRecord = new DataRecord.Builder()
                     .setDateTime(dateTime)
