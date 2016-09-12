@@ -6,7 +6,7 @@ import java.util.List;
 
 import static java.lang.String.format;
 
-public class TickDataFactory {
+class TickDataFactory {
     UsefulTickData buildTickData(List<DataRecord> hourData, int hourCounter, List<DataRecord> tickData, int tickCounter) {
         if(hourCounter < 1) {
             throw new IllegalStateException(format("Hour counter is: %d. The hour counter must be at least one" +
