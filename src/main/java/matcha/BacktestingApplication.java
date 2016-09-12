@@ -11,10 +11,8 @@ import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newHashMap;
 import static java.nio.file.Files.readAllLines;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -26,11 +24,13 @@ public class BacktestingApplication {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final int EXTRA_TICKS = 10;
     private Utils utils;
 
     public static void main(String[] args) throws Exception {
-        Injector injector = Guice.createInjector((Module) binder -> { });
+
+
+        Injector injector = Guice.createInjector((Module) binder -> {
+        });
         final BacktestingApplication instance = injector.getInstance(BacktestingApplication.class);
         instance.run(args);
     }
@@ -39,9 +39,6 @@ public class BacktestingApplication {
         CommandLine cmd = getCmdLineOptions(args);
 
         utils = new Utils();
-        Map<String, BackTestingParameters> parametersMap = createParametersMap(EXTRA_TICKS);
-
-        final String backTestingParametersName = cmd.getOptionValue("scenario");
 
         final Path inputPath = Paths.get(cmd.getOptionValue("input"));
         LOG.info(String.format("Using input file '%s'", inputPath));
@@ -52,11 +49,7 @@ public class BacktestingApplication {
 
         List<Results> allResults = newArrayList();
 
-        for (BackTestingParameters backTestingParameters : getBackTestingParameters(parametersMap,
-                backTestingParametersName)) {
-            LOG.info("Executing " + backTestingParameters.getName());
-
-            final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
+            final RealSimulation simulation = new RealSimulation(new PositionExecutor(utils), new TickDataReaderImpl(),
                     new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, 1), new TickDataFactory());
 
             for (String inputLine : inputLines) {
@@ -69,34 +62,20 @@ public class BacktestingApplication {
                 final Path sixtyMinutePath = Paths.get(lineParts[1]);
                 Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
 
-                final Results results = simulation.execute(input, outputDirectory, backTestingParameters,
+                final Results results = simulation.execute(input, outputDirectory,
                         getDecimalPointPlace(inputLine));
 
                 allResults.add(results);
 
                 LOG.info(results.toString());
             }
-        }
+
 
         return allResults;
     }
 
-    private List<BackTestingParameters> getBackTestingParameters(Map<String, BackTestingParameters> parametersMap,
-                                                                 String backTestingParametersName) {
-        List<BackTestingParameters> backTestingParametersList = newArrayList();
-
-        backTestingParametersList.add(parametersMap.get(backTestingParametersName));
-
-        if (backTestingParametersList.isEmpty()) {
-            throw new IllegalArgumentException("Couldn't find the backTestingParameters for " +
-                    backTestingParametersName);
-        }
-        return backTestingParametersList;
-    }
-
     private CommandLine getCmdLineOptions(String[] args) throws ParseException {
         Options options = new Options();
-        options.addOption("scenario", true, "The scenario to use.");
         options.addOption("input", true, "The input file to use.");
         options.addOption("output", true, "Where to output the results.");
 
@@ -110,18 +89,5 @@ public class BacktestingApplication {
         } else {
             return 10000;
         }
-    }
-
-    private Map<String, BackTestingParameters> createParametersMap(int extraTicks) {
-        Map<String, BackTestingParameters> parametersMap = newHashMap();
-
-        parametersMap.put("FadeTheBreakoutNormalDaily", new BackTestingParameters.Builder()
-                .setName("FadeTheBreakoutNormalDaily")
-                .setExtraTicks(extraTicks)
-                .setHighLowCheckPref(1)
-                .fadeTheBreakout()
-                .createBackTestingParameters());
-
-        return parametersMap;
     }
 }
