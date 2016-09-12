@@ -23,7 +23,7 @@ public class FadeTheExtremesPositionPlacerTest {
     @Test
     public void shouldCreateAShortPosition() throws Exception {
 
-        final UsefulTickData usefulTickData = new UsefulTickDataBuilder()
+        final UsefulTickData usefulTickData = new UsefulTickData.Builder()
                 .setCandleDate("2007-12-13T18:19:00")
                 .setCandleClose(7)
                 .setCandleLow(0)
@@ -58,7 +58,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Test
     public void shouldCreateALongPosition() throws Exception {
-        final UsefulTickData usefulTickData = new UsefulTickDataBuilder()
+        final UsefulTickData usefulTickData = new UsefulTickData.Builder()
                 .setCandleDate("2007-12-13T18:19:00")
                 .setCandleClose(7)
                 .setCandleLow(2)

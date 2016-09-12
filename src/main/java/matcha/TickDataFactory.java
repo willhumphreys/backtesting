@@ -46,7 +46,7 @@ public class TickDataFactory {
         boolean closeBelowYesterdaysHigh = candleClose < yesterdaysHigh;
         boolean openBelowYesterdaysHigh = candleOpen < yesterdaysHigh;
 
-        return new UsefulTickDataBuilder()
+        return new UsefulTickData.Builder()
                 .setCandleDate(candleDate)
                 .setCandleClose(candleClose)
                 .setCandleLow(candleLow)
