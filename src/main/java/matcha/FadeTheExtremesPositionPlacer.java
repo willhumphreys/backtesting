@@ -15,9 +15,11 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
     private final Utils utils;
+    private int highLowCheckPref;
 
-    FadeTheExtremesPositionPlacer(Utils utils) {
+    FadeTheExtremesPositionPlacer(Utils utils, int highLowCheckPref) {
         this.utils = utils;
+        this.highLowCheckPref = highLowCheckPref;
     }
 
     private Position createShort(UsefulTickData usefulTickData, int decimalPointPlace) {
@@ -118,7 +120,7 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
 
     @Override
     public Optional<Position> placePositions(UsefulTickData usefulTickData,
-                                             int decimalPointPlace, int highLowCheckPref) {
+                                             int decimalPointPlace) {
 
         if (isALongSignal(usefulTickData, highLowCheckPref)) {
             return Optional.of(createLong(usefulTickData, decimalPointPlace));

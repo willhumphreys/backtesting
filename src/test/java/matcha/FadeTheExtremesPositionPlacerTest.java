@@ -18,7 +18,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Before
     public void setUp() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils());
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class FadeTheExtremesPositionPlacerTest {
                 .setTickHigh(BigDecimal.valueOf(0))
                 .createUsefulTickData();
 
-        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5, 1);
+        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
 
         assertThat(position.isPresent(), is(true));
         assertThat(position.get().getEntry(), is(equalTo(BigDecimal.valueOf(7))));
@@ -82,7 +82,7 @@ public class FadeTheExtremesPositionPlacerTest {
                 .setTickHigh(BigDecimal.valueOf(0))
                 .createUsefulTickData();
 
-        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5, 1);
+        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
 
         assertThat(position.isPresent(), is(true));
         assertThat(position.get().getStop().compareTo(position.get().getTarget()) > 0, is(false));

@@ -111,7 +111,7 @@ class Simulation {
             } else {
                 if (timeToOpenPosition) {
                     final Optional<Position> positionOptional = positionPlacer.placePositions(usefulTickData,
-                            decimalPointPlace, backTestingParameters.getHighLowCheckPref());
+                            decimalPointPlace);
 
                     if (positionOptional.isPresent()) {
                         final Position position = positionOptional.get();
