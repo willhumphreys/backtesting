@@ -27,6 +27,7 @@ public class BacktestingApplication {
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
 
     private static final int EXTRA_TICKS = 10;
+    private Utils utils;
 
     public static void main(String[] args) throws Exception {
         Injector injector = Guice.createInjector((Module) binder -> { });
@@ -37,6 +38,7 @@ public class BacktestingApplication {
     List<Results> run(String... args) throws Exception {
         CommandLine cmd = getCmdLineOptions(args);
 
+        utils = new Utils();
         Map<String, BackTestingParameters> parametersMap = createParametersMap(EXTRA_TICKS);
 
         final String backTestingParametersName = cmd.getOptionValue("scenario");
@@ -53,8 +55,9 @@ public class BacktestingApplication {
         for (BackTestingParameters backTestingParameters : getBackTestingParameters(parametersMap,
                 backTestingParametersName)) {
             LOG.info("Executing " + backTestingParameters.getName());
-            final Simulation simulation = new Simulation(new PositionExecutor(new Utils()), new TickDataReaderImpl(),
-                    new SyncTicks(), new FadeTheExtremesPositionPlacer(new Utils(), 1), new TickDataFactory());
+
+            final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
+                    new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, 1), new TickDataFactory());
 
             for (String inputLine : inputLines) {
                 if (inputLine.trim().length() == 0) {
