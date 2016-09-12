@@ -26,12 +26,15 @@ class UsefulTickData {
     private double tickLow;
     private double tickHigh;
 
-    UsefulTickData(LocalDateTime candleDate, double candleClose, double candleLow, double previousCandleLow,
-                   double candleHigh, double previousCandleHigh, boolean takeOutYesterdaysLow, boolean closePositive,
-                   boolean closeAboveYesterdaysLow, boolean openAboveYesterdaysLow, boolean takeOutYesterdaysHigh,
-                   boolean closeNegative, boolean closeBelowYesterdaysHigh, boolean openBelowYesterdaysHigh,
-                   double todaysLow, double todaysHigh, double lowOfDayForPreviousHour, double highOfDayForPreviousHour,
-                   double tickLow, double tickHigh) {
+    private UsefulTickData(LocalDateTime candleDate, double candleClose, double candleLow, double previousCandleLow,
+                           double candleHigh, double previousCandleHigh, boolean takeOutYesterdaysLow, boolean
+                                   closePositive,
+                           boolean closeAboveYesterdaysLow, boolean openAboveYesterdaysLow, boolean
+                                   takeOutYesterdaysHigh,
+                           boolean closeNegative, boolean closeBelowYesterdaysHigh, boolean openBelowYesterdaysHigh,
+                           double todaysLow, double todaysHigh, double lowOfDayForPreviousHour, double
+                                   highOfDayForPreviousHour,
+                           double tickLow, double tickHigh) {
         this.candleDate = candleDate;
         this.candleClose = candleClose;
         this.candleLow = candleLow;
@@ -134,7 +137,7 @@ class UsefulTickData {
         return tickLow;
     }
 
-    public static class Builder {
+    static class Builder {
 
         private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
 
@@ -159,111 +162,111 @@ class UsefulTickData {
         private double tickLow;
         private double tickHigh;
 
-        public Builder setCandleDate(LocalDateTime candleDate) {
+        Builder setCandleDate(LocalDateTime candleDate) {
             this.candleDate = candleDate;
             return this;
         }
 
-        public Builder setCandleDate(String candleDate) {
+        Builder setCandleDate(String candleDate) {
             return setCandleDate(LocalDateTime.parse(candleDate, formatter));
         }
 
-        public Builder setCandleClose(double candleClose) {
+        Builder setCandleClose(double candleClose) {
             this.candleClose = candleClose;
             return this;
         }
 
-        public Builder setCandleLow(double candleLow) {
+        Builder setCandleLow(double candleLow) {
             this.candleLow = candleLow;
             return this;
         }
 
-        public Builder setPreviousCandleLow(double previousCandleLow) {
+        Builder setPreviousCandleLow(double previousCandleLow) {
             this.previousCandleLow = previousCandleLow;
             return this;
         }
 
-        public Builder setCandleHigh(double candleHigh) {
+        Builder setCandleHigh(double candleHigh) {
             this.candleHigh = candleHigh;
             return this;
         }
 
-        public Builder setPreviousCandleHigh(double previousCandleHigh) {
+        Builder setPreviousCandleHigh(double previousCandleHigh) {
             this.previousCandleHigh = previousCandleHigh;
             return this;
         }
 
-        public Builder setTakeOutYesterdaysLow(boolean takeOutYesterdaysLow) {
+        Builder setTakeOutYesterdaysLow(boolean takeOutYesterdaysLow) {
             this.takeOutYesterdaysLow = takeOutYesterdaysLow;
             return this;
         }
 
-        public Builder setClosePositive(boolean closePositive) {
+        Builder setClosePositive(boolean closePositive) {
             this.closePositive = closePositive;
             return this;
         }
 
-        public Builder setCloseAboveYesterdaysLow(boolean closeAboveYesterdaysLow) {
+        Builder setCloseAboveYesterdaysLow(boolean closeAboveYesterdaysLow) {
             this.closeAboveYesterdaysLow = closeAboveYesterdaysLow;
             return this;
         }
 
-        public Builder setOpenAboveYesterdaysLow(boolean openAboveYesterdaysLow) {
+        Builder setOpenAboveYesterdaysLow(boolean openAboveYesterdaysLow) {
             this.openAboveYesterdaysLow = openAboveYesterdaysLow;
             return this;
         }
 
-        public Builder setTakeOutYesterdaysHigh(boolean takeOutYesterdaysHigh) {
+        Builder setTakeOutYesterdaysHigh(boolean takeOutYesterdaysHigh) {
             this.takeOutYesterdaysHigh = takeOutYesterdaysHigh;
             return this;
         }
 
-        public Builder setCloseNegative(boolean closeNegative) {
+        Builder setCloseNegative(boolean closeNegative) {
             this.closeNegative = closeNegative;
             return this;
         }
 
-        public Builder setCloseBelowYesterdaysHigh(boolean closeBelowYesterdaysHigh) {
+        Builder setCloseBelowYesterdaysHigh(boolean closeBelowYesterdaysHigh) {
             this.closeBelowYesterdaysHigh = closeBelowYesterdaysHigh;
             return this;
         }
 
-        public Builder setOpenBelowYesterdaysHigh(boolean openBelowYesterdaysHigh) {
+        Builder setOpenBelowYesterdaysHigh(boolean openBelowYesterdaysHigh) {
             this.openBelowYesterdaysHigh = openBelowYesterdaysHigh;
             return this;
         }
 
-        public Builder setTodaysLow(double todaysLow) {
+        Builder setTodaysLow(double todaysLow) {
             this.todaysLow = todaysLow;
             return this;
         }
 
-        public Builder setTodaysHigh(double todaysHigh) {
+        Builder setTodaysHigh(double todaysHigh) {
             this.todaysHigh = todaysHigh;
             return this;
         }
 
-        public Builder setLowOfDayForPreviousHour(double lowOfDayForPreviousHour) {
+        Builder setLowOfDayForPreviousHour(double lowOfDayForPreviousHour) {
             this.lowOfDayForPreviousHour = lowOfDayForPreviousHour;
             return this;
         }
 
-        public Builder setHighOfDayForPreviousHour(double highOfDayForPreviousHour) {
+        Builder setHighOfDayForPreviousHour(double highOfDayForPreviousHour) {
             this.highOfDayForPreviousHour = highOfDayForPreviousHour;
             return this;
         }
 
-        public Builder setTickLow(double tickLow) {
+        Builder setTickLow(double tickLow) {
             this.tickLow = tickLow;
             return this;
         }
 
-        public Builder setTickHigh(double tickHigh) {
+        Builder setTickHigh(double tickHigh) {
             this.tickHigh = tickHigh;
             return this;
         }
 
-        public UsefulTickData createUsefulTickData() {
+        UsefulTickData createUsefulTickData() {
             return new UsefulTickData(candleDate, candleClose, candleLow, previousCandleLow, candleHigh,
                     previousCandleHigh, takeOutYesterdaysLow, closePositive, closeAboveYesterdaysLow,
                     openAboveYesterdaysLow, takeOutYesterdaysHigh, closeNegative, closeBelowYesterdaysHigh,
