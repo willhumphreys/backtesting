@@ -24,8 +24,6 @@ public class BacktestingApplication {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
 
-    private Utils utils;
-
     public static void main(String[] args) throws Exception {
 
 
@@ -38,7 +36,7 @@ public class BacktestingApplication {
     List<Results> run(String... args) throws Exception {
         CommandLine cmd = getCmdLineOptions(args);
 
-        utils = new Utils();
+        Utils utils = new Utils();
 
         final Path inputPath = Paths.get(cmd.getOptionValue("input"));
         LOG.info(String.format("Using input file '%s'", inputPath));
