@@ -25,7 +25,7 @@ public class AcceptanceTests {
 
     @Test
     public void shouldAShortWinningTradeAtHighs() throws Exception {
-        final List<Results> allResults = backtestingApplication.run("-scenario", "FadeTheBreakoutNormalDaily",
+        final List<Results> allResults = backtestingApplication.run(
                 "-input", "acceptance_data/input_one_winner.csv", "-output", "acceptance_results");
 
         assertThat(allResults.size(), is(equalTo(1)));
@@ -39,7 +39,7 @@ public class AcceptanceTests {
 
     @Test
     public void shouldGoLongAWinningTradeAtLows() throws Exception {
-        final List<Results> allResults = backtestingApplication.run("-scenario", "FadeTheBreakoutNormalDaily",
+        final List<Results> allResults = backtestingApplication.run(
                 "-input", "acceptance_data/eurjpy_long_winner.csv", "-output", "acceptance_results");
 
         assertThat(allResults.size(), is(equalTo(1)));
@@ -53,7 +53,7 @@ public class AcceptanceTests {
 
     @Test
     public void shouldAShortLosingTradeAtHighs() throws Exception {
-        final List<Results> allResults = backtestingApplication.run("-scenario", "FadeTheBreakoutNormalDaily",
+        final List<Results> allResults = backtestingApplication.run(
                 "-input", "acceptance_data/eurjpy_short_loser.csv", "-output", "acceptance_results");
 
         assertThat(allResults.size(), is(equalTo(1)));
@@ -67,7 +67,7 @@ public class AcceptanceTests {
 
     @Test
     public void shouldGoLongALosingTradeAtLows() throws Exception {
-        final List<Results> allResults = backtestingApplication.run("-scenario", "FadeTheBreakoutNormalDaily",
+        final List<Results> allResults = backtestingApplication.run(
                 "-input", "acceptance_data/eurjpy_long_loser.csv", "-output", "acceptance_results");
 
         assertThat(allResults.size(), is(equalTo(1)));
@@ -81,7 +81,7 @@ public class AcceptanceTests {
 
     @Test
     public void shouldGoLongALosingTradeAtLowsAndThenLongAWinningTradeAtLows() throws Exception {
-        final List<Results> allResults = backtestingApplication.run("-scenario", "FadeTheBreakoutNormalDaily",
+        final List<Results> allResults = backtestingApplication.run(
                 "-input", "acceptance_data/eurjpy_long_loser_then_winner.csv", "-output", "acceptance_results");
 
         assertThat(allResults.size(), is(equalTo(1)));
@@ -95,7 +95,7 @@ public class AcceptanceTests {
 
     @Test
     public void shouldGoLongALosingTradeAtLowsAndThenShortALosingTradeAtLows() throws Exception {
-        final List<Results> allResults = backtestingApplication.run("-scenario", "FadeTheBreakoutNormalDaily",
+        final List<Results> allResults = backtestingApplication.run(
                 "-input", "acceptance_data/eurjpy_long_loser_then_short_loser.csv", "-output", "acceptance_results");
 
         assertThat(allResults.size(), is(equalTo(1)));
