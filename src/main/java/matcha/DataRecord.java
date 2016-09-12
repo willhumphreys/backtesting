@@ -17,8 +17,9 @@ class DataRecord {
     private final double todaysLow;
     private final double todaysHigh;
 
-    DataRecord(LocalDateTime dateTime, double open, double low, double high, double close, double yesterdaysDailyLow,
-               double yesterdaysDailyHigh, double todaysLow, double todaysHigh) {
+    private DataRecord(LocalDateTime dateTime, double open, double low, double high, double close, double
+            yesterdaysDailyLow,
+                       double yesterdaysDailyHigh, double todaysLow, double todaysHigh) {
 
         this.dateTime = dateTime;
         this.open = open;
@@ -31,43 +32,43 @@ class DataRecord {
         this.todaysHigh = todaysHigh;
     }
 
-    public LocalDateTime getDateTime() {
+    LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public double getOpen() {
+    double getOpen() {
         return open;
     }
 
-    public double getLow() {
+    double getLow() {
         return low;
     }
 
-    public double getHigh() {
+    double getHigh() {
         return high;
     }
 
-    public double getClose() {
+    double getClose() {
         return close;
     }
 
-    public double getYesterdaysDailyLow() {
+    double getYesterdaysDailyLow() {
         return yesterdaysDailyLow;
     }
 
-    public double getYesterdaysDailyHigh() {
+    double getYesterdaysDailyHigh() {
         return yesterdaysDailyHigh;
     }
 
-    public double getTodaysLow() {
+    double getTodaysLow() {
         return todaysLow;
     }
 
-    public double getTodaysHigh() {
+    double getTodaysHigh() {
         return todaysHigh;
     }
 
-    public static class Builder {
+    static class Builder {
         private LocalDateTime dateTime;
         private double open;
         private double low;
@@ -78,56 +79,56 @@ class DataRecord {
         private double todaysLow;
         private double todaysHigh;
 
-        public Builder setDateTime(LocalDateTime dateTime) {
+        Builder setDateTime(LocalDateTime dateTime) {
             this.dateTime = dateTime;
             return this;
         }
 
-        public Builder setDateTime(String dateTime) {
+        Builder setDateTime(String dateTime) {
             return setDateTime(LocalDateTime.parse(dateTime, formatter));
         }
 
-        public Builder setOpen(double open) {
+        Builder setOpen(double open) {
             this.open = open;
             return this;
         }
 
-        public Builder setLow(double low) {
+        Builder setLow(double low) {
             this.low = low;
             return this;
         }
 
-        public Builder setHigh(double high) {
+        Builder setHigh(double high) {
             this.high = high;
             return this;
         }
 
-        public Builder setClose(double close) {
+        Builder setClose(double close) {
             this.close = close;
             return this;
         }
 
-        public Builder setYesterdaysDailyLow(double yesterdaysDailyLow) {
+        Builder setYesterdaysDailyLow(double yesterdaysDailyLow) {
             this.yesterdaysDailyLow = yesterdaysDailyLow;
             return this;
         }
 
-        public Builder setYesterdaysDailyHigh(double yesterdaysDailyHigh) {
+        Builder setYesterdaysDailyHigh(double yesterdaysDailyHigh) {
             this.yesterdaysDailyHigh = yesterdaysDailyHigh;
             return this;
         }
 
-        public Builder setTodaysLow(double todaysLow) {
+        Builder setTodaysLow(double todaysLow) {
             this.todaysLow = todaysLow;
             return this;
         }
 
-        public Builder setTodaysHigh(double todaysHigh) {
+        Builder setTodaysHigh(double todaysHigh) {
             this.todaysHigh = todaysHigh;
             return this;
         }
 
-        public DataRecord createDataRecord() {
+        DataRecord createDataRecord() {
             return new DataRecord(dateTime, open, low, high, close, yesterdaysDailyLow, yesterdaysDailyHigh, todaysLow,
                     todaysHigh);
         }
