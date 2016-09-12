@@ -17,9 +17,8 @@ class DataRecord {
     private final double todaysLow;
     private final double todaysHigh;
 
-    private DataRecord(LocalDateTime dateTime, double open, double low, double high, double close, double
-            yesterdaysDailyLow,
-                       double yesterdaysDailyHigh, double todaysLow, double todaysHigh) {
+    private DataRecord(LocalDateTime dateTime, double open, double low, double high, double close,
+                       double yesterdaysDailyLow, double yesterdaysDailyHigh, double todaysLow, double todaysHigh) {
 
         this.dateTime = dateTime;
         this.open = open;
