@@ -1,8 +1,8 @@
 package matcha;
 
 class Results {
-    private String outputFile;
-    private PositionStats positionStats;
+    private final String outputFile;
+    private final PositionStats positionStats;
 
     public Results(String outputFile, PositionStats positionStats) {
         this.outputFile = outputFile;

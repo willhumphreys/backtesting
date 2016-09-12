@@ -19,10 +19,10 @@ class PositionStats {
     private int losers;
     private int longTradeCount;
 
-    private List<LocalDateTime> losingDates;
-    private List<LocalDateTime> winningDates;
+    private final List<LocalDateTime> losingDates;
+    private final List<LocalDateTime> winningDates;
 
-    private List<Boolean> last30WinnersList;
+    private final List<Boolean> last30WinnersList;
 
     PositionStats() {
         tickCounter = 0;

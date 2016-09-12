@@ -6,26 +6,26 @@ import java.time.format.DateTimeFormatter;
 
 class UsefulTickData {
 
-    private LocalDateTime candleDate;
-    private BigDecimal candleClose;
-    private BigDecimal candleLow;
-    private BigDecimal previousCandleLow;
-    private BigDecimal candleHigh;
-    private BigDecimal previousCandleHigh;
-    private boolean takeOutYesterdaysLow;
-    private boolean closePositive;
-    private boolean closeAboveYesterdaysLow;
-    private boolean openAboveYesterdaysLow;
-    private boolean takeOutYesterdaysHigh;
-    private boolean closeNegative;
-    private boolean closeBelowYesterdaysHigh;
-    private boolean openBelowYesterdaysHigh;
-    private BigDecimal todaysLow;
-    private BigDecimal todaysHigh;
-    private BigDecimal lowOfDayForPreviousHour;
-    private BigDecimal highOfDayForPreviousHour;
-    private BigDecimal tickLow;
-    private BigDecimal tickHigh;
+    private final LocalDateTime candleDate;
+    private final BigDecimal candleClose;
+    private final BigDecimal candleLow;
+    private final BigDecimal previousCandleLow;
+    private final BigDecimal candleHigh;
+    private final BigDecimal previousCandleHigh;
+    private final boolean takeOutYesterdaysLow;
+    private final boolean closePositive;
+    private final boolean closeAboveYesterdaysLow;
+    private final boolean openAboveYesterdaysLow;
+    private final boolean takeOutYesterdaysHigh;
+    private final boolean closeNegative;
+    private final boolean closeBelowYesterdaysHigh;
+    private final boolean openBelowYesterdaysHigh;
+    private final BigDecimal todaysLow;
+    private final BigDecimal todaysHigh;
+    private final BigDecimal lowOfDayForPreviousHour;
+    private final BigDecimal highOfDayForPreviousHour;
+    private final BigDecimal tickLow;
+    private final BigDecimal tickHigh;
 
     private UsefulTickData(LocalDateTime candleDate, BigDecimal candleClose, BigDecimal candleLow, BigDecimal previousCandleLow,
                            BigDecimal candleHigh, BigDecimal previousCandleHigh, boolean takeOutYesterdaysLow,

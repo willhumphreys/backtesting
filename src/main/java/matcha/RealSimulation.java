@@ -29,8 +29,8 @@ class RealSimulation implements Simulation{
     private final SyncTicks syncTicks;
     private LocalDate lastTradeDate;
     private boolean timeToOpenPosition;
-    private PositionPlacer positionPlacer;
-    private TickDataFactory tickDataFactory;
+    private final PositionPlacer positionPlacer;
+    private final TickDataFactory tickDataFactory;
 
     @Inject
     RealSimulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks,

@@ -15,7 +15,7 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
     private final Utils utils;
-    private int highLowCheckPref;
+    private final int highLowCheckPref;
 
     FadeTheExtremesPositionPlacer(Utils utils, int highLowCheckPref) {
         this.utils = utils;

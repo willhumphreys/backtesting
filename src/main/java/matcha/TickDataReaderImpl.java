@@ -22,7 +22,7 @@ class TickDataReaderImpl implements TickDataReader {
 
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
-    private DateTimeFormatter formatter;
+    private final DateTimeFormatter formatter;
 
     TickDataReaderImpl() {
         formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
