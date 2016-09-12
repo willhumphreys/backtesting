@@ -24,7 +24,7 @@ class PositionExecutor {
 
     private final Utils utils;
 
-    PositionExecutor(Utils utils) throws IOException {
+    PositionExecutor(Utils utils) {
         this.utils = utils;
     }
 
