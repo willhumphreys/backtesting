@@ -1,8 +1,5 @@
 package matcha;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,9 +15,7 @@ public class AcceptanceTests {
 
     @Before
     public void beforeEachTest() throws Exception {
-        Injector injector = Guice.createInjector((Module) binder -> {
-        });
-        backtestingApplication = injector.getInstance(BacktestingApplication.class);
+        backtestingApplication = new BacktestingApplication();
     }
 
     @Test

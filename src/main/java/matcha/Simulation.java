@@ -1,6 +1,5 @@
 package matcha;
 
-import com.google.inject.Inject;
 import org.slf4j.Logger;
 
 import java.io.BufferedWriter;
@@ -32,7 +31,6 @@ class Simulation {
     private final PositionPlacer positionPlacer;
     private final TickDataFactory tickDataFactory;
 
-    @Inject
     Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks,
                PositionPlacer positionPlacer, TickDataFactory tickDataFactory) {
         this.positionExecutor = positionExecutor;
@@ -42,7 +40,7 @@ class Simulation {
         this.tickDataFactory = tickDataFactory;
         this.positions = newArrayList();
 
-        lastTradeDate = LocalDate.of(1900,1,1);
+        lastTradeDate = LocalDate.of(1900, 1, 1);
     }
 
     Results execute(Inputs inputs, final Path outputDirectory,
