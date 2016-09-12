@@ -50,7 +50,8 @@ public class BacktestingApplication {
 
         List<Results> allResults = newArrayList();
 
-        for (BackTestingParameters backTestingParameters : getBackTestingParameters(parametersMap, backTestingParametersName)) {
+        for (BackTestingParameters backTestingParameters : getBackTestingParameters(parametersMap,
+                backTestingParametersName)) {
             LOG.info("Executing " + backTestingParameters.getName());
             final Simulation simulation = new Simulation(new PositionExecutor(new Utils()), new TickDataReaderImpl(),
                     new SyncTicks(), new FadeTheExtremesPositionPlacer(new Utils()), new TickDataFactory());
@@ -77,7 +78,8 @@ public class BacktestingApplication {
         return allResults;
     }
 
-    private List<BackTestingParameters> getBackTestingParameters(Map<String, BackTestingParameters> parametersMap, String backTestingParametersName) {
+    private List<BackTestingParameters> getBackTestingParameters(Map<String, BackTestingParameters> parametersMap,
+                                                                 String backTestingParametersName) {
         List<BackTestingParameters> backTestingParametersList = newArrayList();
 
         backTestingParametersList.add(parametersMap.get(backTestingParametersName));
