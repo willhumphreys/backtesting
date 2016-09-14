@@ -15,7 +15,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Typical program arguments
- * -scenario FadeTheBreakoutNormalDaily -output results -input inputFileList.csv
+ * -output results -input inputFileList.csv
  */
 class BacktestingApplication {
 
