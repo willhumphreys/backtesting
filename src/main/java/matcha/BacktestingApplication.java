@@ -65,11 +65,8 @@ class BacktestingApplication {
                     getDecimalPointPlace(inputLine));
 
             allResults.add(results);
-
             LOG.info(results.toString());
         }
-
-
         return allResults;
     }
 
