@@ -31,6 +31,14 @@ class BacktestingApplication {
 
         Utils utils = new Utils();
 
+        if (!cmd.hasOption("input")) {
+            throw new IllegalArgumentException("We need an input argument");
+        }
+
+        if (!cmd.hasOption("output")) {
+            throw new IllegalArgumentException("We need an output argument");
+        }
+
         final Path inputPath = Paths.get(cmd.getOptionValue("input"));
         LOG.info(String.format("Using input file '%s'", inputPath));
         final List<String> inputLines = readAllLines(inputPath);
