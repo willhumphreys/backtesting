@@ -46,6 +46,9 @@ class TickDataReaderImpl implements TickDataReader {
             BigDecimal yesterdaysDailyHigh = new BigDecimal(record.get("yesterdays.daily.high"));
             BigDecimal todaysLow = new BigDecimal(record.get("todays.low"));
             BigDecimal todaysHigh = new BigDecimal(record.get("todays.high"));
+            final BigDecimal topBollingerBand = new BigDecimal(record.get("bollinger.2sd.90.TopBand"));
+            final BigDecimal movingAverage = new BigDecimal(record.get("bollinger.2sd.90.MovingAverage"));
+            final BigDecimal bottomBollingerBand = new BigDecimal(record.get("bollinger.2sd.90.BottomBand"));
 
             LocalDateTime dateTime;
             try {
@@ -65,6 +68,9 @@ class TickDataReaderImpl implements TickDataReader {
                     .setYesterdaysDailyHigh(yesterdaysDailyHigh)
                     .setTodaysLow(todaysLow)
                     .setTodaysHigh(todaysHigh)
+                    .setTopBollingerBand(topBollingerBand)
+                    .setMovingAverage(movingAverage)
+                    .setBottomBollingerBand(bottomBollingerBand)
                     .createDataRecord();
             dataRecords.add(dataRecord);
         }

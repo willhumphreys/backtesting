@@ -82,7 +82,6 @@ class Simulation {
             LocalDateTime tickDateTime = tickData.get(tickCounter).getDateTime();
             LocalDateTime nextTickDateTime = tickData.get(tickCounter + 1).getDateTime();
 
-
             int hourCandleHour = hourDateTime.getHour();
             final int tickCandleHour = tickDateTime.getHour();
 
