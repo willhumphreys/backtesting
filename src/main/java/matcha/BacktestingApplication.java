@@ -48,12 +48,12 @@ class BacktestingApplication {
         LOG.info(String.format("Using input file '%s'", inputPath));
         final List<String> inputLines = readAllLines(inputPath);
 
-        Path outputDirectory = Paths.get(cmd.getOptionValue("output-dir"));
+        Path outputDirectory = Paths.get(cmd.getOptionValue("output_dir"));
         LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
-        final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high-low-pref", "1"));
-        final boolean aboveBelowMovingAverages =  Boolean.valueOf(cmd.getOptionValue("moving-averages", "false"));
-        final boolean aboveBelowBands =  Boolean.valueOf(cmd.getOptionValue("bands", "false"));
+        final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high_low_pref", "1"));
+        final boolean aboveBelowMovingAverages =  cmd.hasOption("moving_averages");
+        final boolean aboveBelowBands =  cmd.hasOption("bands");
 
         List<Results> allResults = newArrayList();
 
@@ -92,7 +92,10 @@ class BacktestingApplication {
     private CommandLine getCmdLineOptions(String[] args) throws ParseException {
         Options options = new Options();
         options.addOption("input", true, "The input file to use.");
-        options.addOption("output", true, "Where to output the results.");
+        options.addOption("output_dir", true, "Where to output the results.");
+        options.addOption("high_low_pref", true, "New low for the day is 1");
+        options.addOption("moving_averages", false, "Buy below the moving average and sell above");
+        options.addOption("bands", false, "Buy below the lower band and sell above the higher band");
 
         CommandLineParser parser = new DefaultParser();
         return parser.parse(options, args);
