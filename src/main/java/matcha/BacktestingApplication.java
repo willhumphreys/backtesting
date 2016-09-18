@@ -48,7 +48,7 @@ class BacktestingApplication {
         LOG.info(String.format("Using input file '%s'", inputPath));
         final List<String> inputLines = readAllLines(inputPath);
 
-        Path outputDirectory = Paths.get(cmd.getOptionValue("output"));
+        Path outputDirectory = Paths.get(cmd.getOptionValue("output-dir"));
         LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
         final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high-low-pref", "1"));
