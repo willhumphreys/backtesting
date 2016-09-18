@@ -26,6 +26,13 @@ class UsefulTickData {
     private final BigDecimal highOfDayForPreviousHour;
     private final BigDecimal tickLow;
     private final BigDecimal tickHigh;
+    private final BigDecimal topBollingerBand;
+    private final BigDecimal movingAverage;
+    private final BigDecimal bottomBollingerBand;
+    private final boolean closeAboveMovingAverage;
+    private final boolean closeBelowMovingAverage;
+    private final boolean closeAboveTopBand;
+    private final boolean closeBelowBottomBand;
 
     private UsefulTickData(LocalDateTime candleDate, BigDecimal candleClose, BigDecimal candleLow, BigDecimal previousCandleLow,
                            BigDecimal candleHigh, BigDecimal previousCandleHigh, boolean takeOutYesterdaysLow,
@@ -33,7 +40,9 @@ class UsefulTickData {
                            boolean takeOutYesterdaysHigh, boolean closeNegative, boolean closeBelowYesterdaysHigh,
                            boolean openBelowYesterdaysHigh, BigDecimal todaysLow, BigDecimal todaysHigh,
                            BigDecimal lowOfDayForPreviousHour, BigDecimal highOfDayForPreviousHour, BigDecimal tickLow,
-                           BigDecimal tickHigh) {
+                           BigDecimal tickHigh, BigDecimal topBollingerBand, BigDecimal movingAverage,
+                           BigDecimal bottomBollingerBand, boolean closeAboveMovingAverage,
+                           boolean closeBelowMovingAverage, boolean closeAboveTopBand, boolean closeBelowBottomBand) {
         this.candleDate = candleDate;
         this.candleClose = candleClose;
         this.candleLow = candleLow;
@@ -54,6 +63,13 @@ class UsefulTickData {
         this.highOfDayForPreviousHour = highOfDayForPreviousHour;
         this.tickLow = tickLow;
         this.tickHigh = tickHigh;
+        this.topBollingerBand = topBollingerBand;
+        this.movingAverage = movingAverage;
+        this.bottomBollingerBand = bottomBollingerBand;
+        this.closeAboveMovingAverage = closeAboveMovingAverage;
+        this.closeBelowMovingAverage = closeBelowMovingAverage;
+        this.closeAboveTopBand = closeAboveTopBand;
+        this.closeBelowBottomBand = closeBelowBottomBand;
     }
 
     LocalDateTime getCandleDate() {
@@ -136,6 +152,34 @@ class UsefulTickData {
         return tickLow;
     }
 
+    public BigDecimal getTopBollingerBand() {
+        return topBollingerBand;
+    }
+
+    public BigDecimal getMovingAverage() {
+        return movingAverage;
+    }
+
+    public BigDecimal getBottomBollingerBand() {
+        return bottomBollingerBand;
+    }
+
+    public boolean isCloseAboveMovingAverage() {
+        return closeAboveMovingAverage;
+    }
+
+    public boolean isCloseBelowMovingAverage() {
+        return closeBelowMovingAverage;
+    }
+
+    public boolean isCloseAboveTopBand() {
+        return closeAboveTopBand;
+    }
+
+    public boolean isCloseBelowBottomBand() {
+        return closeBelowBottomBand;
+    }
+
     static class Builder {
 
         private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s");
@@ -164,7 +208,7 @@ class UsefulTickData {
         private BigDecimal movingAverage;
         private BigDecimal bottomBollingerBand;
         private boolean closeAboveTopBand;
-        private boolean closeBelowBand;
+        private boolean closeBelowBottomBand;
         private boolean closeAboveMovingAverage;
         private boolean closeBelowMovingAverage;
 
@@ -292,8 +336,8 @@ class UsefulTickData {
             return this;
         }
 
-        Builder setCloseBelowBand(boolean closeBelowBand) {
-            this.closeBelowBand = closeBelowBand;
+        Builder setCloseBelowBottomBand(boolean closeBelowBottomBand) {
+            this.closeBelowBottomBand = closeBelowBottomBand;
             return this;
         }
 
@@ -317,7 +361,8 @@ class UsefulTickData {
                     previousCandleHigh, takeOutYesterdaysLow, closePositive, closeAboveYesterdaysLow,
                     openAboveYesterdaysLow, takeOutYesterdaysHigh, closeNegative, closeBelowYesterdaysHigh,
                     openBelowYesterdaysHigh, todaysLow, todaysHigh, lowOfDayForPreviousHour, highOfDayForPreviousHour,
-                    tickLow, tickHigh);
+                    tickLow, tickHigh, topBollingerBand, movingAverage, bottomBollingerBand, closeAboveMovingAverage,
+                    closeBelowMovingAverage, closeAboveTopBand, closeBelowBottomBand);
         }
     }
 }

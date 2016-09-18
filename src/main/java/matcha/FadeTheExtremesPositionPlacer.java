@@ -96,28 +96,41 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
         return highCheck;
     }
 
-    private boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
+    private boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref, boolean aboveBelowMovingAverages) {
         final boolean takeOutYesterdaysHigh = usefulTickData.isTakeOutYesterdaysHigh();
         final boolean closeNegative = usefulTickData.isCloseNegative();
         final boolean closeBelowYesterdaysHigh = usefulTickData.isCloseBelowYesterdaysHigh();
         final boolean openBelowYesterdaysHigh = usefulTickData.isOpenBelowYesterdaysHigh();
         final boolean highCheck = getHighCheck(usefulTickData, highLowCheckPref);
 
+        boolean movingAverageCheck = true;
+        if(aboveBelowMovingAverages) {
+            movingAverageCheck = usefulTickData.isCloseAboveMovingAverage();
+        }
+
         return takeOutYesterdaysHigh &&
                 closeNegative &&
                 closeBelowYesterdaysHigh &&
                 openBelowYesterdaysHigh &&
+                movingAverageCheck &&
                 highCheck;
     }
 
-    private boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref) {
+    private boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref, boolean aboveBelowMovingAverages) {
         final boolean takeOutYesterdaysLow = usefulTickData.isTakeOutYesterdaysLow();
         final boolean closePositive = usefulTickData.isClosePositive();
         final boolean closeAboveYesterdaysLow = usefulTickData.isCloseAboveYesterdaysLow();
+
+        boolean movingAverageCheck = true;
+        if(aboveBelowMovingAverages) {
+            movingAverageCheck = usefulTickData.isCloseBelowMovingAverage();
+        }
+
         return takeOutYesterdaysLow &&
                 closePositive &&
                 closeAboveYesterdaysLow &&
                 usefulTickData.isOpenAboveYesterdaysLow() &&
+                movingAverageCheck &&
                 getLowCheck(usefulTickData, highLowCheckPref);
     }
 
@@ -125,11 +138,11 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
     public Optional<Position> placePositions(UsefulTickData usefulTickData,
                                              int decimalPointPlace) {
 
-        if (isALongSignal(usefulTickData, highLowCheckPref)) {
+        if (isALongSignal(usefulTickData, highLowCheckPref, aboveBelowMovingAverages)) {
             return Optional.of(createLong(usefulTickData, decimalPointPlace));
         }
 
-        if (isAShortSignal(usefulTickData, highLowCheckPref)) {
+        if (isAShortSignal(usefulTickData, highLowCheckPref,aboveBelowMovingAverages)) {
             return Optional.of(createShort(usefulTickData, decimalPointPlace));
         }
         return Optional.empty();

@@ -105,6 +105,56 @@ public class FadeTheExtremesPositionPlacerTest {
     }
 
     @Test
+    public void shouldCreateALongPositionOnlyIfWeAreBelowTheMovingAverage() throws Exception {
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, true);
+        final UsefulTickData usefulTickData = longPositionData.setCloseBelowMovingAverage(true).createUsefulTickData();
+
+        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
+
+        assertThat(position.isPresent(), is(true));
+        assertThat(position.get().getStop().compareTo(position.get().getTarget()) > 0, is(false));
+        assertThat(position.get().getEntry(), is(equalTo(BigDecimal.valueOf(7))));
+        assertThat(position.get().getEntryDate(), is(equalTo(LocalDateTime.parse("2007-12-13T18:19:00"))));
+        assertThat(position.get().getStop(), is(equalTo(BigDecimal.valueOf(2))));
+        assertThat(position.get().getTarget(), is(equalTo(BigDecimal.valueOf(12))));
+    }
+
+    @Test
+    public void shouldNotCreateALongPositionOnlyIfWeAreNotBelowTheMovingAverage() throws Exception {
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, true);
+        final UsefulTickData usefulTickData = longPositionData.createUsefulTickData();
+
+        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
+
+        assertThat(position.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldCreateAShortPositionOnlyIfWeAreAboveTheMovingAverage() throws Exception {
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, true);
+        final UsefulTickData usefulTickData = shortPositionData.setCloseAboveMovingAverage(true).createUsefulTickData();
+
+        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
+
+        assertThat(position.isPresent(), is(true));
+        assertThat(position.get().getEntry(), is(equalTo(BigDecimal.valueOf(7))));
+        assertThat(position.get().getEntryDate(), is(equalTo(LocalDateTime.parse("2007-12-13T18:19:00"))));
+        assertThat(position.get().getStop().compareTo(position.get().getTarget()) > 0, is(true));
+        assertThat(position.get().getStop(), is(equalTo(BigDecimal.valueOf(9))));
+        assertThat(position.get().getTarget(), is(equalTo(BigDecimal.valueOf(5))));
+    }
+
+    @Test
+    public void shouldNotCreateAShortPositionOnlyIfWeAreNotAboveTheMovingAverage() throws Exception {
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, true);
+        final UsefulTickData usefulTickData = shortPositionData.createUsefulTickData();
+
+        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
+
+        assertThat(position.isPresent(), is(false));
+    }
+
+    @Test
     public void shouldNotCreateALongPosition() throws Exception {
         final UsefulTickData usefulTickData = longPositionData.setClosePositive(false).createUsefulTickData();
 

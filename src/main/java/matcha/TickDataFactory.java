@@ -80,7 +80,7 @@ class TickDataFactory {
                 .setMovingAverage(movingAverage)
                 .setBottomBollingerBand(bottomBollingerBand)
                 .setCloseAboveTopBand(closeAboveTopBand)
-                .setCloseBelowBand(closeBelowBand)
+                .setCloseBelowBottomBand(closeBelowBand)
                 .setCloseAboveMovingAverage(closeAboveMovingAverage)
                 .setCloseBelowMovingAverage(closeBelowMovingAverage)
                 .createUsefulTickData();
