@@ -100,6 +100,7 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
         final boolean closeBelowYesterdaysHigh = usefulTickData.isCloseBelowYesterdaysHigh();
         final boolean openBelowYesterdaysHigh = usefulTickData.isOpenBelowYesterdaysHigh();
         final boolean highCheck = getHighCheck(usefulTickData, highLowCheckPref);
+
         return takeOutYesterdaysHigh &&
                 closeNegative &&
                 closeBelowYesterdaysHigh &&

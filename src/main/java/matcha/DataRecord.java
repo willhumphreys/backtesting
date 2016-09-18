@@ -17,10 +17,13 @@ class DataRecord {
     private final BigDecimal yesterdaysDailyHigh;
     private final BigDecimal todaysLow;
     private final BigDecimal todaysHigh;
+    private final BigDecimal topBollingerBand;
+    private final BigDecimal movingAverage;
+    private final BigDecimal bottomBollingerBand;
 
     private DataRecord(LocalDateTime dateTime, BigDecimal open, BigDecimal low, BigDecimal high, BigDecimal close,
                        BigDecimal yesterdaysDailyLow, BigDecimal yesterdaysDailyHigh, BigDecimal todaysLow,
-                       BigDecimal todaysHigh) {
+                       BigDecimal todaysHigh, BigDecimal topBollingerBand, BigDecimal movingAverage, BigDecimal bottomBollingerBand) {
 
         this.dateTime = dateTime;
         this.open = open;
@@ -31,6 +34,9 @@ class DataRecord {
         this.yesterdaysDailyHigh = yesterdaysDailyHigh;
         this.todaysLow = todaysLow;
         this.todaysHigh = todaysHigh;
+        this.topBollingerBand = topBollingerBand;
+        this.movingAverage = movingAverage;
+        this.bottomBollingerBand = bottomBollingerBand;
     }
 
     LocalDateTime getDateTime() {
@@ -67,6 +73,18 @@ class DataRecord {
 
     BigDecimal getTodaysHigh() {
         return todaysHigh;
+    }
+
+    public BigDecimal getTopBollingerBand() {
+        return topBollingerBand;
+    }
+
+    public BigDecimal getMovingAverage() {
+        return movingAverage;
+    }
+
+    public BigDecimal getBottomBollingerBand() {
+        return bottomBollingerBand;
     }
 
     static class Builder {
@@ -149,7 +167,7 @@ class DataRecord {
 
         DataRecord createDataRecord() {
             return new DataRecord(dateTime, open, low, high, close, yesterdaysDailyLow, yesterdaysDailyHigh, todaysLow,
-                    todaysHigh);
+                    todaysHigh, topBollingerBand, movingAverage, bottomBollingerBand);
         }
     }
 }

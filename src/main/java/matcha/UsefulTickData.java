@@ -160,6 +160,13 @@ class UsefulTickData {
         private BigDecimal highOfDayForPreviousHour;
         private BigDecimal tickLow;
         private BigDecimal tickHigh;
+        private BigDecimal topBollingerBand;
+        private BigDecimal movingAverage;
+        private BigDecimal bottomBollingerBand;
+        private boolean closeAboveTopBand;
+        private boolean closeBelowBand;
+        private boolean closeAboveMovingAverage;
+        private boolean closeBelowMovingAverage;
 
         Builder setCandleDate(LocalDateTime candleDate) {
             this.candleDate = candleDate;
@@ -262,6 +269,41 @@ class UsefulTickData {
 
         Builder setTickHigh(BigDecimal tickHigh) {
             this.tickHigh = tickHigh;
+            return this;
+        }
+
+        Builder setTopBollingerBand(BigDecimal topBollingerBand) {
+            this.topBollingerBand = topBollingerBand;
+            return this;
+        }
+
+        Builder setMovingAverage(BigDecimal movingAverage) {
+            this.movingAverage = movingAverage;
+            return this;
+        }
+
+        Builder setBottomBollingerBand(BigDecimal bottomBollingerBand) {
+            this.bottomBollingerBand = bottomBollingerBand;
+            return this;
+        }
+
+        Builder setCloseAboveTopBand(boolean closeAboveTopBand) {
+            this.closeAboveTopBand = closeAboveTopBand;
+            return this;
+        }
+
+        Builder setCloseBelowBand(boolean closeBelowBand) {
+            this.closeBelowBand = closeBelowBand;
+            return this;
+        }
+
+        Builder setCloseAboveMovingAverage(boolean closeAboveMovingAverage) {
+            this.closeAboveMovingAverage = closeAboveMovingAverage;
+            return this;
+        }
+
+        Builder setCloseBelowMovingAverage(boolean closeBelowMovingAverage) {
+            this.closeBelowMovingAverage = closeBelowMovingAverage;
             return this;
         }
 

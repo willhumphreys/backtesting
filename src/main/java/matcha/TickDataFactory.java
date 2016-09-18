@@ -29,6 +29,10 @@ class TickDataFactory {
         BigDecimal previousCandleLow = hourData.get(hourCounter - 1).getLow();
         BigDecimal candleHigh = hourData.get(hourCounter).getHigh();
 
+        final BigDecimal topBollingerBand = hourData.get(hourCounter).getTopBollingerBand();
+        final BigDecimal movingAverage = hourData.get(hourCounter).getMovingAverage();
+        final BigDecimal bottomBollingerBand = hourData.get(hourCounter).getBottomBollingerBand();
+
         BigDecimal previousCandleHigh = hourData.get(hourCounter - 1).getHigh();
         BigDecimal yesterdaysLow = hourData.get(hourCounter).getYesterdaysDailyLow();
         BigDecimal yesterdaysHigh = hourData.get(hourCounter).getYesterdaysDailyHigh();
@@ -46,6 +50,11 @@ class TickDataFactory {
         boolean closeNegative = candleClose.compareTo(candleOpen) < 0;
         boolean closeBelowYesterdaysHigh = candleClose.compareTo(yesterdaysHigh) < 0;
         boolean openBelowYesterdaysHigh = candleOpen.compareTo(yesterdaysHigh) < 0;
+
+        final boolean closeAboveTopBand = candleClose.compareTo(topBollingerBand) > 0;
+        final boolean closeBelowBand = candleClose.compareTo(bottomBollingerBand) < 0;
+        final boolean closeAboveMovingAverage = candleClose.compareTo(movingAverage) > 0;
+        final boolean closeBelowMovingAverage = candleClose.compareTo(movingAverage) < 0;
 
         return new UsefulTickData.Builder()
                 .setCandleDate(candleDate)
@@ -67,6 +76,13 @@ class TickDataFactory {
                 .setHighOfDayForPreviousHour(highOfDayForPreviousHour)
                 .setTickLow(tickLow)
                 .setTickHigh(tickHigh)
+                .setTopBollingerBand(topBollingerBand)
+                .setMovingAverage(movingAverage)
+                .setBottomBollingerBand(bottomBollingerBand)
+                .setCloseAboveTopBand(closeAboveTopBand)
+                .setCloseBelowBand(closeBelowBand)
+                .setCloseAboveMovingAverage(closeAboveMovingAverage)
+                .setCloseBelowMovingAverage(closeBelowMovingAverage)
                 .createUsefulTickData();
     }
 }
