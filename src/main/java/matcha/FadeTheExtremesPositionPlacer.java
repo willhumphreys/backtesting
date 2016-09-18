@@ -15,15 +15,11 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
     private static final Logger LOG = getLogger(lookup().lookupClass());
 
     private final Utils utils;
-    private final int highLowCheckPref;
-    private final boolean aboveBelowMovingAverages;
-    private final boolean aboveBelowBands;
+    private OpenOptions openOptions;
 
-    FadeTheExtremesPositionPlacer(Utils utils, int highLowCheckPref, boolean aboveBelowMovingAverages, boolean aboveBelowBands) {
+    FadeTheExtremesPositionPlacer(Utils utils, OpenOptions openOptions) {
         this.utils = utils;
-        this.highLowCheckPref = highLowCheckPref;
-        this.aboveBelowMovingAverages = aboveBelowMovingAverages;
-        this.aboveBelowBands = aboveBelowBands;
+        this.openOptions = openOptions;
     }
 
     private Position createShort(UsefulTickData usefulTickData, int decimalPointPlace) {
@@ -98,20 +94,20 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
         return highCheck;
     }
 
-    private boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref, boolean aboveBelowMovingAverages, boolean aboveBelowBands) {
+    private boolean isAShortSignal(UsefulTickData usefulTickData, OpenOptions openOptions) {
         final boolean takeOutYesterdaysHigh = usefulTickData.isTakeOutYesterdaysHigh();
         final boolean closeNegative = usefulTickData.isCloseNegative();
         final boolean closeBelowYesterdaysHigh = usefulTickData.isCloseBelowYesterdaysHigh();
         final boolean openBelowYesterdaysHigh = usefulTickData.isOpenBelowYesterdaysHigh();
-        final boolean highCheck = getHighCheck(usefulTickData, highLowCheckPref);
+        final boolean highCheck = getHighCheck(usefulTickData, openOptions.getHighLowPref());
 
         boolean movingAverageCheck = true;
-        if(aboveBelowMovingAverages) {
+        if(openOptions.isAboveBelowMovingAverages()) {
             movingAverageCheck = usefulTickData.isCloseAboveMovingAverage();
         }
 
         boolean aboveBelowBandsCheck = true;
-        if(aboveBelowBands) {
+        if(openOptions.isAboveBelowBands()) {
             aboveBelowBandsCheck = usefulTickData.isCloseAboveTopBand();
         }
 
@@ -124,18 +120,18 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
                 highCheck;
     }
 
-    private boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref, boolean aboveBelowMovingAverages, boolean aboveBelowBands) {
+    private boolean isALongSignal(UsefulTickData usefulTickData, OpenOptions openOptions) {
         final boolean takeOutYesterdaysLow = usefulTickData.isTakeOutYesterdaysLow();
         final boolean closePositive = usefulTickData.isClosePositive();
         final boolean closeAboveYesterdaysLow = usefulTickData.isCloseAboveYesterdaysLow();
 
         boolean movingAverageCheck = true;
-        if(aboveBelowMovingAverages) {
+        if(openOptions.isAboveBelowMovingAverages()) {
             movingAverageCheck = usefulTickData.isCloseBelowMovingAverage();
         }
 
         boolean aboveBelowBandsCheck = true;
-        if(aboveBelowBands) {
+        if(openOptions.isAboveBelowBands()) {
             aboveBelowBandsCheck = usefulTickData.isCloseBelowBottomBand();
         }
 
@@ -145,18 +141,18 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
                 usefulTickData.isOpenAboveYesterdaysLow() &&
                 movingAverageCheck &&
                 aboveBelowBandsCheck &&
-                getLowCheck(usefulTickData, highLowCheckPref);
+                getLowCheck(usefulTickData, openOptions.getHighLowPref());
     }
 
     @Override
     public Optional<Position> placePositions(UsefulTickData usefulTickData,
                                              int decimalPointPlace) {
 
-        if (isALongSignal(usefulTickData, highLowCheckPref, aboveBelowMovingAverages, aboveBelowBands)) {
+        if (isALongSignal(usefulTickData, openOptions)) {
             return Optional.of(createLong(usefulTickData, decimalPointPlace));
         }
 
-        if (isAShortSignal(usefulTickData, highLowCheckPref,aboveBelowMovingAverages, aboveBelowBands)) {
+        if (isAShortSignal(usefulTickData, openOptions )) {
             return Optional.of(createShort(usefulTickData, decimalPointPlace));
         }
         return Optional.empty();

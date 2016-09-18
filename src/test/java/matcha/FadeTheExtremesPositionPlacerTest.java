@@ -20,7 +20,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Before
     public void setUp() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, false, false);
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), new OpenOptions(1, false, false));
 
         shortPositionData = new UsefulTickData.Builder()
                 .setCandleDate("2007-12-13T18:19:00")
@@ -106,7 +106,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Test
     public void shouldCreateALongPositionOnlyIfWeAreBelowTheMovingAverage() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, true, false);
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(),new OpenOptions(1,true, false));
         final UsefulTickData usefulTickData = longPositionData.setCloseBelowMovingAverage(true).createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
@@ -121,7 +121,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Test
     public void shouldNotCreateALongPositionOnlyIfWeAreNotBelowTheMovingAverage() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, true, false);
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), new OpenOptions(1, true, false));
         final UsefulTickData usefulTickData = longPositionData.createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
@@ -131,7 +131,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Test
     public void shouldCreateAShortPositionOnlyIfWeAreAboveTheMovingAverage() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, true, false);
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), new OpenOptions(1, true, false));
         final UsefulTickData usefulTickData = shortPositionData.setCloseAboveMovingAverage(true).createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
@@ -146,7 +146,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Test
     public void shouldNotCreateAShortPositionOnlyIfWeAreNotAboveTheMovingAverage() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, true, false);
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), new OpenOptions(1, true, false));
         final UsefulTickData usefulTickData = shortPositionData.createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
@@ -166,7 +166,7 @@ public class FadeTheExtremesPositionPlacerTest {
     //Bollinger tests
     @Test
     public void shouldCreateALongPositionOnlyIfWeAreBelowTheLowBand() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, false, true);
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), new OpenOptions(1, false, true));
         final UsefulTickData usefulTickData = longPositionData.setCloseBelowBottomBand(true).createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
@@ -181,7 +181,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Test
     public void shouldNotCreateALongPositionOnlyIfWeAreNotBelowTheLowBand() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, false, true);
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), new OpenOptions(1, false, true));
         final UsefulTickData usefulTickData = longPositionData.createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
@@ -191,7 +191,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Test
     public void shouldCreateAShortPositionOnlyIfWeAreAboveTheHighBand() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, false, true);
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), new OpenOptions(1, false, true));
         final UsefulTickData usefulTickData = shortPositionData.setCloseAboveTopBand(true).createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
@@ -206,7 +206,7 @@ public class FadeTheExtremesPositionPlacerTest {
 
     @Test
     public void shouldNotCreateAShortPositionOnlyIfWeAreNotAboveTheHighBand() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, false, true);
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), new OpenOptions(1, false, true));
         final UsefulTickData usefulTickData = shortPositionData.createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);

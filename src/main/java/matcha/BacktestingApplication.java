@@ -54,9 +54,14 @@ class BacktestingApplication {
         final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high-low-pref", "1"));
 
         List<Results> allResults = newArrayList();
+        final boolean aboveBelowMovingAverages = false;
+        final boolean aboveBelowBands = true;
+
+
+        OpenOptions openOptions = new OpenOptions(highLowPref, aboveBelowMovingAverages, aboveBelowBands);
 
         final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
-                new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, highLowPref, false, true), new TickDataFactory());
+                new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, openOptions), new TickDataFactory());
 
         for (String inputLine : inputLines) {
             if (inputLine.trim().length() == 0) {
