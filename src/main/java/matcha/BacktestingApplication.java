@@ -52,13 +52,16 @@ class BacktestingApplication {
         LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
         final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high-low-pref", "1"));
+        final boolean aboveBelowMovingAverages =  Boolean.valueOf(cmd.getOptionValue("moving-averages", "false"));
+        final boolean aboveBelowBands =  Boolean.valueOf(cmd.getOptionValue("bands", "false"));
 
         List<Results> allResults = newArrayList();
-        final boolean aboveBelowMovingAverages = false;
-        final boolean aboveBelowBands = true;
 
-
-        OpenOptions openOptions = new OpenOptions(highLowPref, aboveBelowMovingAverages, aboveBelowBands);
+        OpenOptions openOptions = new OpenOptions.Builder()
+                .setHighLowPref(highLowPref)
+                .setAboveBelowMovingAverages(aboveBelowMovingAverages)
+                .setAboveBelowBands(aboveBelowBands)
+                .createOpenOptions();
 
         final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
                 new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, openOptions), new TickDataFactory());
