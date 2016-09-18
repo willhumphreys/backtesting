@@ -16,10 +16,12 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
 
     private final Utils utils;
     private final int highLowCheckPref;
+    private final boolean aboveBelowMovingAverages;
 
-    FadeTheExtremesPositionPlacer(Utils utils, int highLowCheckPref) {
+    FadeTheExtremesPositionPlacer(Utils utils, int highLowCheckPref, boolean aboveBelowMovingAverages) {
         this.utils = utils;
         this.highLowCheckPref = highLowCheckPref;
+        this.aboveBelowMovingAverages = aboveBelowMovingAverages;
     }
 
     private Position createShort(UsefulTickData usefulTickData, int decimalPointPlace) {

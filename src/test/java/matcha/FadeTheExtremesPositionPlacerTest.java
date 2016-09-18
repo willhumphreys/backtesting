@@ -15,16 +15,14 @@ import static org.hamcrest.core.Is.is;
 public class FadeTheExtremesPositionPlacerTest {
 
     private FadeTheExtremesPositionPlacer fadeTheExtremesPositionPlacer;
+    private UsefulTickData.Builder shortPositionData;
+    private UsefulTickData.Builder longPositionData;
 
     @Before
     public void setUp() throws Exception {
-        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1);
-    }
+        fadeTheExtremesPositionPlacer = new FadeTheExtremesPositionPlacer(new Utils(), 1, false);
 
-    @Test
-    public void shouldCreateAShortPosition() throws Exception {
-
-        final UsefulTickData usefulTickData = new UsefulTickData.Builder()
+        shortPositionData = new UsefulTickData.Builder()
                 .setCandleDate("2007-12-13T18:19:00")
                 .setCandleClose(BigDecimal.valueOf(7))
                 .setCandleLow(BigDecimal.valueOf(0))
@@ -44,22 +42,9 @@ public class FadeTheExtremesPositionPlacerTest {
                 .setLowOfDayForPreviousHour(BigDecimal.valueOf(0))
                 .setHighOfDayForPreviousHour(BigDecimal.valueOf(0.5))
                 .setTickLow(BigDecimal.valueOf(0))
-                .setTickHigh(BigDecimal.valueOf(0))
-                .createUsefulTickData();
+                .setTickHigh(BigDecimal.valueOf(0));
 
-        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
-
-        assertThat(position.isPresent(), is(true));
-        assertThat(position.get().getEntry(), is(equalTo(BigDecimal.valueOf(7))));
-        assertThat(position.get().getEntryDate(), is(equalTo(LocalDateTime.parse("2007-12-13T18:19:00"))));
-        assertThat(position.get().getStop().compareTo(position.get().getTarget()) > 0, is(true));
-        assertThat(position.get().getStop(), is(equalTo(BigDecimal.valueOf(9))));
-        assertThat(position.get().getTarget(), is(equalTo(BigDecimal.valueOf(5))));
-    }
-
-    @Test
-    public void shouldCreateALongPosition() throws Exception {
-        final UsefulTickData usefulTickData = new UsefulTickData.Builder()
+         longPositionData = new UsefulTickData.Builder()
                 .setCandleDate("2007-12-13T18:19:00")
                 .setCandleClose(BigDecimal.valueOf(7))
                 .setCandleLow(BigDecimal.valueOf(2))
@@ -79,8 +64,35 @@ public class FadeTheExtremesPositionPlacerTest {
                 .setLowOfDayForPreviousHour(BigDecimal.valueOf(4))
                 .setHighOfDayForPreviousHour(BigDecimal.valueOf(0.5))
                 .setTickLow(BigDecimal.valueOf(0))
-                .setTickHigh(BigDecimal.valueOf(0))
-                .createUsefulTickData();
+                .setTickHigh(BigDecimal.valueOf(0));
+
+    }
+
+    @Test
+    public void shouldCreateAShortPosition() throws Exception {
+
+        final UsefulTickData usefulTickData = shortPositionData.createUsefulTickData();
+
+        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
+
+        assertThat(position.isPresent(), is(true));
+        assertThat(position.get().getEntry(), is(equalTo(BigDecimal.valueOf(7))));
+        assertThat(position.get().getEntryDate(), is(equalTo(LocalDateTime.parse("2007-12-13T18:19:00"))));
+        assertThat(position.get().getStop().compareTo(position.get().getTarget()) > 0, is(true));
+        assertThat(position.get().getStop(), is(equalTo(BigDecimal.valueOf(9))));
+        assertThat(position.get().getTarget(), is(equalTo(BigDecimal.valueOf(5))));
+    }
+
+    @Test
+    public void shouldNotCreateAShortPosition() throws Exception {
+        final UsefulTickData usefulTickData = shortPositionData.setCloseNegative(false).createUsefulTickData();
+        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
+        assertThat(position.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldCreateALongPosition() throws Exception {
+        final UsefulTickData usefulTickData = longPositionData.createUsefulTickData();
 
         final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
 
@@ -90,5 +102,14 @@ public class FadeTheExtremesPositionPlacerTest {
         assertThat(position.get().getEntryDate(), is(equalTo(LocalDateTime.parse("2007-12-13T18:19:00"))));
         assertThat(position.get().getStop(), is(equalTo(BigDecimal.valueOf(2))));
         assertThat(position.get().getTarget(), is(equalTo(BigDecimal.valueOf(12))));
+    }
+
+    @Test
+    public void shouldNotCreateALongPosition() throws Exception {
+        final UsefulTickData usefulTickData = longPositionData.setClosePositive(false).createUsefulTickData();
+
+        final Optional<Position> position = fadeTheExtremesPositionPlacer.placePositions(usefulTickData, 5);
+
+        assertThat(position.isPresent(), is(false));
     }
 }

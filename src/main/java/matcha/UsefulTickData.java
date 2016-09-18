@@ -308,6 +308,11 @@ class UsefulTickData {
         }
 
         UsefulTickData createUsefulTickData() {
+
+            if(closePositive && closeNegative) {
+                throw new IllegalStateException("Can't close both position and negative");
+            }
+
             return new UsefulTickData(candleDate, candleClose, candleLow, previousCandleLow, candleHigh,
                     previousCandleHigh, takeOutYesterdaysLow, closePositive, closeAboveYesterdaysLow,
                     openAboveYesterdaysLow, takeOutYesterdaysHigh, closeNegative, closeBelowYesterdaysHigh,

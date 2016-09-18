@@ -51,10 +51,12 @@ class BacktestingApplication {
         Path outputDirectory = Paths.get(cmd.getOptionValue("output"));
         LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
+        final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high-low-pref", "1"));
+
         List<Results> allResults = newArrayList();
 
         final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
-                new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, 1), new TickDataFactory());
+                new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, highLowPref, false), new TickDataFactory());
 
         for (String inputLine : inputLines) {
             if (inputLine.trim().length() == 0) {
