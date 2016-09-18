@@ -56,7 +56,7 @@ class BacktestingApplication {
         List<Results> allResults = newArrayList();
 
         final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
-                new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, highLowPref, false), new TickDataFactory());
+                new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, highLowPref, false, true), new TickDataFactory());
 
         for (String inputLine : inputLines) {
             if (inputLine.trim().length() == 0) {

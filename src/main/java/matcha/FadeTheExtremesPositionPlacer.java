@@ -17,11 +17,13 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
     private final Utils utils;
     private final int highLowCheckPref;
     private final boolean aboveBelowMovingAverages;
+    private final boolean aboveBelowBands;
 
-    FadeTheExtremesPositionPlacer(Utils utils, int highLowCheckPref, boolean aboveBelowMovingAverages) {
+    FadeTheExtremesPositionPlacer(Utils utils, int highLowCheckPref, boolean aboveBelowMovingAverages, boolean aboveBelowBands) {
         this.utils = utils;
         this.highLowCheckPref = highLowCheckPref;
         this.aboveBelowMovingAverages = aboveBelowMovingAverages;
+        this.aboveBelowBands = aboveBelowBands;
     }
 
     private Position createShort(UsefulTickData usefulTickData, int decimalPointPlace) {
@@ -96,7 +98,7 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
         return highCheck;
     }
 
-    private boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref, boolean aboveBelowMovingAverages) {
+    private boolean isAShortSignal(UsefulTickData usefulTickData, int highLowCheckPref, boolean aboveBelowMovingAverages, boolean aboveBelowBands) {
         final boolean takeOutYesterdaysHigh = usefulTickData.isTakeOutYesterdaysHigh();
         final boolean closeNegative = usefulTickData.isCloseNegative();
         final boolean closeBelowYesterdaysHigh = usefulTickData.isCloseBelowYesterdaysHigh();
@@ -108,15 +110,21 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
             movingAverageCheck = usefulTickData.isCloseAboveMovingAverage();
         }
 
+        boolean aboveBelowBandsCheck = true;
+        if(aboveBelowBands) {
+            aboveBelowBandsCheck = usefulTickData.isCloseAboveTopBand();
+        }
+
         return takeOutYesterdaysHigh &&
                 closeNegative &&
                 closeBelowYesterdaysHigh &&
                 openBelowYesterdaysHigh &&
                 movingAverageCheck &&
+                aboveBelowBandsCheck &&
                 highCheck;
     }
 
-    private boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref, boolean aboveBelowMovingAverages) {
+    private boolean isALongSignal(UsefulTickData usefulTickData, int highLowCheckPref, boolean aboveBelowMovingAverages, boolean aboveBelowBands) {
         final boolean takeOutYesterdaysLow = usefulTickData.isTakeOutYesterdaysLow();
         final boolean closePositive = usefulTickData.isClosePositive();
         final boolean closeAboveYesterdaysLow = usefulTickData.isCloseAboveYesterdaysLow();
@@ -126,11 +134,17 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
             movingAverageCheck = usefulTickData.isCloseBelowMovingAverage();
         }
 
+        boolean aboveBelowBandsCheck = true;
+        if(aboveBelowBands) {
+            aboveBelowBandsCheck = usefulTickData.isCloseBelowBottomBand();
+        }
+
         return takeOutYesterdaysLow &&
                 closePositive &&
                 closeAboveYesterdaysLow &&
                 usefulTickData.isOpenAboveYesterdaysLow() &&
                 movingAverageCheck &&
+                aboveBelowBandsCheck &&
                 getLowCheck(usefulTickData, highLowCheckPref);
     }
 
@@ -138,11 +152,11 @@ class FadeTheExtremesPositionPlacer implements PositionPlacer {
     public Optional<Position> placePositions(UsefulTickData usefulTickData,
                                              int decimalPointPlace) {
 
-        if (isALongSignal(usefulTickData, highLowCheckPref, aboveBelowMovingAverages)) {
+        if (isALongSignal(usefulTickData, highLowCheckPref, aboveBelowMovingAverages, aboveBelowBands)) {
             return Optional.of(createLong(usefulTickData, decimalPointPlace));
         }
 
-        if (isAShortSignal(usefulTickData, highLowCheckPref,aboveBelowMovingAverages)) {
+        if (isAShortSignal(usefulTickData, highLowCheckPref,aboveBelowMovingAverages, aboveBelowBands)) {
             return Optional.of(createShort(usefulTickData, decimalPointPlace));
         }
         return Optional.empty();
