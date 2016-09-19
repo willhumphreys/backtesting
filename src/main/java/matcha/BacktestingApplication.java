@@ -61,12 +61,7 @@ class BacktestingApplication {
                 continue;
             }
 
-            String[] lineParts = inputLine.split(",");
-            final Path oneMinutePath = Paths.get(lineParts[0]);
-            final Path sixtyMinutePath = Paths.get(lineParts[1]);
-            Inputs input = new Inputs(oneMinutePath, sixtyMinutePath);
-
-            final Results results = simulation.execute(input, outputDirectory,
+            final Results results = simulation.execute(convertLineToInputs(inputLine), outputDirectory,
                     getDecimalPointPlace(inputLine));
 
             allResults.add(results);
@@ -74,6 +69,14 @@ class BacktestingApplication {
             LOG.info(results.toString());
         }
         return allResults;
+    }
+
+    private Inputs convertLineToInputs(String inputLine) {
+        String[] lineParts = inputLine.split(",");
+        final String symbol = lineParts[0];
+        final Path oneMinutePath = Paths.get(lineParts[1]);
+        final Path sixtyMinutePath = Paths.get(lineParts[2]);
+        return new Inputs(symbol, oneMinutePath, sixtyMinutePath);
     }
 
     private CommandLine getCmdLineOptions(String[] args) throws ParseException {

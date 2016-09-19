@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import static java.lang.String.format;
+
 class ResultsWriterImpl implements ResultsWriter {
 
     private Path outputPath;
@@ -24,7 +26,9 @@ class ResultsWriterImpl implements ResultsWriter {
     @Override
     public void write(Results results) {
 
-        String line = results.getPositionStats().getWinners() + "," + results.getPositionStats().getLosers() + "\n";
+        final PositionStats positionStats = results.getPositionStats();
+        String line = format("%s,%d,%d,%d,%d\n", positionStats.getSymbol(), positionStats.getWinners(),
+                positionStats.getLosers(), positionStats.getLongTradeCount(), positionStats.getShortTradeCount());
         writeLine(line);
     }
 

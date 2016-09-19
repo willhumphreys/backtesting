@@ -17,8 +17,10 @@ class PositionStats {
     private final List<LocalDateTime> winningDates;
 
     private final List<Boolean> last30WinnersList;
+    private String symbol;
 
-    PositionStats() {
+    PositionStats(String symbol) {
+        this.symbol = symbol;
         tickCounter = 0;
         winners = 0;
         losers = 0;
@@ -86,5 +88,14 @@ class PositionStats {
 
     void incrementLongTrades() {
         longTradeCount++;
+    }
+
+    /**
+     * Gets symbol
+     *
+     * @return value of symbol
+     */
+    public String getSymbol() {
+        return symbol;
     }
 }

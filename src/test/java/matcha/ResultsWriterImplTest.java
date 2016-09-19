@@ -19,7 +19,7 @@ public class ResultsWriterImplTest {
     @Test
     public void shouldWriteALine() throws Exception {
 
-        final PositionStats positionStats = new PositionStats();
+        final PositionStats positionStats = new PositionStats("eurjpy");
         positionStats.addLoser(LocalDateTime.parse("2015-07-01T10:00:00"));
         resultsWriter.write(new Results("output.csv", positionStats));
 

@@ -46,7 +46,7 @@ class Simulation {
     Results execute(Inputs inputs, final Path outputDirectory,
                     int decimalPointPlace) throws IOException {
 
-        LOG.info(format("Starting: %s %s",
+        LOG.info(format("Starting: %s %s %s", inputs.getSymbol(),
                 inputs.getFile1(), inputs.getFile2()));
 
         List<DataRecord> tickData;
@@ -62,7 +62,7 @@ class Simulation {
                 .resolve(getOutputFile(inputs)));
         dataWriter.write(fileHeader);
 
-        final PositionStats positionStats = new PositionStats();
+        final PositionStats positionStats = new PositionStats(inputs.getSymbol());
 
         LOG.info("All data loaded");
         int hourCounter = 0;
