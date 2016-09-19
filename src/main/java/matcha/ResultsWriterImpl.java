@@ -20,7 +20,8 @@ class ResultsWriterImpl implements ResultsWriter {
             throw new CsvWritingException("Unable to delete the results file", e);
         }
 
-        writeLine("symbol,tick_profit_loss,winners,loses,long_trade_count,short_trade_count\n");
+        writeLine("symbol,tick_profit_loss,winners,loses,long_trade_count,short_trade_count,above_below_moving_average," +
+                "above_below_band\n");
     }
 
     @Override
