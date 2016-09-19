@@ -20,15 +20,16 @@ class ResultsWriterImpl implements ResultsWriter {
             throw new CsvWritingException("Unable to delete the results file", e);
         }
 
-        writeLine("symbol,winners,loses,long_trade_count,short_trade_count\n");
+        writeLine("symbol,tick_profit_loss,winners,loses,long_trade_count,short_trade_count\n");
     }
 
     @Override
     public void write(Results results) {
 
         final PositionStats positionStats = results.getPositionStats();
-        String line = format("%s,%d,%d,%d,%d\n", positionStats.getSymbol(), positionStats.getWinners(),
-                positionStats.getLosers(), positionStats.getLongTradeCount(), positionStats.getShortTradeCount());
+        String line = format("%s,%d,%d,%d,%d,%d\n", positionStats.getSymbol(), positionStats.getTickCounter(),
+                positionStats.getWinners(), positionStats.getLosers(), positionStats.getLongTradeCount(),
+                positionStats.getShortTradeCount());
         writeLine(line);
     }
 

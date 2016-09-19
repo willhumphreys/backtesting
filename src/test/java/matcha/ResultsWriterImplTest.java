@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 public class ResultsWriterImplTest {
 
-
     private ResultsWriterImpl resultsWriter;
 
     @Before
@@ -22,6 +21,5 @@ public class ResultsWriterImplTest {
         final PositionStats positionStats = new PositionStats("eurjpy");
         positionStats.addLoser(LocalDateTime.parse("2015-07-01T10:00:00"));
         resultsWriter.write(new Results("output.csv", positionStats));
-
     }
 }
