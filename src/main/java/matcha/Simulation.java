@@ -20,7 +20,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 class Simulation {
 
     private static final Logger LOG = getLogger(lookup().lookupClass());
-    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks\n";
+    private static final String fileHeader = "date,direction,entry,target_or_stop,exit_date,exit,ticks," +
+            "above_moving_average,below_moving_average,above_top_band,below_bottom_band\n";
 
     private final PositionExecutor positionExecutor;
     private final List<Position> positions;

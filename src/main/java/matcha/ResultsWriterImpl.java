@@ -41,6 +41,5 @@ class ResultsWriterImpl implements ResultsWriter {
             throw new CsvWritingException("Filed to write a line to the results file", e);
         }
     }
-
 }
 
