@@ -22,10 +22,6 @@ class BacktestingApplication {
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
     private ResultsWriter resultsWriter;
 
-    BacktestingApplication() {
-        resultsWriter = new ResultsWriterImpl(Paths.get("results.csv"));
-    }
-
     public static void main(String[] args) throws Exception {
         BacktestingApplication backtestingApplication = new BacktestingApplication();
         backtestingApplication.run(args);
@@ -45,6 +41,9 @@ class BacktestingApplication {
         }
 
         final Path inputPath = Paths.get(cmd.getOptionValue("input"));
+
+        resultsWriter = new ResultsWriterImpl(Paths.get("results.csv"));
+
         LOG.info(String.format("Using input file '%s'", inputPath));
         final List<String> inputLines = readAllLines(inputPath);
 
