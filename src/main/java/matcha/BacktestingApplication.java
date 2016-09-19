@@ -50,6 +50,8 @@ class BacktestingApplication {
         Path outputDirectory = Paths.get(cmd.getOptionValue("output_dir"));
         LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
+        resultsWriter = new ResultsWriterImpl(outputDirectory.resolve("results.csv"));
+
         final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high_low_pref", "1"));
         final boolean aboveBelowMovingAverages =  cmd.hasOption("moving_averages");
         final boolean aboveBelowBands =  cmd.hasOption("bands");
