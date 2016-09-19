@@ -13,7 +13,7 @@ class Results {
         this.openOptions = openOptions;
     }
 
-    public OpenOptions getOpenOptions() {
+    OpenOptions getOpenOptions() {
         return openOptions;
     }
 
