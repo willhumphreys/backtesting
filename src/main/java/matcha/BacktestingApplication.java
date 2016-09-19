@@ -40,7 +40,7 @@ class BacktestingApplication {
             throw new IllegalArgumentException("We need an input argument");
         }
 
-        if (!cmd.hasOption("output")) {
+        if (!cmd.hasOption("output_dir")) {
             throw new IllegalArgumentException("We need an output argument");
         }
 
