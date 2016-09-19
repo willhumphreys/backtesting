@@ -30,14 +30,16 @@ class Simulation {
     private boolean timeToOpenPosition;
     private final PositionPlacer positionPlacer;
     private final TickDataFactory tickDataFactory;
+    private OpenOptions openOptions;
 
     Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks,
-               PositionPlacer positionPlacer, TickDataFactory tickDataFactory) {
+               PositionPlacer positionPlacer, TickDataFactory tickDataFactory, OpenOptions openOptions) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;
         this.syncTicks = syncTicks;
         this.positionPlacer = positionPlacer;
         this.tickDataFactory = tickDataFactory;
+        this.openOptions = openOptions;
         this.positions = newArrayList();
 
         lastTradeDate = LocalDate.of(1900, 1, 1);
@@ -126,7 +128,7 @@ class Simulation {
             this.timeToOpenPosition = false;
         }
         return positionExecutor.getResults(getOutputFile(inputs), dataWriter,
-                positionStats);
+                positionStats, openOptions);
     }
 
     private boolean isNextTickANewHour(LocalDateTime tickDateTime, LocalDateTime nextTickDateTime) {

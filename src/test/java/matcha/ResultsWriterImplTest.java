@@ -20,6 +20,11 @@ public class ResultsWriterImplTest {
 
         final PositionStats positionStats = new PositionStats("eurjpy");
         positionStats.addLoser(LocalDateTime.parse("2015-07-01T10:00:00"));
-        resultsWriter.write(new Results("output.csv", positionStats));
+        final OpenOptions openOptions = new OpenOptions.Builder()
+                .setHighLowPref(1)
+                .setAboveBelowBands(true)
+                .setAboveBelowMovingAverages(false)
+                .createOpenOptions();
+        resultsWriter.write(new Results("output.csv", positionStats, openOptions));
     }
 }

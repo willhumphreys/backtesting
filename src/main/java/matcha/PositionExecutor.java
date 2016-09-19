@@ -111,8 +111,8 @@ class PositionExecutor {
         position.close();
     }
 
-    Results getResults(String outputFile, BufferedWriter dataWriter, PositionStats positionStats) throws IOException {
+    Results getResults(String outputFile, BufferedWriter dataWriter, PositionStats positionStats, OpenOptions openOptions) throws IOException {
         dataWriter.close();
-        return new Results(outputFile, positionStats);
+        return new Results(outputFile, positionStats, openOptions);
     }
 }

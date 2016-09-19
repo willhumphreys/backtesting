@@ -25,11 +25,11 @@ class ResultsWriterImpl implements ResultsWriter {
 
     @Override
     public void write(Results results) {
-
         final PositionStats positionStats = results.getPositionStats();
-        String line = format("%s,%d,%d,%d,%d,%d\n", positionStats.getSymbol(), positionStats.getTickCounter(),
+        String line = format("%s,%d,%d,%d,%d,%d,%b,%b\n", positionStats.getSymbol(), positionStats.getTickCounter(),
                 positionStats.getWinners(), positionStats.getLosers(), positionStats.getLongTradeCount(),
-                positionStats.getShortTradeCount());
+                positionStats.getShortTradeCount(), results.getOpenOptions().isAboveBelowMovingAverages(),
+                results.getOpenOptions().isAboveBelowBands());
         writeLine(line);
     }
 
