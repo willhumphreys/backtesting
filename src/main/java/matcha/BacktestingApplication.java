@@ -20,6 +20,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 class BacktestingApplication {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
+    private ResultsWriter resultsWriter;
+
+    BacktestingApplication() {
+        resultsWriter = new ResultsWriterImpl(Paths.get("results.csv"));
+    }
 
     public static void main(String[] args) throws Exception {
         BacktestingApplication backtestingApplication = new BacktestingApplication();
@@ -65,6 +70,7 @@ class BacktestingApplication {
                     getDecimalPointPlace(inputLine));
 
             allResults.add(results);
+            resultsWriter.write(results);
             LOG.info(results.toString());
         }
         return allResults;
