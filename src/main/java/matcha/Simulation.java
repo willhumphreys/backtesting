@@ -26,6 +26,7 @@ class Simulation {
     private final PositionExecutor positionExecutor;
     private final List<Position> positions;
     private final TickDataReader tickDataReader;
+    private final TickDataReader tickDataMinuteReader;
     private final SyncTicks syncTicks;
     private LocalDate lastTradeDate;
     private boolean timeToOpenPosition;
@@ -34,13 +35,15 @@ class Simulation {
     private OpenOptions openOptions;
 
     Simulation(PositionExecutor positionExecutor, TickDataReader tickDataReader, SyncTicks syncTicks,
-               PositionPlacer positionPlacer, TickDataFactory tickDataFactory, OpenOptions openOptions) {
+               PositionPlacer positionPlacer, TickDataFactory tickDataFactory, OpenOptions openOptions,
+               TickDataReader tickDataMinuteReader) {
         this.positionExecutor = positionExecutor;
         this.tickDataReader = tickDataReader;
         this.syncTicks = syncTicks;
         this.positionPlacer = positionPlacer;
         this.tickDataFactory = tickDataFactory;
         this.openOptions = openOptions;
+        this.tickDataMinuteReader = tickDataMinuteReader;
         this.positions = newArrayList();
 
         lastTradeDate = LocalDate.of(1900, 1, 1);
@@ -55,7 +58,7 @@ class Simulation {
         List<DataRecord> tickData;
         List<DataRecord> hourData;
         try {
-            tickData = tickDataReader.read(inputs.getFile1());
+            tickData = tickDataMinuteReader.read(inputs.getFile1());
             hourData = tickDataReader.read(inputs.getFile2());
         } catch (IOException | DateTimeParseException e) {
             throw new IOException("Failed to parse " + inputs.getFile2(), e);

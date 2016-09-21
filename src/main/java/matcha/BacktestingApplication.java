@@ -63,7 +63,8 @@ class BacktestingApplication {
                 .createOpenOptions();
 
         final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
-                new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, openOptions), new TickDataFactory(), openOptions);
+                new SyncTicks(), new FadeTheExtremesPositionPlacer(utils, openOptions), new TickDataFactory(),
+                openOptions, new TickDataMinuteReaderImpl());
 
         for (String inputLine : inputLines) {
             if (inputLine.trim().length() == 0) {
