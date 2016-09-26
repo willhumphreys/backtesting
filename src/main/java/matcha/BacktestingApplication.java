@@ -1,6 +1,7 @@
 package matcha;
 
 
+import matcha.service.RScriptService;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 
@@ -25,6 +26,12 @@ class BacktestingApplication {
     public static void main(String[] args) throws Exception {
         BacktestingApplication backtestingApplication = new BacktestingApplication();
         backtestingApplication.run(args);
+        backtestingApplication.executeRScripts();
+    }
+
+    private void executeRScripts() {
+        final RScriptService rScriptService = new RScriptService();
+        rScriptService.executeScript(Paths.get("RScripts/cumulativeProfit.r"));
     }
 
     List<Results> run(String... args) throws Exception {
@@ -42,15 +49,13 @@ class BacktestingApplication {
 
         final Path inputPath = Paths.get(cmd.getOptionValue("input"));
 
-        resultsWriter = new ResultsWriterImpl(Paths.get("results.csv"));
-
         LOG.info(String.format("Using input file '%s'", inputPath));
         final List<String> inputLines = readAllLines(inputPath);
 
         Path outputDirectory = Paths.get(cmd.getOptionValue("output_dir"));
         LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
-        resultsWriter = new ResultsWriterImpl(outputDirectory.resolve("results.csv"));
+        resultsWriter = new ResultsWriterImpl(Paths.get("results.csv"));
 
         final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high_low_pref", "1"));
         final boolean aboveBelowMovingAverages =  cmd.hasOption("moving_averages");

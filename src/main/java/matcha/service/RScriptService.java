@@ -3,7 +3,6 @@ package matcha.service;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -17,19 +16,22 @@ public class RScriptService {
     private static final Path R_SCRIPT_LOCATION = Paths.get("/usr/bin/Rscript");
     private static final Path MAC_R_SCRIPT_LOCATION = Paths.get("/usr/local/Cellar/r/3.3.1_2/bin/Rscript");
 
-    public int executeScript(String script) {
+    public int executeScript(Path scriptPath) {
+
+        final Path lastElement = scriptPath.getName(scriptPath.getNameCount() - 1);
+
 
         List<String> commands = Lists.newArrayList();
         commands.add(getRLocation().toString());
 
-        commands.add(script);
+        commands.add(scriptPath.toString());
 
         try {
             ProcessBuilder pb = new ProcessBuilder(commands);
-            //pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-            //pb.redirectError(ProcessBuilder.Redirect.INHERIT);
-            pb.redirectOutput(new File("/tmp/graphOutput_" + script + ".log"));
-            pb.redirectError(new File("/tmp/graphOutputError_" + script + ".log"));
+            pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+            pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+//            pb.redirectOutput(new File("/tmp/graphOutput_" + lastElement + ".log"));
+//            pb.redirectError(new File("/tmp/graphOutputError_" + lastElement + ".log"));
             Process p = pb.start();
             return p.waitFor();
         } catch (Exception e) {
