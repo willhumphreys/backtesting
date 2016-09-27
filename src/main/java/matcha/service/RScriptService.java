@@ -16,16 +16,16 @@ public class RScriptService {
     private static final Path R_SCRIPT_LOCATION = Paths.get("/usr/bin/Rscript");
     private static final Path MAC_R_SCRIPT_LOCATION = Paths.get("/usr/bin/Rscript");
 
-    public int executeScript(Path scriptPath, Path outputPath, Path inputPath) {
+    public int executeScript(ScriptArguments scriptArguments) {
 
-        final Path lastElement = scriptPath.getName(scriptPath.getNameCount() - 1);
+        final Path lastElement = scriptArguments.getScriptPath().getName(scriptArguments.getScriptPath().getNameCount() - 1);
 
         List<String> commands = Lists.newArrayList();
         commands.add(getRLocation().toString());
 
-        commands.add(scriptPath.toString());
-        commands.add(inputPath.toString());
-        commands.add(outputPath.toString());
+        commands.add(scriptArguments.getScriptPath().toString());
+        commands.add(scriptArguments.getInputPath().toString());
+        commands.add(scriptArguments.getOutputPath().toString());
 
         try {
             ProcessBuilder pb = new ProcessBuilder(commands);

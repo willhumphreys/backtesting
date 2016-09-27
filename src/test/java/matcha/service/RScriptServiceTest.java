@@ -13,7 +13,12 @@ public class RScriptServiceTest {
     @Test
     public void shouldExecuteASimpleRScript() throws Exception {
         final RScriptService rScriptService = new RScriptService();
-        assertThat(rScriptService.executeScript(Paths.get("RScripts/cumulativeProfit.r"), Paths.get("/tmp"),
-                Paths.get("results/acceptance_results/data")), is(equalTo(0)));
+        assertThat(rScriptService.executeScript(
+                new ScriptArguments.Builder()
+                        .setScriptPath(Paths.get("RScripts/cumulativeProfit.r"))
+                        .setOutputPath(Paths.get("/tmp/test2"))
+                        .setInputPath(Paths.get("results/acceptance_results/data"))
+                        .createScriptArguments()),
+                is(equalTo(0)));
     }
 }

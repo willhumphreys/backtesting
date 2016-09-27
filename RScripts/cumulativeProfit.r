@@ -19,7 +19,7 @@ generate.plot <- function(file.in, input, output) {
     file.out.sma30 <- paste(graph.output.dir, "/", file.name, "sma30.png", sep = "")
     file.out.sma30ticks <- paste(graph.output.dir, "/", file.name, "sma30Ticks.png", sep = "")
 
-    data <- read.table(paste(input, file.in, sep=""), header=T,sep=",")
+    data <- read.table(paste(input, '/', file.in, sep=""), header=T,sep=",")
     data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
     data$date <- NULL
 

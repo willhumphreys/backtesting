@@ -2,6 +2,7 @@ package matcha;
 
 
 import matcha.service.RScriptService;
+import matcha.service.ScriptArguments;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 
@@ -33,7 +34,9 @@ class BacktestingApplication {
 
     private void executeRScripts(CmdLineOptions cmdLineOptions) {
         final RScriptService rScriptService = new RScriptService();
-        rScriptService.executeScript(Paths.get("RScripts/cumulativeProfit.r"), cmdLineOptions.getOutputDirectory(), cmdLineOptions.getInputPath());
+        rScriptService.executeScript(new ScriptArguments.Builder().setScriptPath(Paths.get("RScripts/cumulativeProfit" +
+                ".r")).setOutputPath(cmdLineOptions
+                .getOutputDirectory()).setInputPath(cmdLineOptions.getInputPath()).createScriptArguments());
     }
 
     List<Results> run(CmdLineOptions args) throws Exception {
