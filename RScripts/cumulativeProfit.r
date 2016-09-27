@@ -4,8 +4,9 @@ library('scales')
 
 last <- function(x) { tail(x, n = 1) }
 
-generate.plot <- function(file.in) {
+generate.plot <- function(file.in, input, output) {
     print(file.in)
+    print(output)
     symbol <- strsplit(file.in, split='.', fixed=TRUE)[[1]][1]
 
     scenario <- 'onlyOne'
@@ -18,7 +19,7 @@ generate.plot <- function(file.in) {
     file.out.sma30 <- paste(graph.output.dir, "/", file.name, "sma30.png", sep = "")
     file.out.sma30ticks <- paste(graph.output.dir, "/", file.name, "sma30Ticks.png", sep = "")
 
-    data <- read.table(paste("results/acceptance_results/data/",file.in, sep=""), header=T,sep=",")
+    data <- read.table(paste(input, file.in, sep=""), header=T,sep=",")
     data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
     data$date <- NULL
 
@@ -56,8 +57,25 @@ generate.plot <- function(file.in) {
 
 write("file.in,symbol,scenario,cumulative_profit,win_lose_count,trade_count,win_lose_ratio,ticks_per_trade", file="summary.csv", append=FALSE)
 
-in_files <- list.files('results/acceptance_results/data')
+
+args <- commandArgs(trailingOnly = TRUE)
+#Set the input file
+#input = "/home/will/Code/macchiato/matcha/live-data/549d5843521836129546bdd8_BuyAtTime/flatSimulation.csv"
+input <- args[1]
+
+output <- args[2]
+
+#output = "/home/will/Code/macchiato/matcha/live-data/549d5843521836129546bdd8_BuyAtTime/flatSimulationMerged.csv"
+
+cat(sprintf("Read input %s\n", input ))
+cat(sprintf("Output %s\n", output))
+
+#'results/acceptance_results/data'
+
+in_files <- list.files(input)
+
+
 
 
 #in_files <- in_files[!grepl("NewDayLow", in_files)]
-sapply(in_files, function(x) generate.plot(x))
+sapply(in_files, function(x) generate.plot(x, input, output))

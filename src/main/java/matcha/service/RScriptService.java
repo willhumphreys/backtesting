@@ -16,7 +16,7 @@ public class RScriptService {
     private static final Path R_SCRIPT_LOCATION = Paths.get("/usr/bin/Rscript");
     private static final Path MAC_R_SCRIPT_LOCATION = Paths.get("/usr/bin/Rscript");
 
-    public int executeScript(Path scriptPath, Path outputPath) {
+    public int executeScript(Path scriptPath, Path outputPath, Path inputPath) {
 
         final Path lastElement = scriptPath.getName(scriptPath.getNameCount() - 1);
 
@@ -24,6 +24,7 @@ public class RScriptService {
         commands.add(getRLocation().toString());
 
         commands.add(scriptPath.toString());
+        commands.add(inputPath.toString());
         commands.add(outputPath.toString());
 
         try {

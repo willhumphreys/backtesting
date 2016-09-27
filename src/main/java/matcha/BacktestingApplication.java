@@ -33,7 +33,7 @@ class BacktestingApplication {
 
     private void executeRScripts(CmdLineOptions cmdLineOptions) {
         final RScriptService rScriptService = new RScriptService();
-        rScriptService.executeScript(Paths.get("RScripts/cumulativeProfit.r"), cmdLineOptions.getOutputDirectory());
+        rScriptService.executeScript(Paths.get("RScripts/cumulativeProfit.r"), cmdLineOptions.getOutputDirectory(), cmdLineOptions.getInputPath());
     }
 
     List<Results> run(CmdLineOptions args) throws Exception {
