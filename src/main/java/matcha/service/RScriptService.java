@@ -14,17 +14,17 @@ public class RScriptService {
     private static final Logger LOG = getLogger(RScriptService.class);
 
     private static final Path R_SCRIPT_LOCATION = Paths.get("/usr/bin/Rscript");
-    private static final Path MAC_R_SCRIPT_LOCATION = Paths.get("/usr/local/Cellar/r/3.3.1_2/bin/Rscript");
+    private static final Path MAC_R_SCRIPT_LOCATION = Paths.get("/usr/bin/Rscript");
 
-    public int executeScript(Path scriptPath) {
+    public int executeScript(Path scriptPath, Path outputPath) {
 
         final Path lastElement = scriptPath.getName(scriptPath.getNameCount() - 1);
-
 
         List<String> commands = Lists.newArrayList();
         commands.add(getRLocation().toString());
 
         commands.add(scriptPath.toString());
+        commands.add(outputPath.toString());
 
         try {
             ProcessBuilder pb = new ProcessBuilder(commands);

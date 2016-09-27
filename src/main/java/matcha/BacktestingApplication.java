@@ -23,49 +23,34 @@ class BacktestingApplication {
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
 
     public static void main(String[] args) throws Exception {
+
+        final CmdLineOptions cmdLineOptions = getCmdLineOptions(args);
+
         BacktestingApplication backtestingApplication = new BacktestingApplication();
-        backtestingApplication.run(args);
-        backtestingApplication.executeRScripts();
+        backtestingApplication.run(cmdLineOptions);
+        backtestingApplication.executeRScripts(cmdLineOptions);
     }
 
-    private void executeRScripts() {
+    private void executeRScripts(CmdLineOptions cmdLineOptions) {
         final RScriptService rScriptService = new RScriptService();
-        rScriptService.executeScript(Paths.get("RScripts/cumulativeProfit.r"));
+        rScriptService.executeScript(Paths.get("RScripts/cumulativeProfit.r"), cmdLineOptions.getOutputDirectory());
     }
 
-    List<Results> run(String... args) throws Exception {
-        CommandLine cmd = getCmdLineOptions(args);
+    List<Results> run(CmdLineOptions args) throws Exception {
+
 
         Utils utils = new Utils();
 
-        if (!cmd.hasOption("input")) {
-            throw new IllegalArgumentException("We need an input argument");
-        }
+        final List<String> inputLines = readAllLines(args.getInputPath());
 
-        if (!cmd.hasOption("output_dir")) {
-            throw new IllegalArgumentException("We need an output argument");
-        }
-
-        final Path inputPath = Paths.get(cmd.getOptionValue("input"));
-
-        LOG.info(String.format("Using input file '%s'", inputPath));
-        final List<String> inputLines = readAllLines(inputPath);
-
-        Path outputDirectory = Paths.get(cmd.getOptionValue("output_dir"));
-        LOG.info(String.format("Using output directory '%s'", outputDirectory));
-
-        ResultsWriter resultsWriter = new ResultsWriterImpl(Paths.get("results").resolve(outputDirectory));
-
-        final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high_low_pref", "1"));
-        final boolean aboveBelowMovingAverages =  cmd.hasOption("moving_averages");
-        final boolean aboveBelowBands =  cmd.hasOption("bands");
+        ResultsWriter resultsWriter = new ResultsWriterImpl(Paths.get("results").resolve(args.getOutputDirectory()));
 
         List<Results> allResults = newArrayList();
 
         OpenOptions openOptions = new OpenOptions.Builder()
-                .setHighLowPref(highLowPref)
-                .setAboveBelowMovingAverages(aboveBelowMovingAverages)
-                .setAboveBelowBands(aboveBelowBands)
+                .setHighLowPref(args.getHighLowPref())
+                .setAboveBelowMovingAverages(args.isAboveBelowMovingAverages())
+                .setAboveBelowBands(args.isAboveBelowBands())
                 .createOpenOptions();
 
         final Simulation simulation = new Simulation(new PositionExecutor(utils), new TickDataReaderImpl(),
@@ -77,7 +62,7 @@ class BacktestingApplication {
                 continue;
             }
 
-            final Results results = simulation.execute(convertLineToInputs(inputLine), outputDirectory,
+            final Results results = simulation.execute(convertLineToInputs(inputLine), args.getOutputDirectory(),
                     getDecimalPointPlace(inputLine));
 
             allResults.add(results);
@@ -95,7 +80,7 @@ class BacktestingApplication {
         return new Inputs(symbol, oneMinutePath, sixtyMinutePath);
     }
 
-    private CommandLine getCmdLineOptions(String[] args) throws ParseException {
+    private static CmdLineOptions getCmdLineOptions(String[] args) throws ParseException {
         Options options = new Options();
         options.addOption("input", true, "The input file to use.");
         options.addOption("output_dir", true, "Where to output the results.");
@@ -104,7 +89,35 @@ class BacktestingApplication {
         options.addOption("bands", false, "Buy below the lower band and sell above the higher band");
 
         CommandLineParser parser = new DefaultParser();
-        return parser.parse(options, args);
+        final CommandLine cmd = parser.parse(options, args);
+
+
+        if (!cmd.hasOption("input")) {
+            throw new IllegalArgumentException("We need an input argument");
+        }
+
+        if (!cmd.hasOption("output_dir")) {
+            throw new IllegalArgumentException("We need an output argument");
+        }
+
+        final Path inputPath = Paths.get(cmd.getOptionValue("input"));
+
+        LOG.info(String.format("Using input file '%s'", inputPath));
+
+        Path outputDirectory = Paths.get(cmd.getOptionValue("output_dir"));
+        LOG.info(String.format("Using output directory '%s'", outputDirectory));
+
+        final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high_low_pref", "1"));
+        final boolean aboveBelowMovingAverages =  cmd.hasOption("moving_averages");
+        final boolean aboveBelowBands =  cmd.hasOption("bands");
+
+        return new CmdLineOptions.Builder()
+                .setInputPath(inputPath)
+                .setOutputDirectory(outputDirectory)
+                .setHighLowPref(highLowPref)
+                .setAboveBelowMovingAverages(aboveBelowMovingAverages)
+                .setAboveBelowBands(aboveBelowBands)
+                .createCmdLineOptions();
     }
 
     private int getDecimalPointPlace(String inputLine) {

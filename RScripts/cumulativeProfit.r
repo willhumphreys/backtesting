@@ -1,6 +1,6 @@
-library(ggplot2)
-library(TTR)
-library("scales")
+library('ggplot2')
+library('TTR')
+library('scales')
 
 last <- function(x) { tail(x, n = 1) }
 
@@ -18,7 +18,7 @@ generate.plot <- function(file.in) {
     file.out.sma30 <- paste(graph.output.dir, "/", file.name, "sma30.png", sep = "")
     file.out.sma30ticks <- paste(graph.output.dir, "/", file.name, "sma30Ticks.png", sep = "")
 
-    data <- read.table(paste("results/",file.in, sep=""), header=T,sep=",")
+    data <- read.table(paste("results/acceptance_results/data/",file.in, sep=""), header=T,sep=",")
     data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
     data$date <- NULL
 
@@ -56,7 +56,7 @@ generate.plot <- function(file.in) {
 
 write("file.in,symbol,scenario,cumulative_profit,win_lose_count,trade_count,win_lose_ratio,ticks_per_trade", file="summary.csv", append=FALSE)
 
-in_files <- list.files('results')
+in_files <- list.files('results/acceptance_results/data')
 
 
 #in_files <- in_files[!grepl("NewDayLow", in_files)]
