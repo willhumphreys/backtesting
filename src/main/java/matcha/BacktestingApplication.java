@@ -21,7 +21,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 class BacktestingApplication {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
-    private ResultsWriter resultsWriter;
 
     public static void main(String[] args) throws Exception {
         BacktestingApplication backtestingApplication = new BacktestingApplication();
@@ -55,7 +54,7 @@ class BacktestingApplication {
         Path outputDirectory = Paths.get(cmd.getOptionValue("output_dir"));
         LOG.info(String.format("Using output directory '%s'", outputDirectory));
 
-        resultsWriter = new ResultsWriterImpl(Paths.get("results.csv"));
+        ResultsWriter resultsWriter = new ResultsWriterImpl(Paths.get("results").resolve(outputDirectory));
 
         final int highLowPref =  Integer.valueOf(cmd.getOptionValue("high_low_pref", "1"));
         final boolean aboveBelowMovingAverages =  cmd.hasOption("moving_averages");

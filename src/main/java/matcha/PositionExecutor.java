@@ -30,7 +30,7 @@ class PositionExecutor {
 
     Path createResultsDirectory(final Path outputDirectory) throws IOException {
         if (!Files.exists(outputDirectory)) {
-            Files.createDirectory(outputDirectory);
+            Files.createDirectories(outputDirectory);
         }
         return outputDirectory;
     }

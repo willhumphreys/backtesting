@@ -1,9 +1,12 @@
 package matcha;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Comparator;
 
 import static java.lang.String.format;
 
@@ -14,11 +17,25 @@ class ResultsWriterImpl implements ResultsWriter {
     ResultsWriterImpl(Path outputPath) {
         this.outputPath = outputPath;
 
-        try {
-            Files.deleteIfExists(outputPath);
-        } catch (IOException e) {
-            throw new CsvWritingException("Unable to delete the results file", e);
+        if(outputPath.toFile().exists()) {
+            try {
+                Files.walk(outputPath, FileVisitOption.FOLLOW_LINKS)
+                        .sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .peek(System.out::println)
+                        .forEach(File::delete);
+
+            } catch (IOException e) {
+                throw new CsvWritingException("Unable to delete the results file", e);
+            }
         }
+        try {
+            Files.createDirectories(outputPath);
+        } catch (IOException e) {
+            throw new CsvWritingException("Unable to create output directories", e);
+        }
+
+        this.outputPath = outputPath.resolve("results.csv");
 
         writeLine("symbol,tick_profit_loss,winners,loses,long_trade_count,short_trade_count,above_below_moving_average," +
                 "above_below_band\n");
