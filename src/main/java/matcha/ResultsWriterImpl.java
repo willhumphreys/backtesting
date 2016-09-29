@@ -22,7 +22,6 @@ class ResultsWriterImpl implements ResultsWriter {
                 Files.walk(outputPath, FileVisitOption.FOLLOW_LINKS)
                         .sorted(Comparator.reverseOrder())
                         .map(Path::toFile)
-                        .peek(System.out::println)
                         .forEach(File::delete);
 
             } catch (IOException e) {

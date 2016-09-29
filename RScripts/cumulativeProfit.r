@@ -7,17 +7,24 @@ last <- function(x) { tail(x, n = 1) }
 generate.plot <- function(file.in, input, output) {
     print(file.in)
     print(output)
+    dir.create(output)
     symbol <- strsplit(file.in, split='.', fixed=TRUE)[[1]][1]
 
     scenario <- 'onlyOne'
-    dir.create(file.path("graphs", symbol))
+    graph.output.dir <- file.path(output, "graphs", symbol)
+    dir.create(graph.output.dir, recursive = TRUE)
+
     file.name <- (strsplit(file.in, split='.', fixed=TRUE)[[1]])[1]
-    graph.output.dir = paste("graphs/", symbol, sep = "")
-    csv.out <- paste("r-csv/", file.name, ".csv", sep = "")
-    file.out <- paste(graph.output.dir, "/", file.name, ".png", sep = "")
-    file.out.winLose <- paste(graph.output.dir, "/",file.name, "winLose.png", sep = "")
-    file.out.sma30 <- paste(graph.output.dir, "/", file.name, "sma30.png", sep = "")
-    file.out.sma30ticks <- paste(graph.output.dir, "/", file.name, "sma30Ticks.png", sep = "")
+    csv.out.dir <- file.path(output, "r-csv")
+    dir.create(csv.out.dir)
+    csv.file <- paste(file.name, ".csv", sep="")
+    csv.out <- file.path(csv.out.dir, csv.file)
+
+    graph.file <- paste(file.name, ".png", sep="")
+    file.out <- file.path(graph.output.dir, graph.file)
+
+    winLose.file <- paste(file.name, "winLose.png", sep="")
+    file.out.winLose <- file.path(graph.output.dir, winLose.file)
 
     data <- read.table(paste(input, '/', file.in, sep=""), header=T,sep=",")
     data$date.time=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
