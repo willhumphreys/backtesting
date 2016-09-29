@@ -37,8 +37,8 @@ class BacktestingApplication {
         final RScriptService rScriptService = new RScriptService();
         rScriptService.executeScript(new ScriptArguments.Builder()
                 .setScriptPath(Paths.get("RScripts/cumulativeProfit.r"))
-                .setOutputPath(cmdLineOptions.getOutputDirectory())
-                .setInputPath(cmdLineOptions.getOutputDirectory().resolve("data"))
+                .setOutputPath(BacktestingApplication.ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory()))
+                .setInputPath(BacktestingApplication.ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory().resolve("data")))
                 .createScriptArguments());
     }
 
@@ -49,7 +49,7 @@ class BacktestingApplication {
 
         final List<String> inputLines = readAllLines(args.getInputPath());
 
-        ResultsWriter resultsWriter = new ResultsWriterImpl(args.getOutputDirectory());
+        ResultsWriter resultsWriter = new ResultsWriterImpl(ROOT_OUTPUT_PATH.resolve(args.getOutputDirectory()));
 
         List<Results> allResults = newArrayList();
 

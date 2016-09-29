@@ -15,6 +15,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 import static java.lang.invoke.MethodHandles.lookup;
 import static java.nio.file.Files.newBufferedWriter;
+import static matcha.BacktestingApplication.ROOT_OUTPUT_PATH;
 import static org.slf4j.LoggerFactory.getLogger;
 
 class Simulation {
@@ -64,8 +65,10 @@ class Simulation {
             throw new IOException("Failed to parse " + inputs.getFile2(), e);
         }
 
-        BufferedWriter dataWriter = newBufferedWriter(positionExecutor.createResultsDirectory(
-                outputDirectory.resolve("data")).resolve(getOutputFile(inputs)));
+        final Path resultsFile = positionExecutor.createResultsDirectory(
+                ROOT_OUTPUT_PATH.resolve(outputDirectory.resolve("data"))).resolve(getOutputFile(inputs));
+
+        BufferedWriter dataWriter = newBufferedWriter(resultsFile);
         dataWriter.write(fileHeader);
 
         final PositionStats positionStats = new PositionStats(inputs.getSymbol());
