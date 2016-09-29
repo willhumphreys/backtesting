@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -65,8 +64,8 @@ class Simulation {
             throw new IOException("Failed to parse " + inputs.getFile2(), e);
         }
 
-        BufferedWriter dataWriter = newBufferedWriter(positionExecutor.createResultsDirectory(Paths.get("results")
-                .resolve(outputDirectory).resolve("data")).resolve(getOutputFile(inputs)));
+        BufferedWriter dataWriter = newBufferedWriter(positionExecutor.createResultsDirectory(
+                outputDirectory.resolve("data")).resolve(getOutputFile(inputs)));
         dataWriter.write(fileHeader);
 
         final PositionStats positionStats = new PositionStats(inputs.getSymbol());

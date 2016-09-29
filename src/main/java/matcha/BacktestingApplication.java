@@ -22,6 +22,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 class BacktestingApplication {
 
     private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
+    public static final Path ROOT_OUTPUT_PATH = Paths.get("results");
 
     public static void main(String[] args) throws Exception {
 
@@ -48,7 +49,7 @@ class BacktestingApplication {
 
         final List<String> inputLines = readAllLines(args.getInputPath());
 
-        ResultsWriter resultsWriter = new ResultsWriterImpl(Paths.get("results").resolve(args.getOutputDirectory()));
+        ResultsWriter resultsWriter = new ResultsWriterImpl(args.getOutputDirectory());
 
         List<Results> allResults = newArrayList();
 
