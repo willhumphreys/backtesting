@@ -17,8 +17,9 @@ require_relative 'results_with_name'
 require_relative 'option_parser'
 require 'active_support/all'
 require 'optparse'
+require 'open3'
 
-options = OptionParser.new.parse
+options = Options.new.parse
 
 @bar_chart_file_repo = BarChartFileRepo.new
 @mt4_file_repo = MT4FileRepo.new(FadeMapper.new)
@@ -26,10 +27,13 @@ options = OptionParser.new.parse
 @processors = Processors.new
 @date_range_generator = DateRangeGenerator.new(DateTime.new(2007, 12, 5), DateTime.new(2016, 8, 2))
 
-moving_average_counts = 2.step(10, 2).to_a # How big is the moving average window.
-cut_offs = -10.step(10, 1).to_a # How successful do the trades need to be.
-minimum_profits = 2.step(100, 5).to_a # What is the minimum profit our new trade needs to be traded.
+# moving_average_counts = 2.step(10, 2).to_a # How big is the moving average window.
+# cut_offs = -10.step(10, 1).to_a # How successful do the trades need to be.
+# minimum_profits = 2.step(100, 5).to_a # What is the minimum profit our new trade needs to be traded.
 
+moving_average_counts = 8.step(10, 2).to_a # How big is the moving average window.
+cut_offs = -10.step(10, 5).to_a # How successful do the trades need to be.
+minimum_profits = 80.step(100, 5).to_a # What is the minimum profit our new trade needs to be traded.
 
 symbols = %w(AUDUSD EURCHF EURGBP EURUSD GBPUSD USDCAD USDCHF NZDUSD USDJPY EURJPY)
 
@@ -82,3 +86,13 @@ minimum_profits.each { |minimum_profit|
     }
   }
 }
+
+command = 'Rscript ../RScripts/summary_new_by_year.r ../results/normal/ruby/summary_high_scores-2-100-bands.csv ../results/normal/graphs'
+
+stdout, stderr, status = Open3.capture3(command)
+
+puts status
+puts stdout
+puts stderr
+
+

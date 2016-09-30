@@ -1,6 +1,6 @@
 require 'probability_engine/version'
 
-class OptionParser
+class Options
 
   attr_reader :options
 
