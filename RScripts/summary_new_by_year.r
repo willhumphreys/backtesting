@@ -73,3 +73,5 @@ generate.plots.by.date <- function(start_date, end_date, data) {
 unique_start_and_end_dates <-  unique(data[c("start_date", "end_date")])
 
 apply(unique_start_and_end_dates, 1, function(x) generate.plots.by.date(x[1], x[2], data))
+
+print('Finished')
