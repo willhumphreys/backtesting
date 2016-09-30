@@ -14,15 +14,17 @@ require_relative 'results'
 require_relative 'results_writer'
 require_relative 'execution_parameters'
 require_relative 'results_with_name'
+require_relative 'option_parser'
 require 'active_support/all'
+require 'optparse'
+
+options = OptionParser.new.parse
 
 @bar_chart_file_repo = BarChartFileRepo.new
 @mt4_file_repo = MT4FileRepo.new(FadeMapper.new)
 @candle_ops = CandleOperations.new
 @processors = Processors.new
 @date_range_generator = DateRangeGenerator.new(DateTime.new(2007, 12, 5), DateTime.new(2016, 8, 2))
-
-@input_directory = '../../results/results_bands/data'
 
 moving_average_counts = 2.step(10, 2).to_a # How big is the moving average window.
 cut_offs = -10.step(10, 1).to_a # How successful do the trades need to be.
@@ -34,13 +36,13 @@ symbols = %w(AUDUSD EURCHF EURGBP EURUSD GBPUSD USDCAD USDCHF NZDUSD USDJPY EURJ
 all_results_with_names = []
 symbols.each { |data_set|
 
-  trade_results = @mt4_file_repo.read_quotes("#{@input_directory}/#{data_set}.csv")
+  trade_results = @mt4_file_repo.read_quotes("#{options[:input_directory]}/#{data_set}.csv")
   all_results_with_names.push(ResultsWithName.new(data_set,trade_results))
 }
 
 date_ranges = @date_range_generator.get_ranges
 
-@results_writer = ResultsWriter.new
+@results_writer = ResultsWriter.new(options[:output_directory])
 
 @results_writer.write_summary_header
 

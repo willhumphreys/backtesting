@@ -3,15 +3,14 @@ require 'fileutils'
 
 class ResultsWriter
 
-  def initialize
-    @output_directory = '../../results/results_bands/ruby'
-    @summary_file = "#{@output_directory}/summary_high_scores-2-100-bands.csv"
+  def initialize(output_directory)
+    @summary_file = "#{output_directory}/summary_high_scores-2-100-bands.csv"
 
-    FileUtils.mkpath @output_directory unless File.exists?(@output_directory)
+    FileUtils.mkpath output_directory unless File.exists?(output_directory)
 
     File.delete(@summary_file) if File.exist?(@summary_file)
 
-    #FileUtils.rm_rf Dir.glob("#{@output_directory}/*")
+    #FileUtils.rm_rf Dir.glob("#{output_directory}/*")
 
   end
 
