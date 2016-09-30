@@ -1,20 +1,23 @@
 library('ggthemes')
 library('ggplot2')
 
+print('------------- GO ---------------------')
+
 args <- commandArgs(trailingOnly = TRUE)
 input <- args[1]
 #results/results_bands/ruby/summary_high_scores-2-100-bands.csv
 output <- args[2]
 
 #results/results_bands/graphs
-dir.out <- output
-
-
+dir.out <- file.path(output,'years')
+dir.create(dir.out, showWarnings = FALSE)
 data <- read.table(input, header=T,sep=",")
+
+print(sprintf("Row count from data %d", nrow(data)))
 data$start_date.time=as.Date(as.POSIXct(data$start_date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S"))
 data$year <- format(data$start_date.time, '%Y')
 data <- data[complete.cases(data), ]
-data <- data[data$minimum_profit == 70,]
+data <- data[data$minimum_profit == 80,]
 
 by_cut_off_min <- aggregate(cbind(winners.size, losers.size)~cut_off_percentage+year, data=data, sum, na.rm=TRUE)
 by_cut_off_min$ave <- (by_cut_off_min$winners.size / (by_cut_off_min$winners.size + by_cut_off_min$losers.size)) * 100
