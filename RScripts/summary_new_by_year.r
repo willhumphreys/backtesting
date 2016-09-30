@@ -17,7 +17,7 @@ print(sprintf("Row count from data %d", nrow(data)))
 data$start_date.time=as.Date(as.POSIXct(data$start_date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S"))
 data$year <- format(data$start_date.time, '%Y')
 data <- data[complete.cases(data), ]
-data <- data[data$minimum_profit == 80,]
+data <- data[data$minimum_profit == 12,]
 
 by_cut_off_min <- aggregate(cbind(winners.size, losers.size)~cut_off_percentage+year, data=data, sum, na.rm=TRUE)
 by_cut_off_min$ave <- (by_cut_off_min$winners.size / (by_cut_off_min$winners.size + by_cut_off_min$losers.size)) * 100

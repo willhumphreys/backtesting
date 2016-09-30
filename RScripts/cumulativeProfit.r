@@ -48,22 +48,19 @@ generate.plot <- function(file.in, input, output) {
     data$date.time=as.Date(data$date.time)
 
     line <- paste(file.in, ",", symbol, ",", scenario, ",", last(data$cumulative_profit), ",", last(data$cum.winLose), ",", nrow(data), ",", last(data$cum.win) / last(data$cum.lose), ",", sum(data$ticks) / nrow(data))
-    write(line,file="summary.csv",append=TRUE)
+    write(line,file=file.path(output,"summary.csv"),append=TRUE)
 
     cat(file.out.winLose)
     ggplot(data=data, aes(x=date.time, y=cum.winLose)) +
     geom_line() +
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    scale_y_continuous(limits=c(0, 200)) +
+    scale_y_continuous(limits=c(-50, 200)) +
     stat_smooth() +
     ggtitle(file.out.winLose)
     ggsave(file=file.out.winLose)
     print('finished')
 }
-
-write("file.in,symbol,scenario,cumulative_profit,win_lose_count,trade_count,win_lose_ratio,ticks_per_trade", file="summary.csv", append=FALSE)
-
 
 args <- commandArgs(trailingOnly = TRUE)
 #Set the input file
@@ -71,8 +68,10 @@ args <- commandArgs(trailingOnly = TRUE)
 input <- args[1]
 
 output <- args[2]
-
 #output = "/home/will/Code/macchiato/matcha/live-data/549d5843521836129546bdd8_BuyAtTime/flatSimulationMerged.csv"
+
+write("file.in,symbol,scenario,cumulative_profit,win_lose_count,trade_count,win_lose_ratio,ticks_per_trade", file=file.path(output, "summary.csv"), append=FALSE)
+
 
 cat(sprintf("Read input %s\n", input ))
 cat(sprintf("Output %s\n", output))
