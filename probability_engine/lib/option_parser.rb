@@ -5,7 +5,7 @@ class Options
   attr_reader :options
 
   def parse
-    @options = {:input_directory => nil, :output_directory => nil}
+    @options = {:input_directory => nil, :output_directory => nil, :profile => nil}
 
     parser = OptionParser.new do |opts|
       opts.banner = 'Usage: [options]'
@@ -15,6 +15,10 @@ class Options
 
       opts.on('-o', '--output_directory output_directory', 'OutputDirectory') do |output_directory|
         @options[:output_directory] = output_directory;
+      end
+
+      opts.on('-', '--profile profile', 'Profile') do |profile|
+        @options[:profile] = profile;
       end
 
       opts.on('-h', '--help', 'Displays Help') do
@@ -27,6 +31,7 @@ class Options
 
     raise OptionParser::MissingArgument if @options[:input_directory].nil?
     raise OptionParser::MissingArgument if @options[:output_directory].nil?
+    raise OptionParser::MissingArgument if @options[:profile].nil?
 
     @options
   end
