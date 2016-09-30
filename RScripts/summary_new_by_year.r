@@ -1,6 +1,10 @@
 library('ggthemes')
 library('ggplot2')
 
+args <- commandArgs(trailingOnly = TRUE)
+input <- args[1]
+output <- args[2]
+
 dir.out <- 'plots'
 
 data <- read.table('results/summary_high_scores-2-100-bands.csv', header=T,sep=",")
