@@ -22,7 +22,7 @@ require 'active_support/all'
 @processors = Processors.new
 @date_range_generator = DateRangeGenerator.new(DateTime.new(2007, 12, 5), DateTime.new(2016, 8, 2))
 
-@input_directory = 'backtesting_data'
+@input_directory = '../../results/results_bands/data'
 
 moving_average_counts = 2.step(10, 2).to_a # How big is the moving average window.
 cut_offs = -10.step(10, 1).to_a # How successful do the trades need to be.

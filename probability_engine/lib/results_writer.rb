@@ -1,10 +1,13 @@
 require 'probability_engine/version'
+require 'fileutils'
 
 class ResultsWriter
 
   def initialize
-    @output_directory = 'results'
+    @output_directory = '../../results/results_bands/ruby'
     @summary_file = "#{@output_directory}/summary_high_scores-2-100-bands.csv"
+
+    FileUtils.mkpath @output_directory unless File.exists?(@output_directory)
 
     File.delete(@summary_file) if File.exist?(@summary_file)
 
