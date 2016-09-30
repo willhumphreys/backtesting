@@ -3,11 +3,14 @@ library('ggplot2')
 
 args <- commandArgs(trailingOnly = TRUE)
 input <- args[1]
+#results/results_bands/ruby/summary_high_scores-2-100-bands.csv
 output <- args[2]
 
-dir.out <- 'plots'
+#results/results_bands/graphs
+dir.out <- output
 
-data <- read.table('results/summary_high_scores-2-100-bands.csv', header=T,sep=",")
+
+data <- read.table(input, header=T,sep=",")
 data$start_date.time=as.Date(as.POSIXct(data$start_date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S"))
 data$year <- format(data$start_date.time, '%Y')
 data <- data[complete.cases(data), ]
