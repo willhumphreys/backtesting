@@ -1,7 +1,7 @@
 library('ggthemes')
 library('ggplot2')
 
-print('------------- GO ---------------------')
+print('------------- GO Summary new by year ---------------------')
 
 args <- commandArgs(trailingOnly = TRUE)
 input <- args[1]
@@ -11,6 +11,8 @@ output <- args[2]
 #results/results_bands/graphs
 dir.out <- file.path(output,'years')
 dir.create(dir.out, showWarnings = FALSE)
+
+
 data <- read.table(input, header=T,sep=",")
 
 print(sprintf("Row count from data %d", nrow(data)))
