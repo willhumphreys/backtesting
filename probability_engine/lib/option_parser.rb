@@ -5,20 +5,18 @@ class Options
   attr_reader :options
 
   def parse
-    @options = {:input_directory => nil, :output_directory => nil, :profile => nil}
+    @options = {:input_directory => nil, :output_directory => nil, :profile => nil, :data_set => nil}
 
     parser = OptionParser.new do |opts|
-      opts.banner = 'Usage: [options]'
-      opts.on('-i', '--input_directory input_directory ', 'InputDirectory') do |input_directory|
-        @options[:input_directory] = input_directory;
-      end
 
-      opts.on('-o', '--output_directory output_directory', 'OutputDirectory') do |output_directory|
-        @options[:output_directory] = output_directory;
-      end
-
-      opts.on('-', '--profile profile', 'Profile') do |profile|
+      opts.on('-p', '--profile profile', 'Profile') do |profile|
         @options[:profile] = profile;
+      end
+
+      opts.on('-d', '--data_set data_set', 'Data Set') do |data_set|
+        @options[:data_set] = data_set
+        @options[:output_directory] = "../results/#{data_set}/ruby"
+        @options[:input_directory] = "../results/#{data_set}/data"
       end
 
       opts.on('-h', '--help', 'Displays Help') do
@@ -29,8 +27,7 @@ class Options
 
     parser.parse!
 
-    raise OptionParser::MissingArgument if @options[:input_directory].nil?
-    raise OptionParser::MissingArgument if @options[:output_directory].nil?
+    raise OptionParser::MissingArgument if @options[:data_set].nil?
     raise OptionParser::MissingArgument if @options[:profile].nil?
 
     @options

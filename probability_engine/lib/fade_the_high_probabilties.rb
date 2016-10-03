@@ -39,7 +39,7 @@ all_results_with_names = []
 symbols.each { |data_set|
 
   trade_results = @mt4_file_repo.read_quotes("#{options[:input_directory]}/#{data_set}.csv")
-  all_results_with_names.push(ResultsWithName.new(data_set,trade_results))
+  all_results_with_names.push(ResultsWithName.new(data_set, trade_results))
 }
 
 date_ranges = @date_range_generator.get_ranges
@@ -85,7 +85,7 @@ profile.minimum_profits.each { |minimum_profit|
   }
 }
 
-command = 'Rscript ../../RScripts/summary_new_by_year.r ../results/normal/ruby/summary_high_scores-2-100-bands.csv ../results/normal/graphs'
+command = "Rscript ../RScripts/summary_new_by_year.r #{options[:output_directory]}/summary_high_scores-2-100-bands.csv #{options[:output_directory]}/graphs"
 
 stdout, stderr, status = Open3.capture3(command)
 
