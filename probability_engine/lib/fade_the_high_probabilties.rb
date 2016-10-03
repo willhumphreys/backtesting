@@ -85,7 +85,7 @@ profile.minimum_profits.each { |minimum_profit|
   }
 }
 
-command = 'Rscript ../RScripts/summary_new_by_year.r ../results/normal/ruby/summary_high_scores-2-100-bands.csv ../results/normal/graphs'
+command = 'Rscript ../../RScripts/summary_new_by_year.r ../results/normal/ruby/summary_high_scores-2-100-bands.csv ../results/normal/graphs'
 
 stdout, stderr, status = Open3.capture3(command)
 
