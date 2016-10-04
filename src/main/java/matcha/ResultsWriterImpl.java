@@ -36,7 +36,7 @@ class ResultsWriterImpl implements ResultsWriter {
 
         this.outputPath = outputPath.resolve("results.csv");
 
-        writeLine("symbol,tick_profit_loss,winners,loses,long_trade_count,short_trade_count,above_below_moving_average," +
+        writeLine("symbol,tick_profit_loss,winners,losers,long_trade_count,short_trade_count,above_below_moving_average," +
                 "above_below_band\n");
     }
 
