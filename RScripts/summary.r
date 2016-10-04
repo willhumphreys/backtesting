@@ -1,4 +1,3 @@
-library(scales)
 library(R.utils)
 
 args <- commandArgs(trailingOnly = TRUE)
