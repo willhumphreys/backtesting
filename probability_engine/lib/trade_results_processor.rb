@@ -7,8 +7,6 @@ class TradeResultsProcessor
     @execution_parameters = execution_parameters
     @winners = []
     @losers = []
-
-    @mt4_file_repo = MT4FileRepo.new(FadeMapper.new)
     @trade_result_processor = TradeResultProcessor.new(execution_parameters.window_size, execution_parameters.required_score)
   end
 
