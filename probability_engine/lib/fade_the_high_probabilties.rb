@@ -17,6 +17,7 @@ require_relative 'results_with_name'
 require_relative 'option_parser'
 require_relative 'profile'
 require_relative 'profiles'
+require_relative 'r_script_service'
 require 'active_support/all'
 require 'optparse'
 require 'open3'
@@ -85,12 +86,5 @@ profile.minimum_profits.each { |minimum_profit|
   }
 }
 
-command = "Rscript ../RScripts/summary_new_by_year.r #{options[:output_directory]}/summary_high_scores-2-100-bands.csv #{options[:output_directory]}/graphs"
-
-stdout, stderr, status = Open3.capture3(command)
-
-puts status
-puts stdout
-puts stderr
-
+RScriptService.new.execute(options)
 
