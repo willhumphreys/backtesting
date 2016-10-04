@@ -6,6 +6,7 @@ class MT4FileRepo
   @mt4_quote_mapper
 
   def initialize(mapper)
+    puts "Working directory is '#{Dir.pwd}'."
     @mt4_quote_mapper = mapper
 
   end
