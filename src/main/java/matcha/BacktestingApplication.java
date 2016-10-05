@@ -2,7 +2,6 @@ package matcha;
 
 
 import matcha.service.RScriptService;
-import matcha.service.ScriptArguments;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 
@@ -19,10 +18,10 @@ import static org.slf4j.LoggerFactory.getLogger;
  * Typical program arguments
  * -output results -input inputFileList.csv
  */
-class BacktestingApplication {
+public class BacktestingApplication {
 
-    private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
     public static final Path ROOT_OUTPUT_PATH = Paths.get("results");
+    private static final Logger LOG = getLogger(MethodHandles.lookup().lookupClass());
 
     public static void main(String[] args) throws Exception {
 
@@ -30,16 +29,8 @@ class BacktestingApplication {
 
         BacktestingApplication backtestingApplication = new BacktestingApplication();
         backtestingApplication.run(cmdLineOptions);
-        backtestingApplication.executeRScripts(cmdLineOptions);
-    }
 
-    private void executeRScripts(CmdLineOptions cmdLineOptions) {
-        final RScriptService rScriptService = new RScriptService();
-        rScriptService.executeScript(new ScriptArguments.Builder()
-                .setScriptPath(Paths.get("RScripts/cumulativeProfit.r"))
-                .setOutputPath(BacktestingApplication.ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory()))
-                .setInputPath(BacktestingApplication.ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory().resolve("data")))
-                .createScriptArguments());
+        new RScriptService().executeAll(cmdLineOptions);
     }
 
     List<Results> run(CmdLineOptions args) throws Exception {

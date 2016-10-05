@@ -70,11 +70,14 @@ input <- args[1]
 output <- args[2]
 #output = "/home/will/Code/macchiato/matcha/live-data/549d5843521836129546bdd8_BuyAtTime/flatSimulationMerged.csv"
 
+cat("Executing cumulative_profit.r\n")
+cat(sprintf("Read input %s\n", input ))
+cat(sprintf("Output %s\n", output))
+
 write("file.in,symbol,scenario,cumulative_profit,win_lose_count,trade_count,win_lose_ratio,ticks_per_trade", file=file.path(output, "summary.csv"), append=FALSE)
 
 
-cat(sprintf("Read input %s\n", input ))
-cat(sprintf("Output %s\n", output))
+
 
 #'results/acceptance_results/data'
 
@@ -85,3 +88,4 @@ in_files <- list.files(input)
 
 #in_files <- in_files[!grepl("NewDayLow", in_files)]
 sapply(in_files, function(x) generate.plot(x, input, output))
+cat("Finished executing cumulative_profit.r\n")

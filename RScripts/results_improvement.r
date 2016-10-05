@@ -8,6 +8,8 @@ options(width=150)
 input = args[1];
 output = args[2]
 
+cat("Executing results_improvement.r\n")
+
 data <- read.table(input, header=T,sep=",")
 
 data$winner_ratio <- round(data$winners / data$losers, digits = 4)
@@ -18,3 +20,5 @@ data$losing_percentage <- round((data$losers / (data$winners + data$losers) * 10
 cat(nrow(data))
 
 write.table(data, file=output, sep=",", row.names=FALSE)
+
+cat("Finished executing cumulative_profit.r\n")
