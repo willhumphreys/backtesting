@@ -16,6 +16,11 @@ winners <- sum(data$winner_ratio > 1)
 losers <- sum(data$winner_ratio < 1)
 flat <- sum(data$winner_ratio == 1)
 
+highest_winners_row <- data[which.max(data$winning_percentage),]
+lowest_winners_row <- data[which.min(data$winning_percentage),]
+
 fileConn<-file(output)
-writeLines(sprintf("Winners: %d\nLosers: %d\n", winners, losers), fileConn)
+writeLines(sprintf("Winners: %d\nLosers: %d\n", winners, losers),
+sprintf("Highest winning percentage: %s:%d\nHighest losing percentage: %s:%d",
+  highest_winners_row$symbol, highest_winners_row$winning_percentage, lowest_winners_row$symobl, lowest_winners_row$winning_percentage), fileConn)
 close(fileConn)
