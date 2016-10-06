@@ -60,7 +60,7 @@ public class RScriptService {
         final ScriptArguments summaryArguments = new ScriptArguments.Builder()
                 .setScriptPath(Paths.get("RScripts/summary.r"))
                 .setOutputPath(ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory().resolve("summary.txt")))
-                .setInputPath(ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory().resolve("results_improved.csv")))
+                .setInputPath(ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory()))
                 .createScriptArguments();
 
         return ImmutableList.of(cumulativeProfitScriptArguments, resultsImprovementArguments, summaryArguments);

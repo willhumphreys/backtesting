@@ -1,5 +1,7 @@
 library(R.utils)
 
+print('Start summary.r')
+
 args <- commandArgs(trailingOnly = TRUE)
 
 options(width=150)
@@ -7,11 +9,11 @@ options(width=150)
 input = args[1];
 output = args[2]
 
-data <- read.table(input, header=T,sep=",")
+data <- read.table(file.path(input, "results_improved.csv"), header=T,sep=",")
 
-cat(sprintf("Input is %s\n", input))
+(sprintf("Input is %s\n", input))
 cat(sprintf("Output is %s\n", output))
-cat(getwd())
+cat(sprintf("Current working directory %s\n",getwd()))
 
 winners <- sum(data$winner_ratio > 1)
 losers <- sum(data$winner_ratio < 1)
@@ -26,5 +28,7 @@ writeLines(c(sprintf("Winners: %d\nLosers: %d\n", winners, losers),
     sprintf("Lowest winning percentage: %s:%f", lowest_winners_row$symbol, lowest_winners_row$winning_percentage)),
     con=fileConn)
 close(fileConn)
+
+print('Finished summary.r')
 
 
