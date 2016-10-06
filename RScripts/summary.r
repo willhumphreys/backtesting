@@ -28,13 +28,23 @@ writeLines(c(sprintf("Winners: %d\nLosers: %d\n", winners, losers),
     sprintf("Lowest winning percentage: %s:%f", lowest_winners_row$symbol, lowest_winners_row$winning_percentage)),
     con=fileConn,sep="\n")
 
-symbol <- 'AUDUSD'
-symbol_data <- read.table(file.path(input, paste("data/", symbol, ".csv", sep="")), header=T,sep=",")
-trade_count <- nrow(symbol_data)
 cat("\nSymbol information\n", file=fileConn, append=TRUE)
-cat(sprintf("%s trade count %d\n", symbol, trade_count), file=fileConn, append=TRUE)
+generate.symbol.info <- function(file.in) {
+
+  symbol <- strsplit(file.in, split='.', fixed=TRUE)[[1]][1]
+
+  symbol_data <- read.table(file.path(input, 'data', file.in), header=T,sep=",")
+  trade_count <- nrow(symbol_data)
+  cat(sprintf("%s count %d\n", symbol, trade_count), file=fileConn, append=TRUE)
+
+}
+
+input.files <- list.files(file.path(input, 'data'))
+
+sapply(input.files, function(x) generate.symbol.info(x))
 
 close(fileConn)
 print('Finished summary.r')
+
 
 
