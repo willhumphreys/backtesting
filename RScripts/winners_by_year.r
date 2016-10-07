@@ -32,14 +32,17 @@ symbols_merged$winner <- symbols_merged$ticks > 0
 
 years <- unique(symbols_merged$years)
 
-print(xtabs(~ symbol + years, symbols_merged))
+#print(xtabs(~ symbol + years, symbols_merged))
 
 winners_by_year <- (count(symbols_merged, c('symbol', 'years', 'winner')))
 
 winners_fixed <- dcast(winners_by_year, symbol + years ~ winner)
 winners_fixed[is.na(winners_fixed)] <- 0
 winners_fixed <- rename(winners_fixed, c("FALSE"="losers", "TRUE"="winners"))
-print(head(winners_by_year))
+#print(head(winners_by_year))
+
+winners_fixed$win_ratio <- round(winners_fixed$winners / winners_fixed$losers, digits = 3)
+winners_fixed$win_percentage <- round((winners_fixed$winners / (winners_fixed$losers + winners_fixed$winners)) * 100, digits = 3)
 
 write.table(winners_fixed, file=output, sep=",", row.names=FALSE)
 cat("Finished executing winners by year.r\n")
