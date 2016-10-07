@@ -1,6 +1,7 @@
 library(R.utils)
 library(plyr)
-require(reshape2)
+library(reshape2)
+library(ggplot2)
 
 cat("Executing winners by year.r\n")
 
@@ -45,4 +46,11 @@ winners_fixed$win_ratio <- round(winners_fixed$winners / winners_fixed$losers, d
 winners_fixed$win_percentage <- round((winners_fixed$winners / (winners_fixed$losers + winners_fixed$winners)) * 100, digits = 3)
 
 write.table(winners_fixed, file=output, sep=",", row.names=FALSE)
+
+ggplot(data=winners_fixed, aes(x=years, y=win_percentage, group=symbol)) +
+    geom_line(aes(colour=symbol)) +
+    geom_point(aes(colour=symbol)) +
+    ggtitle(output)
+ggsave(file=paste(output, '.png', sep=""))
+
 cat("Finished executing winners by year.r\n")
