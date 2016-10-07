@@ -45,12 +45,12 @@ winners_fixed <- rename(winners_fixed, c("FALSE"="losers", "TRUE"="winners"))
 winners_fixed$win_ratio <- round(winners_fixed$winners / winners_fixed$losers, digits = 3)
 winners_fixed$win_percentage <- round((winners_fixed$winners / (winners_fixed$losers + winners_fixed$winners)) * 100, digits = 3)
 
-write.table(winners_fixed, file=output, sep=",", row.names=FALSE)
+write.table(winners_fixed, file=file.path(output, 'winners_by_year.csv'), sep=",", row.names=FALSE)
 
 ggplot(data=winners_fixed, aes(x=years, y=win_percentage, group=symbol)) +
     geom_line(aes(colour=symbol)) +
     geom_point(aes(colour=symbol)) +
-    ggtitle(output)
-ggsave(file=paste(output, '.png', sep=""))
+    ggtitle('winners by year')
+ggsave(file=file.path(output, 'graphs', 'winners_by_year.png'))
 
 cat("Finished executing winners by year.r\n")
