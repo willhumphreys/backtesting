@@ -69,7 +69,7 @@ public class RScriptService {
                 .setInputPath(ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory()))
                 .createScriptArguments();
 
-        return ImmutableList.of(cumulativeProfitScriptArguments, resultsImprovementArguments, summaryArguments);
+        return ImmutableList.of(cumulativeProfitScriptArguments, resultsImprovementArguments, summaryArguments, winners_by_year);
     }
 
 
