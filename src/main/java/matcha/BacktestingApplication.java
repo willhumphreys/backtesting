@@ -16,7 +16,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Typical program arguments
- * -output results -input inputFileList.csv
+ * -input inputFileList.csv -output_dir normal
  */
 public class BacktestingApplication {
 
