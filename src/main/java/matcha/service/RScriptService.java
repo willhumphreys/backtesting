@@ -54,7 +54,13 @@ public class RScriptService {
         final ScriptArguments resultsImprovementArguments = new ScriptArguments.Builder()
                 .setScriptPath(Paths.get("RScripts/results_improvement.r"))
                 .setOutputPath(ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory().resolve("results_improved.csv")))
-                .setInputPath(ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory().resolve("results.csv")))
+                .setInputPath(ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory()))
+                .createScriptArguments();
+
+        final ScriptArguments winners_by_year = new ScriptArguments.Builder()
+                .setScriptPath(Paths.get("RScripts/winners_by_year.r"))
+                .setOutputPath(ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory()))
+                .setInputPath(ROOT_OUTPUT_PATH.resolve(cmdLineOptions.getOutputDirectory()))
                 .createScriptArguments();
 
         final ScriptArguments summaryArguments = new ScriptArguments.Builder()

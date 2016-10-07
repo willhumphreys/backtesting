@@ -9,6 +9,7 @@ args <- commandArgs(trailingOnly = TRUE)
 
 options(width=200)
 
+#The input and output are the same and point to results directory. e.g. results-bands and normal
 
 input = args[1];
 output = args[2]
