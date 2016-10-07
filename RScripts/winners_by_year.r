@@ -59,11 +59,6 @@ ggsave(file=file.path(output, 'graphs', 'winners_by_year_and_symbol.png'))
 
 ggplot(data=winners_fixed, aes(x=years, y=win_percentage, fill=symbol)) +
     geom_bar(colour="black", stat="identity") +
-    ggtitle('winners by year and symbol stacked')
-ggsave(file=file.path(output, 'graphs', 'winners_by_year_and_symbol_stacked.png'))
-
-ggplot(data=winners_fixed, aes(x=years, y=win_percentage, fill=symbol)) +
-    geom_bar(colour="black", stat="identity") +
     facet_wrap( ~ symbol, ncol = 2) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     geom_hline(yintercept = 50) +
