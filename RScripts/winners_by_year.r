@@ -37,6 +37,8 @@ years <- unique(symbols_merged$years)
 
 winners_by_year <- (count(symbols_merged, c('symbol', 'years', 'winner')))
 
+# winners by year and symbol
+
 winners_fixed <- dcast(winners_by_year, symbol + years ~ winner)
 winners_fixed[is.na(winners_fixed)] <- 0
 winners_fixed <- rename(winners_fixed, c("FALSE"="losers", "TRUE"="winners"))
@@ -47,10 +49,55 @@ winners_fixed$win_percentage <- round((winners_fixed$winners / (winners_fixed$lo
 
 write.table(winners_fixed, file=file.path(output, 'winners_by_year.csv'), sep=",", row.names=FALSE)
 
+
 ggplot(data=winners_fixed, aes(x=years, y=win_percentage, group=symbol)) +
     geom_line(aes(colour=symbol)) +
     geom_point(aes(colour=symbol)) +
+    ggtitle('winners by year and symbol')
+ggsave(file=file.path(output, 'graphs', 'winners_by_year_and_symbol.png'))
+
+ggplot(data=winners_fixed, aes(x=years, y=win_percentage, fill=symbol)) +
+    geom_bar(colour="black", stat="identity") +
+    ggtitle('winners by year and symbol stacked')
+ggsave(file=file.path(output, 'graphs', 'winners_by_year_and_symbol_stacked.png'))
+
+ggplot(data=winners_fixed, aes(x=years, y=win_percentage, fill=symbol)) +
+    geom_bar(colour="black", stat="identity") +
+    facet_wrap( ~ symbol, ncol = 2) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    geom_hline(yintercept = 50) +
+    geom_hline(yintercept = 60, colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
+    guides(fill=FALSE) +
+    ggtitle('winners by year and symbol facet')
+ggsave(file=file.path(output, 'graphs', 'winners_by_year_and_symbol_facet.png'))
+
+# Winners by symbol
+
+winners_by_symbol <- aggregate(cbind(winners_fixed$winners, winners_fixed$losers), list(symbol = winners_fixed$symbol), sum)
+winners_by_symbol <- rename(winners_by_symbol, c("V1"="winners", "V2"="losers"))
+winners_by_symbol$win_ratio <- round(winners_by_symbol$winners / winners_by_symbol$losers, digits = 3)
+winners_by_symbol$win_percentage <- round((winners_by_symbol$winners / (winners_by_symbol$losers + winners_by_symbol$winners)) * 100, digits = 3)
+
+ggplot(data=winners_by_symbol, aes(x=symbol, y=win_percentage, fill=symbol)) +
+    geom_bar(colour="black", stat="identity") +
+    guides(fill=FALSE) +
+    scale_y_continuous(limits=c(0, 100)) +
+    ggtitle('winners by symbol')
+ggsave(file=file.path(output, 'graphs', 'winners_by_symbol.png'))
+
+# Winners by year
+
+winners_by_year <- aggregate(cbind(winners_fixed$winners, winners_fixed$losers), list(year = winners_fixed$years), sum)
+winners_by_year <- rename(winners_by_year, c("V1"="winners", "V2"="losers"))
+winners_by_year$win_ratio <- round(winners_by_year$winners / winners_by_year$losers, digits = 3)
+winners_by_year$win_percentage <- round((winners_by_year$winners / (winners_by_year$losers + winners_by_year$winners)) * 100, digits = 3)
+
+ggplot(data=winners_by_year, aes(x=year, y=win_percentage, fill=year)) +
+    geom_bar(colour="black", stat="identity") +
+    guides(fill=FALSE) +
     ggtitle('winners by year')
 ggsave(file=file.path(output, 'graphs', 'winners_by_year.png'))
+
 
 cat("Finished executing winners by year.r\n")
