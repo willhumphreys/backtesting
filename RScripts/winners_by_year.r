@@ -54,6 +54,9 @@ write.table(winners_fixed, file=file.path(output, 'winners_by_year.csv'), sep=",
 ggplot(data=winners_fixed, aes(x=years, y=win_percentage, group=symbol)) +
     geom_line(aes(colour=symbol)) +
     geom_point(aes(colour=symbol)) +
+    geom_hline(yintercept = 50) +
+    geom_hline(yintercept = 60, colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
     ggtitle('winners by year and symbol')
 ggsave(file=file.path(output, 'graphs', 'winners_by_year_and_symbol.png'))
 
@@ -78,6 +81,9 @@ winners_by_symbol$win_percentage <- round((winners_by_symbol$winners / (winners_
 ggplot(data=winners_by_symbol, aes(x=symbol, y=win_percentage, fill=symbol)) +
     geom_bar(colour="black", stat="identity") +
     guides(fill=FALSE) +
+    geom_hline(yintercept = 50) +
+    geom_hline(yintercept = 60, colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
     scale_y_continuous(limits=c(0, 100)) +
     ggtitle('winners by symbol')
 ggsave(file=file.path(output, 'graphs', 'winners_by_symbol.png'))
@@ -91,6 +97,9 @@ winners_by_year$win_percentage <- round((winners_by_year$winners / (winners_by_y
 
 ggplot(data=winners_by_year, aes(x=year, y=win_percentage, fill=year)) +
     geom_bar(colour="black", stat="identity") +
+    geom_hline(yintercept = 50) +
+    geom_hline(yintercept = 60, colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
     guides(fill=FALSE) +
     ggtitle('winners by year')
 ggsave(file=file.path(output, 'graphs', 'winners_by_year.png'))
