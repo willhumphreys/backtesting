@@ -55,7 +55,7 @@ generate.plot <- function(file.in, input, output) {
     geom_line() +
     scale_x_date(date_breaks = "3 month") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    scale_y_continuous(limits=c(-50, 200)) +
+    scale_y_continuous(limits=c(-50, 100)) +
     stat_smooth() +
     ggtitle(file.out.winLose)
     ggsave(file=file.out.winLose)
