@@ -4,7 +4,7 @@ require 'fileutils'
 class ResultsWriter
 
   def initialize(output_directory)
-    @summary_file = "#{output_directory}/summary_high_scores-2-100-bands.csv"
+    @summary_file = "#{output_directory}/odds_results.csv"
 
     FileUtils.mkpath output_directory unless File.exists?(output_directory)
 

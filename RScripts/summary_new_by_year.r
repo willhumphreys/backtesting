@@ -5,7 +5,7 @@ print('------------- GO Summary new by year ---------------------')
 
 args <- commandArgs(trailingOnly = TRUE)
 input <- args[1]
-#results/results_bands/ruby/summary_high_scores-2-100-bands.csv
+#results/results_bands/ruby/odds_results.csv
 output <- args[2]
 
 #results/results_bands/graphs
@@ -51,7 +51,7 @@ generate.plots.by.date <- function(start_date, end_date, data) {
   start_year = get.year(start_date,"_")
   end_year = get.year(end_date,"_")
 
-  plot_name <- append.year.filename("/summary_high_scores-2-100-bands_", start_year, end_year)
+  plot_name <- append.year.filename("/odds_results_", start_year, end_year)
   print(sprintf("Going to plot to %s", plot_name))
 
 
