@@ -80,7 +80,6 @@ profile.minimum_profits.each { |minimum_profit|
                                                           required_score, window_size, results_with_name.trade_results)
           process_data_set(execution_parameters)
         }
-
       }
     }
   }

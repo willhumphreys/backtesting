@@ -36,7 +36,8 @@ class DateRangeGenerator
 
         #puts "start_date #{run_start_date} end date #{run_end_date} date_period #{date_period}"
 
-        date_ranges.push(DateRange.new(run_start_date , run_end_date + 12.months))
+        # date_ranges.push(DateRange.new(run_start_date , run_end_date + 12.months))
+        date_ranges.push(DateRange.new(run_start_date , run_end_date))
 
         run_end_date = run_end_date - (date_period * 12).months
       end
@@ -44,8 +45,8 @@ class DateRangeGenerator
     date_ranges
   end
 end
-
-ranges = DateRangeGenerator.new(DateTime.new(2007, 12, 5), DateTime.new(2016, 8, 2)).get_ranges
-puts(ranges)
+#
+# ranges = DateRangeGenerator.new(DateTime.new(2007, 12, 5), DateTime.new(2016, 8, 2)).get_ranges
+# puts(ranges)
 
 

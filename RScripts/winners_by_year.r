@@ -3,7 +3,7 @@ library(plyr)
 library(reshape2)
 library(ggplot2)
 
-cat("Executing winners by year.r\n")
+cat("Executing winners by year\n")
 
 args <- commandArgs(trailingOnly = TRUE)
 
