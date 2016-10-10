@@ -9,11 +9,9 @@ options(width=150)
 input = args[1];
 output = args[2]
 
-winners_by_year_and_symbol_dir <- 'winners_by_year_and_symbol/summary'
-winners_by_year_and_symbol_graph_dir <- file.path(winners_by_year_and_symbol_dir, 'graphs')
-dir.create(file.path(output, winners_by_year_and_symbol_graph_dir))
-
-data <- read.table(file.path(input, winners_by_year_and_symbol_dir, "summary_all.csv"), header=T,sep=",")
+winners_by_year_and_symbol_dir <- 'winners_by_year_and_symbol'
+winners_by_year_and_symbol_graph_dir <- file.path(winners_by_year_and_symbol_dir, 'summary_graphs')
+dir.create(file.path(output, winners_by_year_and_symbol_graph_dir), showWarnings = FALSE)
 
 generate.plots <- function(data, type) {
 
@@ -63,13 +61,27 @@ generate.plots <- function(data, type) {
 
 }
 
-generate.plots(data,'all')
+generate.all.plots <- function(file.name) {
+data.path <- file.path(input, winners_by_year_and_symbol_dir, 'summary', file.name)
+  print(data.path)
+  data <- read.table(data.path, header=T,sep=",")
 
-negative_cut_off <- data[data$cut_off < 0, ]
-generate.plots(negative_cut_off,'negative_cut_off')
+  generate.plots(data,'all')
 
-positive_cut_off <- data[data$cut_off > 0, ]
-generate.plots(positive_cut_off,'positive_cut_off')
+  negative_cut_off <- data[data$cut_off < 0, ]
+  generate.plots(negative_cut_off,'negative_cut_off')
+
+  positive_cut_off <- data[data$cut_off > 0, ]
+  generate.plots(positive_cut_off,'positive_cut_off')
+}
+
+all.summary.files <- list.files(file.path(input, winners_by_year_and_symbol_dir, 'summary'))
+
+lapply(all.summary.files, function(x) generate.all.plots(x))
+
+#file.name <- file.path(input, winners_by_year_and_symbol_dir, "summary_all.csv")
+
+#generate.all.plots(file.name)
 
 print('Finished summary.r')
 
