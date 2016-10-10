@@ -67,7 +67,7 @@ generate.plot <- function(cut_off, moving_average_count, data) {
   ggtitle(paste('winners by year and symbol CO', cut_off, ' MA_', moving_average_count))
   file.name <- paste('winners_by_year_and_symbol_CO_', cut_off, '_MA_', moving_average_count, '.png',sep="")
   ggsave(file=file.path(winners_by_year_and_symbol_dir, 'by_year_and_symbol', file.name))
-paste('winners_by_year_facet_CO_', cut_off, '_MA_', moving_average_count, '.png', sep="")
+  paste('winners_by_year_facet_CO_', cut_off, '_MA_', moving_average_count, '.png', sep="")
   print(sprintf("Saved %s", file.name))
 
   # Winners by year and symbol facet
