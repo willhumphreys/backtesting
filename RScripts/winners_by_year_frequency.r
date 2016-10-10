@@ -151,6 +151,10 @@ symbols <- unique(filtered_data$data_set)
 
 lapply(symbols, function(x) process.stats(filtered_data[filtered_data$data_set == x,], x))
 
+years <- unique(filtered_data$years)
+
+lapply(years, function(x) process.stats(filtered_data[filtered_data$years == x,], x))
+
 process.stats(filtered_data, 'all')
 
 
