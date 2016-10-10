@@ -35,14 +35,11 @@ print('finished creating output directories')
 
 
 generate.stats <- function(cut_off, moving_average_count, filtered_data) {
-
-
-  filtered_data <- data[data$cut_off == cut_off & data$moving_average_count == moving_average_count, ]
-
-  winners.count <- sum(filtered_data$winners.size)
-  losers.count <- sum(filtered_data$losers.size)
-  win.lose.count <- sum(filtered_data$winners.size - filtered_data$losers.size)
-  trade.count <- sum(filtered_data$winners.size + filtered_data$losers.size)
+  filtered_data_cut_off <- filtered_data[filtered_data$cut_off == cut_off & filtered_data$moving_average_count == moving_average_count, ]
+  winners.count <- sum(filtered_data_cut_off$winners.size)
+  losers.count <- sum(filtered_data_cut_off$losers.size)
+  win.lose.count <- sum(filtered_data_cut_off$winners.size - filtered_data_cut_off$losers.size)
+  trade.count <- sum(filtered_data_cut_off$winners.size + filtered_data_cut_off$losers.size)
   print(sprintf("MovingAveragecount: %d CutOff: %d winWinLoseCount: %d tradeCount %d", moving_average_count, cut_off, win.lose.count, trade.count))
 
   return(c(cut_off, moving_average_count, winners.count, losers.count, win.lose.count, trade.count))
@@ -144,15 +141,15 @@ finish.stats <- function(stats, name) {
   write.table(stats, file=csv.out, sep=",", row.names=FALSE)
 }
 
-process.stats <- function(filtered_data, name) {
+process.stats <- function(filtered_data_n, name) {
   print(sprintf("Process stats %s", name))
-  stats <- as.data.frame(t(apply(unique_cut_offs, 1, function(x) generate.stats(x[1], x[2], filtered_data))))
+  stats <- as.data.frame(t(apply(unique_cut_offs, 1, function(x) generate.stats(x[1], x[2], filtered_data_n))))
   finish.stats(stats, name)
 }
 
 symbols <- unique(filtered_data$data_set)
 
-sapply(symbols, function(x) process.stats(filtered_data[filtered_data$data_set == x,], x))
+lapply(symbols, function(x) process.stats(filtered_data[filtered_data$data_set == x,], x))
 
 process.stats(filtered_data, 'all')
 
