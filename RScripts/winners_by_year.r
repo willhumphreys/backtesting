@@ -57,6 +57,7 @@ ggplot(data=winners_fixed, aes(x=years, y=win_percentage, group=symbol)) +
     geom_hline(yintercept = 50) +
     geom_hline(yintercept = 60, colour="#990000", linetype="dashed") +
     geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = mean(winners_fixed$win_percentage, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
     ggtitle('winners by year and symbol')
 ggsave(file=file.path(output, 'graphs', 'winners_by_year_and_symbol.png'))
 
@@ -67,6 +68,7 @@ ggplot(data=winners_fixed, aes(x=years, y=win_percentage, fill=symbol)) +
     geom_hline(yintercept = 50) +
     geom_hline(yintercept = 60, colour="#990000", linetype="dashed") +
     geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = mean(winners_fixed$win_percentage, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
     guides(fill=FALSE) +
     ggtitle('winners by year and symbol facet')
 ggsave(file=file.path(output, 'graphs', 'winners_by_year_and_symbol_facet.png'))
@@ -84,6 +86,7 @@ ggplot(data=winners_by_symbol, aes(x=symbol, y=win_percentage, fill=symbol)) +
     geom_hline(yintercept = 50) +
     geom_hline(yintercept = 60, colour="#990000", linetype="dashed") +
     geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = mean(winners_by_symbol$win_percentage, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
     scale_y_continuous(limits=c(0, 100)) +
     ggtitle('winners by symbol')
 ggsave(file=file.path(output, 'graphs', 'winners_by_symbol.png'))
@@ -100,6 +103,7 @@ ggplot(data=winners_by_year, aes(x=year, y=win_percentage, fill=year)) +
     geom_hline(yintercept = 50) +
     geom_hline(yintercept = 60, colour="#990000", linetype="dashed") +
     geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = mean(winners_by_year$win_percentage, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
     guides(fill=FALSE) +
     ggtitle('winners by year')
 ggsave(file=file.path(output, 'graphs', 'winners_by_year.png'))
