@@ -2,6 +2,7 @@ library(R.utils)
 library(plyr)
 library(reshape2)
 library(ggplot2)
+library(R.utils)
 
 cat("Executing winners by year frequency\n")
 
@@ -66,7 +67,7 @@ generate.plot <- function(cut_off, moving_average_count, data) {
   ggtitle(paste('winners by year and symbol CO', cut_off, ' MA_', moving_average_count))
   file.name <- paste('winners_by_year_and_symbol_CO_', cut_off, '_MA_', moving_average_count, '.png',sep="")
   ggsave(file=file.path(winners_by_year_and_symbol_dir, 'by_year_and_symbol', file.name))
-
+paste('winners_by_year_facet_CO_', cut_off, '_MA_', moving_average_count, '.png', sep="")
   print(sprintf("Saved %s", file.name))
 
   # Winners by year and symbol facet
@@ -133,6 +134,7 @@ stats <- plyr::rename(stats, c("V3"="winners.count", "V4"="losers.count", "V5"="
 
 stats$win.ratio <- round(stats$winners.count / stats$losers.count, digits = 3)
 stats$winning.percentage <- round((stats$winners.count / (stats$winners.count + stats$losers.count)) * 100, digits = 3)
+stats$window.ratio <- stats$cut_off / stats$moving_average_count
 
 write.table(stats, file=file.path(winners_by_year_and_symbol_dir, "summary.csv"), sep=",", row.names=FALSE)
 
