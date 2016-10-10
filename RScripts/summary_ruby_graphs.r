@@ -22,6 +22,7 @@ generate.plots <- function(data, type) {
   geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
   geom_hline(yintercept = mean(data$winning.percentage, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
   geom_hline(yintercept = weighted.mean(data$winning.percentage, data$trade.count, na.rm=TRUE), colour="darkorange3", linetype="dashed") +
+  scale_y_continuous(breaks=seq(0,100,5)) +
   guides(fill=FALSE) +
   ggtitle(paste('window ratio vs winning percentage', type))
   file.name <- paste('windowRatioVsWinningPercentage', type, '.png', sep="")
@@ -38,6 +39,7 @@ generate.plots <- function(data, type) {
   geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
   geom_hline(yintercept = mean(aggreaged_data$winning.percentage, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
   geom_hline(yintercept = weighted.mean(data$winning.percentage, data$trade.count, na.rm=TRUE), colour="darkorange3", linetype="dashed") +
+  scale_y_continuous(breaks=seq(0,100,5)) +
   guides(fill=FALSE) +
   ggtitle(paste('window ratio vs winning percentage aggregated', type))
   file.name <- paste('windowRatioVsWinningPercentageAggregated', type, '.png', sep="")
@@ -53,6 +55,7 @@ generate.plots <- function(data, type) {
   geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
   geom_hline(yintercept = mean(data$winning.percentage, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
   geom_hline(yintercept = weighted.mean(data$winning.percentage, data$trade.count, na.rm=TRUE), colour="darkorange3", linetype="dashed") +
+  scale_y_continuous(breaks=seq(0,100,5)) +
   guides(fill=FALSE) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   ggtitle(paste('cut off moving average count vs winning percentage', type))
