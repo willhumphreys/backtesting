@@ -9,9 +9,11 @@ options(width=150)
 input = args[1];
 output = args[2]
 
-winners_by_year_and_symbol_dir <- 'winners_by_year_and_symbol'
+winners_by_year_and_symbol_dir <- 'winners_by_year_and_symbol/summary'
+winners_by_year_and_symbol_graph_dir <- file.path(winners_by_year_and_symbol_dir, 'graphs')
+dir.create(file.path(output, winners_by_year_and_symbol_graph_dir))
 
-data <- read.table(file.path(input, winners_by_year_and_symbol_dir, "summary.csv"), header=T,sep=",")
+data <- read.table(file.path(input, winners_by_year_and_symbol_dir, "summary_all.csv"), header=T,sep=",")
 
 generate.plots <- function(data, type) {
 
@@ -26,7 +28,7 @@ generate.plots <- function(data, type) {
   guides(fill=FALSE) +
   ggtitle(paste('window ratio vs winning percentage', type))
   file.name <- paste('windowRatioVsWinningPercentage', type, '.png', sep="")
-  ggsave(file=file.path(output, winners_by_year_and_symbol_dir, file.name))
+  ggsave(file=file.path(output, winners_by_year_and_symbol_graph_dir, file.name))
   print(sprintf("Saved %s", file.name))
 
 
@@ -39,7 +41,7 @@ generate.plots <- function(data, type) {
   guides(fill=FALSE) +
   ggtitle(paste('window ratio vs winning percentage aggregated', type))
   file.name <- paste('windowRatioVsWinningPercentageAggregated', type, '.png', sep="")
-  ggsave(file=file.path(output, winners_by_year_and_symbol_dir, file.name))
+  ggsave(file=file.path(output, winners_by_year_and_symbol_graph_dir, file.name))
   print(sprintf("Saved %s", file.name))
 
 
@@ -56,7 +58,7 @@ generate.plots <- function(data, type) {
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   ggtitle(paste('cut off moving average count vs winning percentage', type))
   file.name <- paste('cutOffMovingAverageCountVsWinningPercentageAggregated', type, '.png', sep="")
-  ggsave(file=file.path(output, winners_by_year_and_symbol_dir, file.name))
+  ggsave(file=file.path(output, winners_by_year_and_symbol_graph_dir, file.name))
   print(sprintf("Saved %s", file.name))
 
 }
