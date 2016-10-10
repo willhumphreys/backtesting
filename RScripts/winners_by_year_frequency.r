@@ -131,8 +131,8 @@ apply(unique_cut_offs, 1, function(x) generate.plot(x[1], x[2], filtered_data))
 stats <- as.data.frame(t(apply(unique_cut_offs, 1, function(x) generate.stats(x[1], x[2], filtered_data))))
 stats <- plyr::rename(stats, c("V3"="winners.count", "V4"="losers.count", "V5"="win.lose.count", "V6"="trade.count"))
 
-stats$win.ratio <- stats$winners.count / stats$losers.count
-stats$winning.percentage <- (stats$winners.count / (stats$winners.count + stats$losers.count)) * 100
+stats$win.ratio <- round(stats$winners.count / stats$losers.count, digits = 3)
+stats$winning.percentage <- round((stats$winners.count / (stats$winners.count + stats$losers.count)) * 100, digits = 3)
 
 write.table(stats, file=file.path(winners_by_year_and_symbol_dir, "summary.csv"), sep=",", row.names=FALSE)
 
