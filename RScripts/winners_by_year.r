@@ -36,7 +36,7 @@ years <- unique(symbols_merged$years)
 
 #print(xtabs(~ symbol + years, symbols_merged))
 
-winners_by_year <- (count(symbols_merged, c('symbol', 'years', 'winner')))
+winners_by_year <- (plyr::count(symbols_merged, c('symbol', 'years', 'winner')))
 
 # winners by year and symbol
 
@@ -70,7 +70,7 @@ ggplot(data=winners_fixed, aes(x=years, y=win_percentage, fill=symbol)) +
     geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
     geom_hline(yintercept = mean(winners_fixed$win_percentage, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
     guides(fill=FALSE) +
-    ggtitle('winners by year and symbol facet')
+    ggtitle('winners_by_symbolwinners by year and symbol facet')
 ggsave(file=file.path(output, 'graphs', 'winners_by_year_and_symbol_facet.png'))
 
 # Winners by symbol
