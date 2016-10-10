@@ -54,8 +54,6 @@ generate.plot <- function(cut_off, moving_average_count, data) {
 
   filtered_data <- data[data$cut_off == cut_off & data$moving_average_count == moving_average_count, ]
 
-
-
   # Winners by year and symbol
 
   ggplot(data=filtered_data, aes(x=years, y=winning_percentage, group=data_set)) +
@@ -129,13 +127,36 @@ unique_cut_offs <- unique(filtered_data[c("cut_off", "moving_average_count")])
 
 apply(unique_cut_offs, 1, function(x) generate.plot(x[1], x[2], filtered_data))
 
-stats <- as.data.frame(t(apply(unique_cut_offs, 1, function(x) generate.stats(x[1], x[2], filtered_data))))
-stats <- plyr::rename(stats, c("V3"="winners.count", "V4"="losers.count", "V5"="win.lose.count", "V6"="trade.count"))
+summary.dir <- file.path(winners_by_year_and_symbol_dir, 'summary')
 
-stats$win.ratio <- round(stats$winners.count / stats$losers.count, digits = 3)
-stats$winning.percentage <- round((stats$winners.count / (stats$winners.count + stats$losers.count)) * 100, digits = 3)
-stats$window.ratio <- stats$cut_off / stats$moving_average_count
+dir.create(summary.dir, showWarnings = FALSE)
 
-write.table(stats, file=file.path(winners_by_year_and_symbol_dir, "summary.csv"), sep=",", row.names=FALSE)
+finish.stats <- function(stats, name) {
+  stats <- plyr::rename(stats, c("V3"="winners.count", "V4"="losers.count", "V5"="win.lose.count", "V6"="trade.count"))
+  stats$win.ratio <- round(stats$winners.count / stats$losers.count, digits = 3)
+  stats$winning.percentage <- round((stats$winners.count / (stats$winners.count + stats$losers.count)) * 100, digits = 3)
+  stats$window.ratio <- stats$cut_off / stats$moving_average_count
+
+  csv.out <- file.path(summary.dir, paste("summary_", name, ".csv", sep=""))
+
+  print(sprintf("Writing summary csv to %s", csv.out))
+
+  write.table(stats, file=csv.out, sep=",", row.names=FALSE)
+}
+
+process.stats <- function(filtered_data, name) {
+  print(sprintf("Process stats %s", name))
+  stats <- as.data.frame(t(apply(unique_cut_offs, 1, function(x) generate.stats(x[1], x[2], filtered_data))))
+  finish.stats(stats, name)
+}
+
+symbols <- unique(filtered_data$data_set)
+
+sapply(symbols, function(x) process.stats(filtered_data[filtered_data$data_set == x,], x))
+
+process.stats(filtered_data, 'all')
+
+
+
 
 cat("Finished executing winners by year.r\n")
