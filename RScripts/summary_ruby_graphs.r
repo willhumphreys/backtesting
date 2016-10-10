@@ -1,6 +1,6 @@
 library(ggplot2)
 
-print('Start summary.r')
+print('Start summary ruby graphs')
 
 args <- commandArgs(trailingOnly = TRUE)
 
@@ -9,7 +9,7 @@ options(width=150)
 input = args[1];
 output = args[2]
 
-winners_by_year_and_symbol_dir <- 'winners_by_year_and_symbol'
+winners_by_year_and_symbol_dir <- '../graphs/winners_by_year_and_symbol'
 winners_by_year_and_symbol_graph_dir <- file.path(winners_by_year_and_symbol_dir, 'summary_graphs')
 dir.create(file.path(output, winners_by_year_and_symbol_graph_dir), showWarnings = FALSE)
 
@@ -83,7 +83,7 @@ all.summary.files <- list.files(file.path(input, winners_by_year_and_symbol_dir,
 
 lapply(all.summary.files, function(x) generate.all.plots(x))
 
-print('Finished summary.r')
+print('Finished summary ruby graphs')
 
 
 

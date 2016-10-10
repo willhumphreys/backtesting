@@ -19,7 +19,7 @@ print(sprintf("Row count from data %d", nrow(data)))
 data$start_date.time=as.Date(as.POSIXct(data$start_date, tz = "UTC", format="%Y-%m-%dT%H:%M:%S"))
 data$year <- format(data$start_date.time, '%Y')
 data <- data[complete.cases(data), ]
-data <- data[data$minimum_profit == 12,]
+data <- data[data$minimum_profit == 2,]
 
 by_cut_off_min <- aggregate(cbind(winners.size, losers.size)~cut_off_percentage+year, data=data, sum, na.rm=TRUE)
 by_cut_off_min$ave <- (by_cut_off_min$winners.size / (by_cut_off_min$winners.size + by_cut_off_min$losers.size)) * 100
@@ -64,8 +64,10 @@ generate.plots.by.date <- function(start_date, end_date, data) {
 
   ggplot(data=by_cut_off_min, aes(x=cut_off_percentage, y=ave)) +
     facet_grid(minimum_profit ~ .) +
-    geom_hline(aes(yintercept=30), colour="#990000", linetype="dashed") +
+    geom_hline(aes(yintercept=40), colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = 50) +
     geom_hline(aes(yintercept=60), colour="#990000", linetype="dashed") +
+    scale_y_continuous(breaks=seq(0,100,5)) +
     geom_bar(stat="identity")
   ggsave(file=plot_name, width = 21, height = 15)
 
