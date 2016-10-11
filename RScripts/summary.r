@@ -28,7 +28,6 @@ total_losers <- sum(data$losers)
 overall_winning_percentage <- (total_winners / (total_winners + total_losers)) * 100
 overall_win_ratio <- total_winners / total_losers
 
-
 fileConn<-file(output, "wt")
 writeLines(c(sprintf("Winners: %d\nLosers: %d\n", winners, losers),
     sprintf("Overall Winning Percentage: %.03f%%", overall_winning_percentage),

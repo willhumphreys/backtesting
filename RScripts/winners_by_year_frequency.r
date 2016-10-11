@@ -79,7 +79,7 @@ generate.plot <- function(cut_off, moving_average_count, data) {
   geom_hline(yintercept = 40, colour="#990000", linetype="dashed") +
   geom_hline(yintercept = mean(filtered_data$winning_percentage, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
   geom_hline(yintercept = weighted.mean(filtered_data$winning_percentage, (filtered_data$winners.size + filtered_data$losers.size), na.rm=TRUE), colour="darkorange3", linetype="dashed") +
-  scale_y_continuous(breaks=seq(0,100,5)) +
+  scale_y_continuous(breaks=seq(0,100,20)) +
   guides(fill=FALSE) +
   ggtitle(paste('winners by year and symbol facet CO ', cut_off, ' MA_', moving_average_count))
   file.name <- paste('winners_by_year_and_symbol_facet_CO_', cut_off, '_MA_', moving_average_count, '.png', sep="")
