@@ -25,7 +25,7 @@ lowest_winners_row <- data[which.min(data$winning_percentage),]
 total_winners <- sum(data$winners)
 total_losers <- sum(data$losers)
 
-overall_winning_percentage <- (total_winners / (total_losers + total_losers)) * 100
+overall_winning_percentage <- (total_winners / (total_winners + total_losers)) * 100
 overall_win_ratio <- total_winners / total_losers
 
 
