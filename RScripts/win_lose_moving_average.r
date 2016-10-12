@@ -8,19 +8,27 @@ output <- args[2]
 
 input <- '/home/whumphreys/code/backtesting/results/normal/data'
 
-file <- 'AUDUSD.csv'
+file <- 'EURUSD.csv'
 
 data <- read.table(file.path(input, file), header=T,sep=",")
 data$date=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
 
 data$winLose <- ifelse(data$ticks > 0, 1, -1)
 
-data$sma10 <- SMA(data$winLose,n=30)
+data$sma10 <- SMA(data$winLose,n=40)
 
+bands <- data.frame(BBands( data[,c("sma10")], n = 70 , sd=2.0))
 
-ggplot(data=data, aes(x=date, y=sma10)) +
-geom_line() +
-geom_point() +
+data$downBB <- bands$dn
+data$upBB <- bands$up
+data$mavg <- bands$mavg
+
+ggplot(data=data, aes(date)) +
+geom_line(aes(y=sma10)) +
+geom_line(aes(y=downBB)) +
+geom_line(aes(y=upBB)) +
+geom_line(aes(y=mavg)) +
+geom_point(aes(y=sma10)) +
 geom_hline(yintercept = 0) +
 geom_hline(yintercept = -0.5, colour="#990000", linetype="dashed") +
 geom_hline(yintercept = 0.5, colour="#990000", linetype="dashed") +
