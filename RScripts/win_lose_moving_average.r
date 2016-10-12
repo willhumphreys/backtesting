@@ -6,44 +6,49 @@ input <- args[1]
 #results/results_bands/ruby/odds_results.csv
 output <- args[2]
 
-input <- '/home/whumphreys/code/backtesting/results/normal/data'
+input <- '/home/whumphreys/code/backtesting/results/normal'
+output <- '/home/whumphreys/code/backtesting/results/normal'
 
-file <- 'EURUSD.csv'
+graph.output <- file.path(output, 'graphs/bollingers')
+data.output <- file.path(output, 'data_bollingers')
 
-data <- read.table(file.path(input, file), header=T,sep=",")
-data$date=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
+dir.create(graph.output, recursive = TRUE)
+dir.create(data.output, recursive = TRUE)
 
-data$winLose <- ifelse(data$ticks > 0, 1, -1)
+input.files <- list.files(file.path(input, 'data'))
 
-data$sma <- SMA(data$winLose,n=40)
+generate.bollinger.data <- function(file.in) {
 
-bands <- data.frame(BBands( data[,c("sma10")], n = 70 , sd=2.0))
+  symbol <- strsplit(file.in, split='.', fixed=TRUE)[[1]][1]
 
-data$downBB <- bands$dn
-data$upBB <- bands$up
-data$mavg <- bands$mavg
+  data <- read.table(file.path(input, 'data', file), header=T,sep=",")
+  data$date=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
 
-ggplot(data=data, aes(date)) +
-geom_line(aes(y=sma)) +
-geom_line(aes(y=downBB)) +
-geom_line(aes(y=upBB)) +
-geom_line(aes(y=mavg)) +
-geom_point(aes(y=sma)) +
-geom_hline(yintercept = 0) +
-geom_hline(yintercept = -0.5, colour="#990000", linetype="dashed") +
-geom_hline(yintercept = 0.5, colour="#990000", linetype="dashed") +
-scale_y_continuous(breaks=seq(-1,1,0.05)) +
-geom_hline(yintercept = mean(data$sma10, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
-ggtitle('10 day sma')
-#ggsave(file=file.path(output, 'graphs', 'sma10Day.png'))
+  data$winLose <- ifelse(data$ticks > 0, 1, -1)
 
+  data$sma <- SMA(data$winLose,n=40)
 
-write.table(data, file=paste(file, '-bollingers.csv', sep=""), sep=",", row.names=FALSE)
+  bands <- data.frame(BBands( data[,c("sma")], n = 70 , sd=2.0))
 
-#unique.sma.values <- unique(data$sma10)
-#
-#unique.sma.values <- unique.sma.values[!is.na(unique.sma.values)]
-#
-#data[data$sma10 %in% unique.sma.values,]
-#
-#data[data$sma10 == -0.4,]
+  data$downBB <- bands$dn
+  data$upBB <- bands$up
+  data$mavg <- bands$mavg
+
+  ggplot(data=data, aes(date)) +
+  geom_line(aes(y=sma)) +
+  geom_line(aes(y=downBB)) +
+  geom_line(aes(y=upBB)) +
+  geom_line(aes(y=mavg)) +
+  geom_point(aes(y=sma)) +
+  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = -0.5, colour="#990000", linetype="dashed") +
+  geom_hline(yintercept = 0.5, colour="#990000", linetype="dashed") +
+  scale_y_continuous(breaks=seq(-1,1,0.05)) +
+  geom_hline(yintercept = mean(data$sma10, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
+  ggtitle('10 day sma')
+  ggsave(file=file.path(graph.output, paste(symbol, '.png', sep="")))
+
+  write.table(data, file=file.path(data.output, paste(symbol, '-bollingers.csv', sep="")), sep=",", row.names=FALSE)
+
+}
+sapply(input.files, function(x) generate.bollinger.data(x))
