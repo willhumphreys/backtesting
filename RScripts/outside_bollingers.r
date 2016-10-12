@@ -30,8 +30,8 @@ scale_y_continuous(breaks=seq(0,100,20)) +
 theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
 guides(fill=FALSE) +
 ggtitle(paste('outside bollingers facet'))
-file.name <- paste('windowRatioVsWinningPercentage', type, '.png', sep="")
-ggsave(file=file.path(output, winners_by_year_and_symbol_graph_dir, file.name))
+file.name <- 'OutsideBollingers.png'
+ggsave(file=file.path(output, file.name))
 print(sprintf("Saved %s", file.name))
 
 #Data parsing
