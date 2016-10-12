@@ -26,55 +26,57 @@ require 'optparse'
 require 'open3'
 
 @mt4_file_repo = MT4FileRepo.new(BollingerMapper.new)
-@candle_ops = CandleOperations.new
 
-sma = 10
-
-parent_directory = "../results/normal/data_bollingers/#{sma}"
-
-files = Dir.entries(parent_directory).select {|f| !File.directory? f}
 
 bollinger_out_results = []
+smas = 10.step(100, 10).to_a
 
-files.each { |file|
+smas.each { |sma|
 
-  puts "Processing #{file}"
+  parent_directory = "../results/normal/data_bollingers/#{sma}"
+  files = Dir.entries(parent_directory).select { |f| !File.directory? f }
 
-  results = @mt4_file_repo.read_quotes(File.join(parent_directory, file))
+  files.each { |file|
 
-  buy_on = false
+    puts "Processing #{file} SMA #{sma}"
 
-  win_count = 0
-  lose_count = 0
+    results = @mt4_file_repo.read_quotes(File.join(parent_directory, file))
 
-  results.each { |result|
+    buy_on = false
 
-    if buy_on
-      if result.profit > 0
-        win_count +=1
-      else
-        lose_count += 1
+    win_count = 0
+    lose_count = 0
+
+    results.each { |result|
+
+      if buy_on
+        if result.profit > 0
+          win_count +=1
+        else
+          lose_count += 1
+        end
       end
-    end
 
-    if result.down_bb != 0 && result.sma < result.down_bb
-      buy_on = true
-    end
+      if result.down_bb != 0 && result.sma < result.down_bb
+        buy_on = true
+      end
 
-   # if result.sma_bb != 0 && result.sma > result.up_bb
-    if result.sma_bb != 0 && result.sma > result.sma_bb
-      buy_on = false
-    end
+      # if result.sma_bb != 0 && result.sma > result.up_bb
+      if result.sma_bb != 0 && result.sma > result.sma_bb
+        buy_on = false
+      end
 
+    }
+
+    winning_percentage = ((win_count.to_f / (win_count + lose_count)) * 100).round(2)
+    result = BollingerOutResult.new(sma: sma,
+                                    win_count: win_count,
+                                    lose_count: lose_count,
+                                    winning_percentage: winning_percentage)
+    bollinger_out_results.push(result)
+
+    puts "win count: #{win_count} lose count #{lose_count} total trades: #{win_count + lose_count} "\
+"winning percentage: #{winning_percentage}%"
   }
 
-  winning_percentage = ((win_count.to_f / (win_count + lose_count)) * 100).round(2)
-  result = BollingerOutResult.new(sma: sma,
-                                  win_count: win_count,
-                                  lose_count: lose_count,
-                                  winning_percentage: winning_percentage)
-  bollinger_out_results.push(result)
-
-  puts "win count: #{win_count} lose count #{lose_count} total trades: #{win_count + lose_count} "\
-"winning percentage: #{winning_percentage}%"
 }
