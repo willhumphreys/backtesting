@@ -2,7 +2,7 @@ require 'probability_engine/version'
 
 class BollingerResult
 
-  def initialize(timestamp: , direction: , profit:, above_top_band:, below_bottom_band:, sma:, down_bb:, up_bb:, sma_bb:)
+  def initialize(timestamp:, direction:, profit:, above_top_band:, below_bottom_band:, sma:, down_bb:, up_bb:, sma_bb:)
 
     @timestamp = timestamp
     @direction = direction

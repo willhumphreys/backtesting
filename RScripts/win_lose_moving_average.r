@@ -9,48 +9,55 @@ output <- args[2]
 #input <- '/home/whumphreys/code/backtesting/results/normal'
 #output <- '/home/whumphreys/code/backtesting/results/normal'
 
-graph.output <- file.path(output, 'graphs/bollingers')
-data.output <- file.path(output, 'data_bollingers')
+generate.all.moving.averages <- function(moving_average_length) {
 
-dir.create(graph.output, recursive = TRUE)
-dir.create(data.output, recursive = TRUE)
+  print(sprintf('Generate graphs and data for %d', moving_average_length))
 
-input.files <- list.files(file.path(input, 'data'))
+  graph.output <- file.path(output, 'graphs/bollingers', moving_average_length)
+  data.output <- file.path(output, 'data_bollingers', moving_average_length)
 
-moving_average_length <- 40
+  dir.create(graph.output, recursive = TRUE)
+  dir.create(data.output, recursive = TRUE)
 
-generate.bollinger.data <- function(file.in) {
+  input.files <- list.files(file.path(input, 'data'))
 
-  symbol <- strsplit(file.in, split='.', fixed=TRUE)[[1]][1]
+  generate.bollinger.data <- function(file.in) {
 
-  data <- read.table(file.path(input, 'data', file.in), header=T,sep=",")
-  data$date=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
+    symbol <- strsplit(file.in, split='.', fixed=TRUE)[[1]][1]
 
-  data$winLose <- ifelse(data$ticks > 0, 1, -1)
+    data <- read.table(file.path(input, 'data', file.in), header=T,sep=",")
+    data$date=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
 
-  data$sma <- SMA(data$winLose,n=moving_average_length)
+    data$winLose <- ifelse(data$ticks > 0, 1, -1)
 
-  bands <- data.frame(BBands( data[,c("sma")], n = 70 , sd=2.0))
+    data$sma <- SMA(data$winLose,n=moving_average_length)
 
-  data$downBB <- bands$dn
-  data$upBB <- bands$up
-  data$mavg <- bands$mavg
+    bands <- data.frame(BBands( data[,c("sma")], n = 70 , sd=2.0))
 
-  ggplot(data=data, aes(date)) +
-  geom_line(aes(y=sma)) +
-  geom_line(aes(y=downBB)) +
-  geom_line(aes(y=upBB)) +
-  geom_line(aes(y=mavg)) +
-  geom_point(aes(y=sma)) +
-  geom_hline(yintercept = 0) +
-  geom_hline(yintercept = -0.5, colour="#990000", linetype="dashed") +
-  geom_hline(yintercept = 0.5, colour="#990000", linetype="dashed") +
-  scale_y_continuous(breaks=seq(-1,1,0.05)) +
-  geom_hline(yintercept = mean(data$sma10, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
-  ggtitle(paste(moving_average_length, ' day sma', sep=""))
-  ggsave(file=file.path(graph.output, paste(symbol, '.png', sep="")))
+    data$downBB <- bands$dn
+    data$upBB <- bands$up
+    data$mavg <- bands$mavg
 
-  write.table(data, file=file.path(data.output, paste(symbol, '-bollingers.csv', sep="")), sep=",", row.names=FALSE)
+    ggplot(data=data, aes(date)) +
+    geom_line(aes(y=sma)) +
+    geom_line(aes(y=downBB)) +
+    geom_line(aes(y=upBB)) +
+    geom_line(aes(y=mavg)) +
+    geom_point(aes(y=sma)) +
+    geom_hline(yintercept = 0) +
+    geom_hline(yintercept = -0.5, colour="#990000", linetype="dashed") +
+    geom_hline(yintercept = 0.5, colour="#990000", linetype="dashed") +
+    scale_y_continuous(breaks=seq(-1,1,0.05)) +
+    geom_hline(yintercept = mean(data$sma10, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
+    ggtitle(paste(moving_average_length, ' day sma', sep=""))
+    ggsave(file=file.path(graph.output, paste(symbol, '.png', sep="")))
 
+    write.table(data, file=file.path(data.output, paste(symbol, '-bollingers.csv', sep="")), sep=",", row.names=FALSE)
+
+  }
+  sapply(input.files, function(x) generate.bollinger.data(x))
 }
-sapply(input.files, function(x) generate.bollinger.data(x))
+
+moving_average_lengths <- seq(10,100, 10)
+
+sapply(moving_average_lengths, function(x) generate.all.moving.averages(x))

@@ -20,6 +20,7 @@ require_relative 'profiles'
 require_relative 'r_script_service'
 require_relative 'bollinger_mapper'
 require_relative 'bollinger_result'
+require_relative 'bollinger_out_result'
 require 'active_support/all'
 require 'optparse'
 require 'open3'
@@ -27,9 +28,13 @@ require 'open3'
 @mt4_file_repo = MT4FileRepo.new(BollingerMapper.new)
 @candle_ops = CandleOperations.new
 
-parent_directory = '../results/normal/data_bollingers'
+sma = 10
+
+parent_directory = "../results/normal/data_bollingers/#{sma}"
 
 files = Dir.entries(parent_directory).select {|f| !File.directory? f}
+
+bollinger_out_results = []
 
 files.each { |file|
 
@@ -56,14 +61,20 @@ files.each { |file|
       buy_on = true
     end
 
-    if result.sma_bb != 0 && result.sma > result.up_bb
+   # if result.sma_bb != 0 && result.sma > result.up_bb
+    if result.sma_bb != 0 && result.sma > result.sma_bb
       buy_on = false
     end
+
   }
 
+  winning_percentage = ((win_count.to_f / (win_count + lose_count)) * 100).round(2)
+  result = BollingerOutResult.new(sma: sma,
+                                  win_count: win_count,
+                                  lose_count: lose_count,
+                                  winning_percentage: winning_percentage)
+  bollinger_out_results.push(result)
+
   puts "win count: #{win_count} lose count #{lose_count} total trades: #{win_count + lose_count} "\
-"winning percentage: #{((win_count.to_f / (win_count + lose_count)) * 100).round(2)}%"
+"winning percentage: #{winning_percentage}%"
 }
-
-
-
