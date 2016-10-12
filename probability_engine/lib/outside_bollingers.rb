@@ -29,7 +29,7 @@ require 'open3'
 
 parent_directory = '../results/normal/data_bollingers'
 
-files = Dir.entries(parent_directory)
+files = Dir.entries(parent_directory).select {|f| !File.directory? f}
 
 files.each { |file|
 
@@ -56,7 +56,7 @@ files.each { |file|
       buy_on = true
     end
 
-    if result.sma_bb != 0 && result.sma > result.sma_bb
+    if result.sma_bb != 0 && result.sma > result.up_bb
       buy_on = false
     end
   }

@@ -21,7 +21,7 @@ generate.bollinger.data <- function(file.in) {
 
   symbol <- strsplit(file.in, split='.', fixed=TRUE)[[1]][1]
 
-  data <- read.table(file.path(input, 'data', file), header=T,sep=",")
+  data <- read.table(file.path(input, 'data', file.in), header=T,sep=",")
   data$date=as.POSIXct(data$date, tz = "UTC", format="%Y-%m-%dT%H:%M")
 
   data$winLose <- ifelse(data$ticks > 0, 1, -1)
