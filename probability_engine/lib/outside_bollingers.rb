@@ -21,18 +21,21 @@ require_relative 'r_script_service'
 require_relative 'bollinger_mapper'
 require_relative 'bollinger_result'
 require_relative 'bollinger_out_result'
+require_relative 'outside_bollingers_writer'
 require 'active_support/all'
 require 'optparse'
 require 'open3'
 
 @mt4_file_repo = MT4FileRepo.new(BollingerMapper.new)
 
+results_writer = OutsideBollingersWriter.new('../results/normal')
+results_writer.write_summary_header
+
 
 bollinger_out_results = []
 smas = 10.step(100, 10).to_a
 
 smas.each { |sma|
-
   parent_directory = "../results/normal/data_bollingers/#{sma}"
   files = Dir.entries(parent_directory).select { |f| !File.directory? f }
 
@@ -70,13 +73,16 @@ smas.each { |sma|
 
     winning_percentage = ((win_count.to_f / (win_count + lose_count)) * 100).round(2)
     result = BollingerOutResult.new(sma: sma,
+                                    symbol: file.split('-').first,
                                     win_count: win_count,
                                     lose_count: lose_count,
                                     winning_percentage: winning_percentage)
     bollinger_out_results.push(result)
 
+    results_writer.write_line(result)
+
     puts "win count: #{win_count} lose count #{lose_count} total trades: #{win_count + lose_count} "\
 "winning percentage: #{winning_percentage}%"
   }
-
 }
+
