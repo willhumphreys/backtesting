@@ -17,6 +17,8 @@ dir.create(data.output, recursive = TRUE)
 
 input.files <- list.files(file.path(input, 'data'))
 
+moving_average_length <- 40
+
 generate.bollinger.data <- function(file.in) {
 
   symbol <- strsplit(file.in, split='.', fixed=TRUE)[[1]][1]
@@ -26,7 +28,7 @@ generate.bollinger.data <- function(file.in) {
 
   data$winLose <- ifelse(data$ticks > 0, 1, -1)
 
-  data$sma <- SMA(data$winLose,n=40)
+  data$sma <- SMA(data$winLose,n=moving_average_length)
 
   bands <- data.frame(BBands( data[,c("sma")], n = 70 , sd=2.0))
 
@@ -45,7 +47,7 @@ generate.bollinger.data <- function(file.in) {
   geom_hline(yintercept = 0.5, colour="#990000", linetype="dashed") +
   scale_y_continuous(breaks=seq(-1,1,0.05)) +
   geom_hline(yintercept = mean(data$sma10, na.rm=TRUE), colour="royalblue1", linetype="dashed") +
-  ggtitle('10 day sma')
+  ggtitle(paste(moving_average_length, ' day sma', sep=""))
   ggsave(file=file.path(graph.output, paste(symbol, '.png', sep="")))
 
   write.table(data, file=file.path(data.output, paste(symbol, '-bollingers.csv', sep="")), sep=",", row.names=FALSE)
