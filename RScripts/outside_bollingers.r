@@ -9,10 +9,10 @@ options(width=150)
 input = args[1];
 output = args[2]
 
-input <- 'results/normal'
-output <- 'results/normal/graphs'
+# input <- 'results/normal'
+# output <- 'results/normal/graphs'
 
-file.name <- '/outside_bollinger.csv'
+file.name <- 'outside_bollinger.csv'
 
 data.path <- file.path(input, file.name)
 print(data.path)
