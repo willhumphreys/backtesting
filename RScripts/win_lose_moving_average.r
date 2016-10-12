@@ -6,8 +6,8 @@ input <- args[1]
 #results/results_bands/ruby/odds_results.csv
 output <- args[2]
 
-input <- '/home/whumphreys/code/backtesting/results/normal'
-output <- '/home/whumphreys/code/backtesting/results/normal'
+#input <- '/home/whumphreys/code/backtesting/results/normal'
+#output <- '/home/whumphreys/code/backtesting/results/normal'
 
 graph.output <- file.path(output, 'graphs/bollingers')
 data.output <- file.path(output, 'data_bollingers')
