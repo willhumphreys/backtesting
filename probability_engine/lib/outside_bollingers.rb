@@ -27,35 +27,43 @@ require 'open3'
 @mt4_file_repo = MT4FileRepo.new(BollingerMapper.new)
 @candle_ops = CandleOperations.new
 
+parent_directory = '../results/normal/data_bollingers'
 
-results = @mt4_file_repo.read_quotes('/home/whumphreys/code/backtesting/EURUSD.csv-bollingers.csv')
+files = Dir.entries(parent_directory)
 
-buy_on = false
+files.each { |file|
 
-win_count = 0
-lose_count = 0
+  puts "Processing #{file}"
 
-results.each { |result|
+  results = @mt4_file_repo.read_quotes(File.join(parent_directory, file))
 
-  if buy_on
-    if result.profit > 0
-      win_count +=1
-    else
-      lose_count += 1
+  buy_on = false
+
+  win_count = 0
+  lose_count = 0
+
+  results.each { |result|
+
+    if buy_on
+      if result.profit > 0
+        win_count +=1
+      else
+        lose_count += 1
+      end
     end
-  end
 
-  if result.down_bb != 0 && result.sma < result.down_bb
-    buy_on = true
-  end
+    if result.down_bb != 0 && result.sma < result.down_bb
+      buy_on = true
+    end
 
-  if result.sma_bb != 0 && result.sma > result.sma_bb
-    buy_on = false
-  end
-}
+    if result.sma_bb != 0 && result.sma > result.sma_bb
+      buy_on = false
+    end
+  }
 
-puts "win count: #{win_count} lose count #{lose_count} total trades: #{win_count + lose_count} "\
+  puts "win count: #{win_count} lose count #{lose_count} total trades: #{win_count + lose_count} "\
 "winning percentage: #{((win_count.to_f / (win_count + lose_count)) * 100).round(2)}%"
+}
 
 
 
