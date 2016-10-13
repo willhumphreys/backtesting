@@ -10,8 +10,8 @@ options(width=150)
 input = args[1];
 output = args[2]
 
-input <- 'results/normal'
-output <- 'results/normal'
+# input <- 'results/normal'
+# output <- 'results/normal'
 
 file.name <- 'outside_bollinger.csv'
 
