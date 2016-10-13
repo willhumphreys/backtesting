@@ -10,9 +10,12 @@ input = args[1];
 output = args[2]
 
 # input <- 'results/normal'
-# output <- 'results/normal/graphs'
+# output <- 'results/normal'
 
 file.name <- 'outside_bollinger.csv'
+
+data.out <- file.path(output, 'outside_bollingers')
+dir.create(data.out)
 
 data.path <- file.path(input, file.name)
 print(data.path)
@@ -31,9 +34,15 @@ theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
 guides(fill=FALSE) +
 ggtitle(paste('outside bollingers facet'))
 file.name <- 'OutsideBollingers.png'
-ggsave(file=file.path(output, file.name))
+ggsave(file=file.path(output, 'graphs', file.name))
 print(sprintf("Saved %s", file.name))
 
 #Data parsing
 weigthed.mean <- weighted.mean(data$winning_percentage, data$win_count + data$lose_count, na.rm=TRUE)
 mean <- mean(data$winning_percentage, na.rm=TRUE)
+
+symbol.mean <- aggregate(list(winners = data$winning_percentage), list(symbol = data$symbol), mean)
+write.table(symbol.mean, file=file.path(data.out, 'symbol_mean.csv'), sep=",", row.names=FALSE)
+
+sma.mean <- aggregate(list(winners = data$winning_percentage), list(sma = data$sma), mean)
+write.table(sma.mean, file=file.path(data.out, 'sma_mean.csv'), sep=",", row.names=FALSE)
