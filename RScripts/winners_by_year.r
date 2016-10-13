@@ -14,6 +14,9 @@ options(width=200)
 input = args[1];
 output = args[2]
 
+graph.output.dir <- file.path(output, "graphs")
+dir.create(graph.output.dir, recursive = TRUE)
+
 generate.symbol.info <- function(file.in) {
 
   symbol <- strsplit(file.in, split='.', fixed=TRUE)[[1]][1]
