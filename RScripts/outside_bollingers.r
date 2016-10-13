@@ -1,4 +1,5 @@
 library(ggplot2)
+library(plyr)
 
 print('Start Outside Bollinger graphs')
 
@@ -9,8 +10,8 @@ options(width=150)
 input = args[1];
 output = args[2]
 
-# input <- 'results/normal'
-# output <- 'results/normal'
+input <- 'results/normal'
+output <- 'results/normal'
 
 file.name <- 'outside_bollinger.csv'
 
@@ -38,11 +39,30 @@ ggsave(file=file.path(output, 'graphs', file.name))
 print(sprintf("Saved %s", file.name))
 
 #Data parsing
+#Overall mean
 weigthed.mean <- weighted.mean(data$winning_percentage, data$win_count + data$lose_count, na.rm=TRUE)
 mean <- mean(data$winning_percentage, na.rm=TRUE)
 
-symbol.mean <- aggregate(list(winners = data$winning_percentage), list(symbol = data$symbol), mean)
-write.table(symbol.mean, file=file.path(data.out, 'symbol_mean.csv'), sep=",", row.names=FALSE)
+#Mean per symbol
+symbol.mean <- aggregate(list(mean = data$winning_percentage), list(symbol = data$symbol), mean)
+symbol.weighted.mean <- ddply(data, .(symbol), function(x) data.frame(weighted.mean=weighted.mean(x$win_count + x$lose_count, x$winning_percentage)))
 
-sma.mean <- aggregate(list(winners = data$winning_percentage), list(sma = data$sma), mean)
-write.table(sma.mean, file=file.path(data.out, 'sma_mean.csv'), sep=",", row.names=FALSE)
+
+trade.counts <- aggregate(list(win.count = data$win_count, lose.count = data$lose_count, trade.count = data$win_count + data$lose_count),
+  list(symbol = data$symbol), sum)
+
+symbol.means <- merge(symbol.mean, symbol.weighted.mean, by='symbol')
+
+symbol.means <- merge(symbol.means, trade.counts, by='symbol')
+
+write.table(symbol.means, file=file.path(data.out, 'symbol_means.csv'), sep=",", row.names=FALSE)
+
+sma.mean <- aggregate(list(mean = data$winning_percentage), list(sma = data$sma), mean)
+sma.weighted.mean <- ddply(data, .(sma), function(x) data.frame(weighted.mean=weighted.mean(x$win_count + x$lose_count, x$winning_percentage)))
+sma.means <- merge(sma.mean, sma.weighted.mean, by='sma')
+
+trade.counts.sma <- aggregate(list(win.count = data$win_count, lose.count = data$lose_count, trade.count = data$win_count + data$lose_count),
+  list(sma = data$sma), sum)
+sma.means <- merge(sma.means, trade.counts.sma, by='sma')
+
+write.table(sma.means, file=file.path(data.out, 'sma_means.csv'), sep=",", row.names=FALSE)
