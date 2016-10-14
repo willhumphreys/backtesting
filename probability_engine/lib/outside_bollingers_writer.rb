@@ -3,8 +3,8 @@ require 'fileutils'
 
 class OutsideBollingersWriter
 
-  def initialize(output_directory)
-    @summary_file = "#{output_directory}/outside_bollinger.csv"
+  def initialize(output_directory, output_file)
+    @summary_file = "#{output_directory}/#{output_file}"
 
     FileUtils.mkpath output_directory unless File.exists?(output_directory)
     File.delete(@summary_file) if File.exist?(@summary_file)

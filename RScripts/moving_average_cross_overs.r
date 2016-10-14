@@ -6,14 +6,17 @@ input <- args[1]
 #results/results_bands/ruby/odds_results.csv
 output <- args[2]
 
-#input <- '/home/whumphreys/code/backtesting/results/normal'
-#output <- '/home/whumphreys/code/backtesting/results/normal'
+input <- '/home/whumphreys/code/backtesting/results/normal'
+output <- '/home/whumphreys/code/backtesting/results/normal'
 
 
 
 generate.all.crossovers <- function(long_sma, short_sma) {
 
   print(sprintf('Generate crossover graphs and data for %d %d', long_sma, short_sma))
+
+  long_sma <- 20
+  short_sma <- 10
 
   crossovers <- paste(long_sma, short_sma, sep="_")
 
